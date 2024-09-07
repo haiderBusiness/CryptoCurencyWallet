@@ -1,0 +1,22 @@
+ const onScroll = useCallback((event) => {
+    const currentOffset = event.nativeEvent.contentOffset.y; // Get current scroll offset
+    const currentTime = Date.now(); // Get current timestamp
+
+    const offsetDifference = Math.abs(currentOffset - lastScrollOffset.current); // Calculate offset difference
+    const timeDifference = (currentTime - lastScrollTime.current) / 1000; // Calculate time difference in seconds
+
+    // Calculate speed (pixels per second), considering that timeDifference should never be 0
+    const speed = offsetDifference / (timeDifference || 1);
+    // setScrollSpeed(speed);
+
+    // Update refs for the next calculation
+    lastScrollOffset.current = currentOffset;
+    lastScrollTime.current = currentTime;
+
+
+    if (speed >= 6000) {
+      setIsScrollingDownDisabled(false)
+    } if (speed <= 3000 ) {
+      setIsScrollingDownDisabled(true)
+    }
+  }, []);

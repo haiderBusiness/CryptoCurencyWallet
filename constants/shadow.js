@@ -1,0 +1,5 @@
+const shadow = {
+    1: {
+        
+    }
+}
