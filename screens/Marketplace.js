@@ -9,7 +9,7 @@ import {
   useResponsiveFontSize,
 } from "../hooks/useResponsiveness";
 import Trade from "../components/trade/Trade";
-import { interfaceAddDocumentOutlineBlack, interfaceFilterOutlineBlack, interfaceHistoryOutlineBlack } from "../assets/dummy/icons_pictures";
+import { interface_plus_black, interfaceAddDocumentOutlineBlack, interfaceFilterOutlineBlack, interfaceHistoryOutlineBlack } from "../assets/dummy/icons_pictures";
 import { getTrades, getOrders } from "../backend/controllers/tradeController";
 import CustomList from "../components/custom_list/CustomList";
 
@@ -46,7 +46,7 @@ export default function Marketplace({ route, navigation }) {
           listItem={ListItem}
           headerTitle="MarketPlace"
           bigHeaderTitle="Marketplace"
-          headerRightImageSource1={interfaceAddDocumentOutlineBlack}
+          headerRightImageSource1={interface_plus_black}
           headerRightImageSource2={interfaceHistoryOutlineBlack}
           headerLeftImageSource1={interfaceFilterOutlineBlack}
           scrollSpeed="slowest"

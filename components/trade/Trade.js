@@ -12,7 +12,14 @@ import { user_1 } from "../../assets/dummy/users_pictures/index.js";
 
 import viewStyleSample from "../RNComponents/viewStyleSample.js";
 import useThemeColors from "../../hooks/useThemeColors.js";
-import { interfaceExchangeCryptoBlack, interfaceShieldTrustGreen, usdt, btc, eth, usdc} from "../../assets/dummy/icons_pictures/index.js";
+import { 
+  interfaceExchangeCryptoBlack, interfaceShieldTrustGreen, usdt, btc, eth, usdc, interface_alarm_clock_fill_black,
+  interface_arrow_trend_down_green_fill,
+  interface_arrow_trend_up_black_fill,
+  interface_heart_outline_black,
+  interface_heart_fill_red
+
+} from "../../assets/dummy/icons_pictures/index.js";
 
 import styles from "./styles.js";
 import { capitalizeFirstLetter } from "../../utils/capitalizeFirstLetter.js";
@@ -25,30 +32,26 @@ import CustomPressable from "../RNComponents/CustomPressable.js"
 
 
 const placeHolderObj = {
-  "id": 1,
-        "ownerData": {
-            "id": 1,
-            "firstName": "Olivia",
-            "lastName": "Williams",
-            "photoUrl": "https://example.com/photos/oliviawilliams.jpg",
-            "lastSeen": 1728747567890,
-            "likes": 4920,
-            "dislikes": 2,
-            "verified": true,
-            "joinedAt": 1613742565991
-        },
-        "orderStatus": "completed",
-        "paymentMethod": "Google Pay- Gold Locker (MMTC-PAMP)",
-        "note": "Reliable and quick service",
-        "tradeType": "buying",
-        "coin": "usdt",
-        "priceAdjustmentPercentage": -4.8,
-        "currentMarketPrice": 49500.80,
-        "minLimit": 2500,
-        "maxLimit": 7500000,
-        "currency": "AUD",
-        "createdAt": 1727747567890
-}
+    "id": "87cb58cf-e7be-4344-b664-1d18b5780d56",
+    "ownerData": {
+      "id": "95a68a51-512a-453b-8e43-1c422a57520f",
+      "username": "Christop3",
+      "avatar": "https://avatars.githubusercontent.com/u/46711448",
+      "lastSeen": 1721273325983,
+      "likes": 1388,
+      "dislikes": 18,
+      "verified": true
+    },
+    "paymentMethod": "GoBank",
+    "note": "quick response time",
+    "tradeType": "buying",
+    "coin": "ETH",
+    "avgTradeSpeed": 180,
+    "priceAdjustmentPercentage": "-5.88",
+    "minLimit": 80,
+    "maxLimit": 29000,
+    "currency": "EUR"
+  }
 
 
 const btcPriceInEuro = 50458.71
@@ -59,20 +62,28 @@ const ethPriceInEuro = 2131.80
 
 
 
-export default function Trade({ orderInfo = placeHolderObj, style = viewStyleSample, }) {
+export default function Trade({ tradeInfo = placeHolderObj, style = viewStyleSample, }) {
   const receivedStyle = style.flex !== 1000 ? style : {};
 
   const themeColors = useThemeColors();
 
-  // console.log("orderStatus", orderInfo && orderInfo.orderStatus)
+  // console.log("orderStatus", tradeInfo && tradeInfo.orderStatus)
 
 
-  // const isRealData = !!order && !!receivedOrderInfo.coin
-  const receivedOrderInfo = orderInfo && orderInfo.coin ? orderInfo : placeHolderObj
+  // const isRealData = !!order && !!receivedTradeInfo.coin
+  const receivedTradeInfo = tradeInfo && tradeInfo.coin ? tradeInfo : placeHolderObj
 
-  const coinIcon = receivedOrderInfo.coin === "USDT" ? usdt : receivedOrderInfo.coin === "BTC" ? btc : receivedOrderInfo.coin === "ETH" ? eth : usdc
+  const coinIcon = receivedTradeInfo.coin === "USDT" ? usdt : receivedTradeInfo.coin === "BTC" ? btc : receivedTradeInfo.coin === "ETH" ? eth : usdc
 
-  const OrderInfo = () => {
+
+  const coin = receivedTradeInfo.coin
+
+
+  
+
+  const TradeInfo = () => {
+
+    const paymentMethod = receivedTradeInfo.paymentMethod
     return (
       <View
         style={{
@@ -82,7 +93,7 @@ export default function Trade({ orderInfo = placeHolderObj, style = viewStyleSam
       >
         <OrderFirstPart />
         <Text style={{...styles.paymentMethod, color: themeColors.secondary_text}}>
-        {receivedOrderInfo.paymentMethod}
+          {paymentMethod}
         </Text>
 
         <LastPart/>
@@ -91,16 +102,41 @@ export default function Trade({ orderInfo = placeHolderObj, style = viewStyleSam
   };
 
   const OrderFirstPart = () => {
+    const tradeType = receivedTradeInfo.tradeType === "buying" ? "Buy " : "Sell "
+
+    
+
+    const speed = receivedTradeInfo.avgTradeSpeed
+
     return (
       <View style={{ ...styles.orderFirstRow }}>
-        <View style={styles.buyingTextAndCoinView}>
+        <View style={{
+          flexDirection: "row", 
+          justifyContent: "space-between", 
+          alignItems: "center",
+         
+          width: "100%"
+          }}>
+          <View style={styles.buyingTextAndCoinView}>
           <Text style={{ ...styles.buySellText, color: themeColors.text }}>
-            {receivedOrderInfo.tradeType === "buying" ? "Buy " : "Sell "} 
-            {receivedOrderInfo.coin.toUpperCase()} 
+            {capitalizeFirstLetter(tradeType) + " "} 
+            {coin} 
           </Text>
           <Image style={styles.coin} source={coinIcon} />
+          </View>
+          
+          <View 
+          style={{
+            flexDirection: "row", 
+            justifyContent: "space-between", 
+            alignItems: "center",
+          }}
+          >
+          <Image style={styles.timer} source={interface_alarm_clock_fill_black} />
+            <Text style={styles.createdAt}>{speed + " min"}</Text> 
+          </View>
 
-          <Text style={styles.createdAt}>{"Today 13:00"}</Text>
+
         </View>
       </View>
     );
@@ -109,7 +145,11 @@ export default function Trade({ orderInfo = placeHolderObj, style = viewStyleSam
 
   const LastPart = () => {
 
-    const type = receivedOrderInfo.tradeType
+    const type = receivedTradeInfo.tradeType
+
+    const minLimitValue = receivedTradeInfo.minLimit + " " + receivedTradeInfo.currency
+
+    const maxLimitValue = receivedTradeInfo.maxLimit + " " + receivedTradeInfo.currency
 
 
     // const borderColor = 
@@ -117,33 +157,95 @@ export default function Trade({ orderInfo = placeHolderObj, style = viewStyleSam
     //TODO complete from here
     const orderStatusBackgroundColor = null
 
+    const percentage = receivedTradeInfo.priceAdjustmentPercentage
+
+    const upOrDown = percentage >= 0 ? interface_arrow_trend_down_black_fill
+    : interface_arrow_trend_down_green_fill
+
+
+    // let originalNumber = btcPriceInEuro;  // The base number
+    // // Dynamic percentage that could be positive or negative
+
+    // Adjust the number by the given percentage
+    let adjustedValue = btcPriceInEuro + (btcPriceInEuro * (percentage / 100));
+
+    const price = parseFloat(adjustedValue.toFixed(2)).toLocaleString('en-US');
+
+    const currency = receivedTradeInfo.currency
+
+    const oppositeOfPercentage = percentage * -1;
+
+
+    const currencyPriceDiffrence = 1 + (1 * (oppositeOfPercentage / 100))
+
     return(
       <View style={styles.exchangeView}>
         <View style={styles.payingDetailsView}>
-            <View style={{flexDirection: "row"}} >
-              {/* <Text style={{...styles.youPay, color: themeColors.tertiary_text}}>
-                {whoPays + ":"}
-              </Text> */}
+            {/* <View style={{flexDirection: "row"}} >
+              <Text style={{...styles.youPay, color: themeColors.tertiary_text}}>
+                {minLimit + ":"}
+              </Text>
 
               <Text style={{...styles.amountPaid, color: themeColors.text}}>
-                {"8.00 USD"}
+                {minLimitValue}
               </Text>
-            </View>
+            </View> */}
 
 
 
             <View style={{flexDirection: "row"}}>
-              {/* <Text style={{...styles.youRceive, color: themeColors.tertiary_text}}>
-                {whoReceives + ":"}
-              </Text> */}
+              <Text style={{...styles.youPay, color: themeColors.tertiary_text}}>
+                {"purchase limit" + ":"}
+              </Text>
 
               <Text style={{...styles.amountPaid, color: themeColors.text}}>
-                {"10.973553 USDT"}
+                { minLimitValue + " - " + maxLimitValue}
               </Text>
             </View>
 
-            
+
+
+            <View style={{
+              flexDirection: "row",
+              justifyContent: "space-between",
+              width: "100%",
+              marginTop: 5,
+              }}>
+
+              <Text style={{...styles.amountPaid, color: themeColors.text}}>
+                {`1 USD = ${currencyPriceDiffrence.toFixed(2)} USD of ${coin}`}
+              </Text>
+
+              <View
+              style={{
+                flexDirection: "row",
+                justifyContent: "space-between",
+                alignItems: "center"
+              }}
+              >
+
+                <Image style={styles.timer} source={upOrDown}/>
+
+              <Text style={{...styles.amountPaid, color: themeColors.text}}>
+                {percentage + "%"}
+              </Text>
+              </View>
+
+            </View>
+
+
+
+            <View style={{flexDirection: "row", marginTop: 5}}>
+
+              <Text style={{...styles.amountPaid, color: themeColors.text}}>
+                {price + " " + currency}
+              </Text>
+            </View>
+
         </View>
+
+
+        
 
         {/* <View style={{...styles.orderStatus, backgroundColor: statusBackgroundColor, borderColor: statusColor}}>
           <Text style={{...styles.orderStatusText, color: statusColor}}>
@@ -160,6 +262,12 @@ export default function Trade({ orderInfo = placeHolderObj, style = viewStyleSam
   }
 
   const UserInfo = () => {
+    const userName = receivedTradeInfo.ownerData.username
+    const isVerified = receivedTradeInfo.ownerData.verified
+    const likes = receivedTradeInfo.ownerData.likes
+    const dislikes = receivedTradeInfo.ownerData.dislikes
+
+    const lastSeen =  "Seen 24h ago"
     return (
       <View style={styles.userView}>
         <View style={styles.userImageView}>
@@ -168,21 +276,35 @@ export default function Trade({ orderInfo = placeHolderObj, style = viewStyleSam
 
 
         <View style={{flex: 1}}>
-          <View style={{ flexDirection: "row" }}>
-            <Text style={styles.userFirstLastName}>
-              {
-              receivedOrderInfo.ownerData.firstName 
-              + " " + 
-              receivedOrderInfo.ownerData.lastName
-              }
+          <View style={{ flexDirection: "row", alignItems: "center" }}>
+            <Text style={styles.username}>
+              {userName}
             </Text>
             {/* <Text style={styles.createdAt}>{"Today 13:00"}</Text> */}
-            {receivedOrderInfo.ownerData.verified && <Verified isVerified={true}/>}
+
+            <Text style={styles.createdAt}>
+              {lastSeen}
+            </Text>
+
           </View>
 
-          <LikesDislikes numOflikes={receivedOrderInfo.ownerData.likes} numOfDislikes={receivedOrderInfo.ownerData.dislikes} style={{marginTop: useResponsiveVerticalSpace(5)}}/>
+          <View 
+          style={{
+            flexDirection: "row",
+            justifyContent: "flex-start",
+            alignItems: "center",
+            // backgroundColor: "red",
+            marginTop: useResponsiveVerticalSpace(6),
+          }}
+          >
+            <LikesDislikes numOflikes={likes} style={{}}/>
+            {isVerified && <Verified isVerified={true}/>}
 
+          </View>
+
+ 
         </View>
+
         
       </View>
     );
@@ -193,14 +315,14 @@ export default function Trade({ orderInfo = placeHolderObj, style = viewStyleSam
       <View style={styles.child}>
         <UserInfo/>
 
-        <OrderInfo/>
+        <TradeInfo/>
 
       </View>
     </CustomPressable>
   );
 }
 
-// const OrderInfo = () => {
+// const TradeInfo = () => {
 //   return (
 //     <View
 //       style={{

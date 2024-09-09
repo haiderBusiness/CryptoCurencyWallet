@@ -4,7 +4,7 @@ import {
   SET_SEARCH_INPUT_VALUE,
   SET_PREVIOUS_HASH,
   SET_ACTIVE_SECTION,
-  SET_DROPDOWN_PROPERTIES,
+  SET_CURRENCIES_CURRENT_PRICE,
 } from "./actions";
 
 const initialState = {
@@ -13,7 +13,7 @@ const initialState = {
   searchInputValue: null,
   previousHash: null,
   activeSection: null,
-  dropdownProperties: null,
+  currenciesCurrentPrices: null,
 };
 
 function reducer(state = initialState, action) {
@@ -43,10 +43,10 @@ function reducer(state = initialState, action) {
         ...state,
         activeSection: action.payload,
       };
-    case SET_DROPDOWN_PROPERTIES:
+    case SET_CURRENCIES_CURRENT_PRICE:
       return {
         ...state,
-        dropdownProperties: action.payload,
+        currenciesCurrentPrices: action.payload,
       };
   }
 

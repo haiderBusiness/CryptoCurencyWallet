@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 import useThemeColors from '../hooks/useThemeColors';
-import { useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth } from '../hooks/useResponsiveness';
+import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth } from '../hooks/useResponsiveness';
 import {dislikePurple, likeGreen, likePurple, likePurple2, thumbsUpPurple } from '../assets/dummy/icons_pictures';
 import English from '../constants/English';
 import viewStyleSample from './RNComponents/viewStyleSample';
@@ -20,10 +20,11 @@ export default function LikesDislikes({numOflikes, numOfDislikes, style = viewSt
             <Text style={{...styles.numOfLikesText, color: themeColors.purple}}>{numOflikes ? numOflikes : "0"}</Text>
         </View>
 
+        { numOfDislikes > 0 &&       
         <View style={{...styles.likesView, backgroundColor: themeColors.lightPurple10}}>
             <Image style={styles.dislikeImage} source={thumbsUpPurple}/>
             <Text style={{...styles.numOfLikesText, color: themeColors.purple}}>{numOfDislikes ? numOfDislikes : "0"}</Text>
-        </View>
+        </View>}
 
     </View>
 
@@ -42,7 +43,7 @@ likesView: {
     // width: useResponsiveWidth(20),
     // height: useResponsiveHeight(20),
     alignSelf: 'flex-start',
-    paddingVertical: useResponsiveVerticalSpace(5),
+    paddingVertical: useResponsiveVerticalSpace(3),
     paddingHorizontal: useResponsiveHorizontalSpace(10),
     flexDirection: "row",
     justifyContent: "center",
@@ -52,15 +53,15 @@ likesView: {
 },
 
 likeImage: {
-    width: useResponsiveWidth(15),
-    height: useResponsiveHeight(15),
+    width: useResponsiveWidth(13),
+    height: useResponsiveHeight(13),
     marginRight: useResponsiveHorizontalSpace(8),
     // backgroundColor: "red",
 },
 
 dislikeImage: {
-    width: useResponsiveWidth(15),
-    height: useResponsiveHeight(15),
+    width: useResponsiveWidth(13),
+    height: useResponsiveHeight(13),
     marginRight: useResponsiveHorizontalSpace(8),
     transform: [{scaleY: -1}]
     // backgroundColor: "red",
@@ -69,7 +70,7 @@ dislikeImage: {
 
 
 numOfLikesText: {
-
+    fontSize: useResponsiveFontSize(13)
 },
 
 });

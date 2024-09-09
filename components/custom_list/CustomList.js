@@ -33,6 +33,7 @@ import PlaceHolderListHeader from "./PlaceHolderListHeader"
 import useScrollController, { useScrollHandler } from './useScrollHandler'; 
 
 import ListCell from "./ListCell";
+import TestComponent from "../TestComponent";
 
 let numOfRenders = 0
 export default function CustomList({
@@ -64,6 +65,7 @@ export default function CustomList({
   headerOnRightImage2Click,
   headerOnRightImage3Click,
   headerStyle = viewStyleSample,
+  headerBlur = true,
 
 
   // -> List <-
@@ -111,10 +113,10 @@ export default function CustomList({
            0; // Default value if none of the conditions match
   }, [scrollSpeed]);
 
-  const scrollMinSpeed = useMemo(() => scrollMaxSpeed / 2, [scrollMaxSpeed]);
+  const scrollMinSpeed =  scrollMaxSpeed / 2
 
   // const { onScroll } = useScrollHandler(scrolling, setScrolling, listRef, topHeaderOpacity, fadeInTopHeader, fadeOutTopHeader, scrollMinSpeed, scrollMaxSpeed);
-  const { onScroll, scrolling, topHeaderOpacity} = useScrollHandler(listRef,scrollMinSpeed, scrollMaxSpeed);
+ 
 
   // const scrollingEnabled = useScrollController(listRef);
 
@@ -172,7 +174,7 @@ export default function CustomList({
 
   if (__DEV__) { 
     if(numOfRenders >= 2) {
-      console.warn(`Reload to reflect changes in CustomList`)
+      console.warn(`Reload to reflect changes in ${this.name}`)
     }
   }
 
@@ -180,62 +182,24 @@ export default function CustomList({
 
 
 
-  // Custom comparison function to check if item has changed
-  const areEqual = (prevProps, nextProps) => {
-    // Perform a shallow comparison of item props
-    return prevProps.item === nextProps.item;
+
+
+  const [headerLayout, setHeaderLayout] = useState(null)
+  const [topHeaderOpacity, setTopheaderOpacity] = useState(null)
+
+  const handlrHeaderLayout = (layout) => {
+    if(layout) {
+      const { height, width, x, y } = layout;
+      setHeaderLayout({ height, width, x, y });
+    }
+
   };
 
 
 
-  const MemoizedRenderTopBarHeader = memo(() => {
-
-    return(
-      <>
-        <TopBarHeader 
-        leftComponent={headerLeftComponent}
-        rightComponent={headerRightComponent}
-        leftImageSource1={headerLeftImageSource1}
-        leftImageSource2={headerLeftImageSource2} 
-        leftImageSource3={headerLeftImageSource3} 
-        rightImageSource1={headerRightImageSource1}
-        rightImageSource2={headerRightImageSource2}
-        rightImageSource3={headerRightImageSource3}
-        titleComponent={headerTitleComponent}
-        onLeftImage1Click={headerOnLeftImage1Click}
-        onLeftImage2Click={headerOnLeftImage2Click}
-        onLeftImage3Click={headerOnLeftImage3Click}
-        onRightImage1Click={headerOnRightImage1Click}
-        onRightImage2Click={headerOnRightImage2Click}
-        onRightImage3Click={headerOnRightImage3Click}
-        title={headerTitle}
-        titleAndBackgroundAnimationValue={topHeaderOpacity}
-        style={headerStyle}
-        />
-    </>
-    )
-  }, areEqual);
 
 
-  const RenderTopBarHeader = () => {
-    return <MemoizedRenderTopBarHeader/>;
-  };
 
-
-  const renderItem = ({item, index}) => {
-    return(
-      <ListCell
-      item={item} index={index}
-      removeBigTitle={removeBigTitle}
-      removeHeader={removeHeader}
-      listItem={listItem}
-      listHeader={listHeader} 
-      bigHeaderTitle={bigHeaderTitle}
-      navigation={navigation}
-
-      />
-    )
-  }
 
 
 
@@ -251,61 +215,151 @@ export default function CustomList({
   isStikcyListHeader ? [0] 
   : null
  
+  console.log("here")
 
   return (
     // <SafeAreaView>
       <View style={{flex: 1, backgroundColor: themeColors.backgroundColor}}>
-
-        
         
          {/* -> Default header if not disabled  */}
-        {!removeHeader && !customHeaderComponent && <RenderTopBarHeader/> }
+        {!removeHeader && !customHeaderComponent &&      
+        <TopBarHeader 
+          leftComponent={headerLeftComponent}
+          rightComponent={headerRightComponent}
+          leftImageSource1={headerLeftImageSource1}
+          leftImageSource2={headerLeftImageSource2} 
+          leftImageSource3={headerLeftImageSource3} 
+          rightImageSource1={headerRightImageSource1}
+          rightImageSource2={headerRightImageSource2}
+          rightImageSource3={headerRightImageSource3}
+          titleComponent={headerTitleComponent}
+          onLeftImage1Click={headerOnLeftImage1Click}
+          onLeftImage2Click={headerOnLeftImage2Click}
+          onLeftImage3Click={headerOnLeftImage3Click}
+          onRightImage1Click={headerOnRightImage1Click}
+          onRightImage2Click={headerOnRightImage2Click}
+          onRightImage3Click={headerOnRightImage3Click}
+          title={headerTitle}
+          titleAndBackgroundAnimationValue={topHeaderOpacity}
+          headerLayout={(layout) => setHeaderLayout(layout)}
+          style={headerStyle ? headerStyle : defaultStyles}
+          headerBlur={headerBlur}
+        /> 
+        }
 
         {/* -> Custom header if there is  */}
         {!removeHeader && !!customHeaderComponent &&customHeaderComponent}
 
         {/* -> List */}
-        <View style={[ receivedListStyleStyle, {flex: 1}]}>
-          <FlashList
-          ref={listRef}
-          data={dataArray}
-          renderItem={renderItem}
-          // ListHeaderComponent={FlatListHeader}
-          estimatedItemSize={230}
-          onScroll={onScroll}
-          scrollEnabled={scrolling}
-          // onScroll={scrollingEnabled}
-          stickyHeaderIndices={showStickyHeader}
-          keyExtractor={keyExtractor}
-          // scrollEventThrottle={16}
-          // onMomentumScrollEnd={() => {console.log("momentum scroll ended")}}
-          // onMomentumScrollEnd={onMomentumScrollEnd}
-          // disableIntervalMomentum={false}
-          // decelerationRate={"normal"}
-          // refreshing={false}
-          // windowSize={windowSize}
-          // maxToRenderPerBatch={windowSize}
-          // decelerationRate="fast"
-          
-         
-          // decelerationRate={0}
-          // stickyHeaderIndices={[0]}
-          />
+        <List
+         receivedListStyleStyle 
+         headerLayout={headerLayout}
+         listRef={listRef}
+         dataArray={dataArray}
+         scrollMaxSpeed={scrollMaxSpeed}
+         scrollMinSpeed={scrollMinSpeed}
+         setTopheaderOpacity={setTopheaderOpacity}
+       
+         removeHeader={removeHeader}
+         removeBigTitle={removeBigTitle}
+         bigHeaderTitle={bigHeaderTitle}
+         showStickyHeader={showStickyHeader}
+         keyExtractor={keyExtractor}
+         listItem={listItem}
+         listHeader={listHeader}
+         navigation={navigation}
+        />
+        
 
-          {/* <FlatList
-          ref={listRef}
-          data={dataArray}
-          renderItem={renderItem}
-          onScroll={onScroll}
-          stickyHeaderIndices={showStickyHeader}
-          keyExtractor={keyExtractor}
-          scrollEnabled={scrolling}
-          // onMomentumScrollEnd={() => {console.log("momentum scroll ended")}}
-          /> */}
-       </View>
       </View>
     // </SafeAreaView>
   );
+}
+
+
+
+const List = ({
+  receivedListStyleStyle, 
+  headerLayout, 
+  listRef, 
+  dataArray, 
+  scrollMaxSpeed, 
+  scrollMinSpeed, 
+  showStickyHeader,
+  removeHeader,
+  removeBigTitle,
+  bigHeaderTitle,
+  keyExtractor,
+  listItem,
+  listHeader,
+  navigation,
+  setTopheaderOpacity
+
+}) => {
+
+
+  const { onScroll, scrolling, topHeaderOpacity} = useScrollHandler(listRef,scrollMinSpeed, scrollMaxSpeed);
+
+  useEffect(() => {
+    setTopheaderOpacity(topHeaderOpacity)
+  }, [topHeaderOpacity])
+
+
+  const renderItem = ({item, index}) => {
+    return(
+      <ListCell
+      item={item} index={index}
+      removeBigTitle={removeBigTitle}
+      removeHeader={removeHeader}
+      listItem={listItem}
+      listHeader={listHeader} 
+      bigHeaderTitle={bigHeaderTitle}
+      navigation={navigation}
+      />
+    )
+  }
+
+  return(
+    <View style={[ receivedListStyleStyle, {flex: 1, }]}>
+    <FlashList
+    contentContainerStyle={{paddingTop: headerLayout && headerLayout.height ? headerLayout.height : 0}}
+    ref={listRef}
+    data={dataArray}
+    renderItem={renderItem}
+    // ListHeaderComponent={FlatListHeader}
+    estimatedItemSize={230}
+    onScroll={onScroll}
+    scrollEnabled={scrolling}
+    // onScroll={scrollingEnabled}
+    stickyHeaderIndices={showStickyHeader}
+    keyExtractor={keyExtractor}
+    // scrollEventThrottle={16}
+    // onMomentumScrollEnd={() => {console.log("momentum scroll ended")}}
+    // onMomentumScrollEnd={onMomentumScrollEnd}
+    // disableIntervalMomentum={false}
+    // decelerationRate={"normal"}
+    // refreshing={false}
+    // windowSize={windowSize}
+    // maxToRenderPerBatch={windowSize}
+    // decelerationRate="fast"
+    
+   
+    // decelerationRate={0}
+    // stickyHeaderIndices={[0]}
+    />
+
+    {/* <FlatList
+    ref={listRef}
+    data={dataArray}
+    renderItem={renderItem}
+    onScroll={onScroll}
+    stickyHeaderIndices={showStickyHeader}
+    keyExtractor={keyExtractor}
+    scrollEnabled={scrolling}
+    // onMomentumScrollEnd={() => {console.log("momentum scroll ended")}}
+    /> */}
+ </View>
+  )
 }
 
 const styles = StyleSheet.create({

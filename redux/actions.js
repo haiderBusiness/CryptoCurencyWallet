@@ -3,7 +3,7 @@ export const SET_ICONS_TO_SHOW = "SET_ICONS_TO_SHOW";
 export const SET_SEARCH_INPUT_VALUE = "SET_SEARCH_INPUT_VALUE";
 export const SET_PREVIOUS_HASH = "SET_PREVIOUS_HASH";
 export const SET_ACTIVE_SECTION = "SET_ACTIVE_SECTION";
-export const SET_DROPDOWN_PROPERTIES = "SET_DROPDOWN_PROPERTIES";
+export const SET_CURRENCIES_CURRENT_PRICE = "SET_CURRENCIES_CURRENT_PRICE";
 
 const nameOfPage = "actions.js";
 
@@ -62,11 +62,11 @@ export const setActiveSection = (setActiveSection) => (dispatch) => {
   }
 };
 
-export const setDropdownProperties = (setDropdownProperties) => (dispatch) => {
+export const setCurrenciesCurrentPrices = (setCurrenciesCurrentPrices) => (dispatch) => {
   try {
     dispatch({
-      type: SET_DROPDOWN_PROPERTIES,
-      payload: setDropdownProperties,
+      type: SET_CURRENCIES_CURRENT_PRICE,
+      payload: setCurrenciesCurrentPrices,
     });
   } catch (error) {
     console.log(`error in ${nameOfPage} > ${this.name}: ${error}`);

@@ -14,7 +14,7 @@ const styles = StyleSheet.create({
     width: "100%",
     justifyContent: "center",
     // backgroundColor: "red",
-    height: 230,
+    // height: 230,
   },
   child: {},
 
@@ -22,6 +22,7 @@ const styles = StyleSheet.create({
   userView: {
     flexDirection: "row",
     justifyContent: "flex-start",
+    alignItems: "center"
     // backgroundColor: "red",
   },
 
@@ -44,9 +45,9 @@ const styles = StyleSheet.create({
   },
 
   userImage: {
-    width: useResponsiveWidth(50),
-    height: useResponsiveHeight(50),
-    borderRadius: useResponsiveRadius(50),
+    width: useResponsiveWidth(40),
+    height: useResponsiveHeight(40),
+    borderRadius: useResponsiveRadius(15),
     borderWidth: 1.5,
     borderColor: "white",
   },
@@ -57,6 +58,13 @@ const styles = StyleSheet.create({
     textTransform: "capitalize",
     marginRight: useResponsiveHorizontalSpace(14),
 
+  },
+
+  username: {
+    fontSize: useResponsiveFontSize(14),
+    fontWeight: "600",
+    textTransform: "capitalize",
+    marginRight: useResponsiveHorizontalSpace(14),
   },
 
 
@@ -108,14 +116,21 @@ const styles = StyleSheet.create({
   buySellText: {
     fontSize: useResponsiveFontSize(15),
     fontWeight: "600",
-    textTransform: "capitalize",
+    // textTransform: "capitalize",
     marginRight: useResponsiveHorizontalSpace(14),
   },
 
   coin: {
-    width: useResponsiveWidth(25),
-    height: useResponsiveHeight(25),
+    width: useResponsiveWidth(22),
+    height: useResponsiveHeight(22),
     marginRight: useResponsiveHorizontalSpace(14),
+  },
+
+  timer: {
+    width: useResponsiveWidth(18),
+    height: useResponsiveHeight(18),
+    marginRight: useResponsiveHorizontalSpace(10),
+    opacity: 0.7
   },
 
   createdAt: {
@@ -138,7 +153,7 @@ const styles = StyleSheet.create({
   // Middle
   paymentMethod: {
     textTransform: "capitalize",
-    fontSize: useResponsiveFontSize(13),
+    fontSize: useResponsiveFontSize(15),
     fontWeight: "500",
     marginTop: useResponsiveVerticalSpace(14),
   },
@@ -159,6 +174,7 @@ const styles = StyleSheet.create({
 
   payingDetailsView: {
     marginTop: useResponsiveVerticalSpace(5),
+    width: "100%"
   },
   youPay:{
     textAlign: "left",
