@@ -2,8 +2,9 @@ export const SET_ICON_OBJECT = "SET_ICON_OBJECT";
 export const SET_ICONS_TO_SHOW = "SET_ICONS_TO_SHOW";
 export const SET_SEARCH_INPUT_VALUE = "SET_SEARCH_INPUT_VALUE";
 export const SET_PREVIOUS_HASH = "SET_PREVIOUS_HASH";
-export const SET_ACTIVE_SECTION = "SET_ACTIVE_SECTION";
+export const SET_TRADES = "SET_TRADES";
 export const SET_CURRENCIES_CURRENT_PRICE = "SET_CURRENCIES_CURRENT_PRICE";
+
 
 const nameOfPage = "actions.js";
 
@@ -51,11 +52,11 @@ export const setPreviousHash = (setPreviousHash) => (dispatch) => {
   }
 };
 
-export const setActiveSection = (setActiveSection) => (dispatch) => {
+export const setTrades = (setTrades) => (dispatch) => {
   try {
     dispatch({
-      type: SET_ACTIVE_SECTION,
-      payload: setActiveSection,
+      type: SET_TRADES,
+      payload: setTrades,
     });
   } catch (error) {
     console.log(`error in ${nameOfPage} > ${this.name}: ${error}`);

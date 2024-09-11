@@ -60,7 +60,7 @@ const BottomNav = () => {
         borderTopRightRadius: 20,
         borderTopLeftRadius: 20,
         overflow: "hidden",
-        backgroundColor: themeColors.background,
+        backgroundColor: themeColors.background3,
         opacity: 0.5,
         }}
       />
@@ -180,9 +180,9 @@ export default function BottomNavigation({}) {
     colors: {
       ...DefaultTheme.colors,
       background: themeColors.background,
-      secondaryContainer: "red",
-      secondaryContainer: "red",
-      primary: "red",
+      // secondaryContainer: "red",
+      // secondaryContainer: "red",
+      // primary: "red",
     },
   };
   return (

@@ -3,7 +3,7 @@ import {
   SET_ICONS_TO_SHOW,
   SET_SEARCH_INPUT_VALUE,
   SET_PREVIOUS_HASH,
-  SET_ACTIVE_SECTION,
+  SET_TRADES,
   SET_CURRENCIES_CURRENT_PRICE,
 } from "./actions";
 
@@ -11,7 +11,7 @@ const initialState = {
   iconObject: null,
   iconsToShow: null,
   searchInputValue: null,
-  previousHash: null,
+  trades: {"test": "test"},
   activeSection: null,
   currenciesCurrentPrices: null,
 };
@@ -36,12 +36,12 @@ function reducer(state = initialState, action) {
     case SET_PREVIOUS_HASH:
       return {
         ...state,
-        previousHash: action.payload,
+        trades: action.payload,
       };
-    case SET_ACTIVE_SECTION:
+    case SET_TRADES:
       return {
         ...state,
-        activeSection: action.payload,
+        trades: action.payload,
       };
     case SET_CURRENCIES_CURRENT_PRICE:
       return {

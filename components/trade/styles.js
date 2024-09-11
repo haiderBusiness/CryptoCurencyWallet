@@ -18,54 +18,7 @@ const styles = StyleSheet.create({
   },
   child: {},
 
-  //HEADER
-  userView: {
-    flexDirection: "row",
-    justifyContent: "flex-start",
-    alignItems: "center"
-    // backgroundColor: "red",
-  },
 
-  userImageView: {
-    shadowOffset: { width: -1, height: 1 },
-    shadowColor: "rgba(0,0,0,0.3)",
-    shadowOpacity: 0.35,
-    shadowRadius: useResponsiveRadius(7),
-    elevation: 10,
-
-    // backgroundColor: "red",
-    height: useResponsiveHeight(55),
-    width: useResponsiveWidth(55),
-    borderRadius: useResponsiveRadius(30),
-    justifyContent: "center",
-    alignItems: "center",
-    marginRight: useResponsiveHorizontalSpace(9),
-
-    // backgroundColor: "red",
-  },
-
-  userImage: {
-    width: useResponsiveWidth(40),
-    height: useResponsiveHeight(40),
-    borderRadius: useResponsiveRadius(15),
-    borderWidth: 1.5,
-    borderColor: "white",
-  },
-
-  userFirstLastName: {
-    fontSize: useResponsiveFontSize(16),
-    fontWeight: "600",
-    textTransform: "capitalize",
-    marginRight: useResponsiveHorizontalSpace(14),
-
-  },
-
-  username: {
-    fontSize: useResponsiveFontSize(14),
-    fontWeight: "600",
-    textTransform: "capitalize",
-    marginRight: useResponsiveHorizontalSpace(14),
-  },
 
 
 
@@ -80,7 +33,7 @@ const styles = StyleSheet.create({
   
   //ORDER
   orderView: {
-    backgroundColor: "red",
+    // backgroundColor: "red",
     paddingLeft: useResponsiveHorizontalSpace(14),
     paddingRight: useResponsiveHorizontalSpace(14),
     paddingTop: useResponsiveHorizontalSpace(18),

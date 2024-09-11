@@ -87,9 +87,7 @@ export default function CustomList({
 
   const { width, height } = Dimensions.get("window");
 
-  const backgroundColor = receivedListStyleStyle.backgroundColor
-    ? receivedListStyleStyle.backgroundColor
-    : themeColors.background;
+
 
 
   // console.log("tabBarheight: ", tabBarHeight);
@@ -217,9 +215,13 @@ export default function CustomList({
  
   console.log("here")
 
+  const backgroundColor = receivedListStyleStyle.backgroundColor
+  ? receivedListStyleStyle.backgroundColor
+  : themeColors.background;
+
   return (
     // <SafeAreaView>
-      <View style={{flex: 1, backgroundColor: themeColors.backgroundColor}}>
+      <View style={{flex: 1, backgroundColor: backgroundColor}}>
         
          {/* -> Default header if not disabled  */}
         {!removeHeader && !customHeaderComponent &&      
@@ -250,7 +252,8 @@ export default function CustomList({
         {/* -> Custom header if there is  */}
         {!removeHeader && !!customHeaderComponent &&customHeaderComponent}
 
-        {/* -> List */}
+
+        <View style={{flex: 1,}}>
         <List
          receivedListStyleStyle 
          headerLayout={headerLayout}
@@ -269,6 +272,9 @@ export default function CustomList({
          listHeader={listHeader}
          navigation={navigation}
         />
+        </View>
+        {/* -> List */}
+
         
 
       </View>
@@ -306,9 +312,11 @@ const List = ({
 
 
   const renderItem = ({item, index}) => {
+
     return(
       <ListCell
-      item={item} index={index}
+      item={item} 
+      index={index}
       removeBigTitle={removeBigTitle}
       removeHeader={removeHeader}
       listItem={listItem}
@@ -324,7 +332,7 @@ const List = ({
     <FlashList
     contentContainerStyle={{paddingTop: headerLayout && headerLayout.height ? headerLayout.height : 0}}
     ref={listRef}
-    data={dataArray}
+    data={dataArray.sort((a,b) => a.priceAdjustmentPercentage - b.priceAdjustmentPercentage)}
     renderItem={renderItem}
     // ListHeaderComponent={FlatListHeader}
     estimatedItemSize={230}

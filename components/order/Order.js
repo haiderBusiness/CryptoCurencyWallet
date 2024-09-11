@@ -77,11 +77,11 @@ export default function Order({ orderInfo = placeHolderObj, style = viewStyleSam
       <View
         style={{
           ...styles.orderView,
-          backgroundColor: themeColors.second_background,
+          backgroundColor: themeColors.background2,
         }}
       >
         <OrderFirstPart />
-        <Text style={{...styles.paymentMethod, color: themeColors.secondary_text}}>
+        <Text style={{...styles.paymentMethod, color: themeColors.text2}}>
         {receivedOrderInfo.paymentMethod}
         </Text>
 
@@ -130,7 +130,7 @@ export default function Order({ orderInfo = placeHolderObj, style = viewStyleSam
       <View style={styles.exchangeView}>
         <View style={styles.payingDetailsView}>
             <View style={{flexDirection: "row"}} >
-              <Text style={{...styles.youPay, color: themeColors.tertiary_text}}>
+              <Text style={{...styles.youPay, color: themeColors.text3}}>
                 {whoPays + ":"}
               </Text>
 
@@ -142,7 +142,7 @@ export default function Order({ orderInfo = placeHolderObj, style = viewStyleSam
 
 
             <View style={{flexDirection: "row"}}>
-              <Text style={{...styles.youRceive, color: themeColors.tertiary_text}}>
+              <Text style={{...styles.youRceive, color: themeColors.text3}}>
                 {whoReceives + ":"}
               </Text>
 
@@ -214,7 +214,7 @@ export default function Order({ orderInfo = placeHolderObj, style = viewStyleSam
 //     <View
 //       style={{
 //         ...styles.orderView,
-//         backgroundColor: themeColors.second_background,
+//         backgroundColor: themeColors.background2,
 //       }}
 //     >
 //       <OrderFirstRow />

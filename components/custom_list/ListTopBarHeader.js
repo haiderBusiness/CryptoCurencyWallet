@@ -65,7 +65,7 @@ const ListTopBarHeader = ({
   // otherImagesMarginLeft = leftImageSource1 ? 
 
 
-  const BACKGROUND_COLOR = backgroundColor ? backgroundColor : themeColors.background
+  const BACKGROUND_COLOR = style &&  style.flex !== 1000 ?  style.backgroundColor : themeColors.background
 
   const LeftIcons = ({}) => {
 
@@ -231,7 +231,8 @@ const ListTopBarHeader = ({
                 // backgroundColor: "white"
                 }}/>}
 
-              {layout && <View 
+              {layout && 
+              <View 
               style={{
                 width: layout.width, 
                 height: layout.height , 

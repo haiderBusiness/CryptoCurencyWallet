@@ -13,24 +13,47 @@ import { interface_plus_black, interfaceAddDocumentOutlineBlack, interfaceFilter
 import { getTrades, getOrders } from "../backend/controllers/tradeController";
 import CustomList from "../components/custom_list/CustomList";
 
+import Store from "../redux/Store.js"
+import { useSelector } from "react-redux";
+import { setTrades } from "../redux/actions";
+
+
+
+
+
 
 export default function Marketplace({ route, navigation }) {
   const themeColors = useThemeColors();
 
+  const trades  = useSelector((state) => state.trades);
+
+  console.log("trades: ", trades)
+
+  
+  const dispatch = Store.dispatch
+
+  useEffect(() => {
+    dispatch(setTrades({"updated": "updated"}))
+  }, [])
+
 
   const data = useCallback(() => { return getTrades(null)}, [])
+
 
 
   const ListItem = 
   // React.memo(
     ({ item, index }) => {
     //  console.log("item.coin: ", item.coin)
+    
     return (
       <Trade
-        orderInfo={item}
+        tradeInfo={item}
         style={{ 
-          paddingTop: useResponsiveVerticalSpace(16),
-          backgroundColor: themeColors.background,
+          paddingVertical: useResponsiveVerticalSpace(6),
+          marginVertical: useResponsiveHorizontalSpace(6),
+          // backgroundColor: "red",
+          backgroundColor: themeColors.background3,
           paddingHorizontal: useResponsiveHorizontalSpace(18)
         }}
       />
@@ -40,21 +63,22 @@ export default function Marketplace({ route, navigation }) {
 
 
   return (
-
-          <CustomList
-          listDataArray={data}
-          listItem={ListItem}
-          headerTitle="MarketPlace"
-          bigHeaderTitle="Marketplace"
-          headerRightImageSource1={interface_plus_black}
-          headerRightImageSource2={interfaceHistoryOutlineBlack}
-          headerLeftImageSource1={interfaceFilterOutlineBlack}
-          scrollSpeed="slowest"
-          // removeBigTitle 
-          // removeHeader
-          // listHeader={() => (<Text>Hellooooooo</Text>)}
-          // isStikcyListHeader={true}
-          />
+      <CustomList
+      listDataArray={data}
+      listItem={ListItem}
+      headerTitle="MarketPlace"
+      bigHeaderTitle="Marketplace"
+      headerRightImageSource1={interface_plus_black}
+      headerRightImageSource2={interfaceHistoryOutlineBlack}
+      headerLeftImageSource1={interfaceFilterOutlineBlack}
+      scrollSpeed="slowest"
+      listStyle={{backgroundColor: themeColors.background3}}
+      headerStyle={{backgroundColor: themeColors.background3}}
+      // removeBigTitle 
+      // removeHeader
+      // listHeader={() => (<Text>Hellooooooo</Text>)}
+      // isStikcyListHeader={true}
+      />
   );
 }
 
