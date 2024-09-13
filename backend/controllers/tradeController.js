@@ -59,7 +59,7 @@ import trade_array from "../../assets/dummy/data/fake_trades_array.json"
 import order_array from "../../assets/dummy/data/fake_orders_array.json";
 
 
-export const getTrades = (someParameters) => {
+export const getTrades = async (someParameters) => {
 
     let array1 = trade_array
 

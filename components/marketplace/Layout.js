@@ -34,9 +34,10 @@ import useScrollController, { useScrollHandler } from './useScrollHandler';
 
 import ListCell from "./ListCell";
 import TestComponent from "../TestComponent";
+import TopTabs from "./TopTabs";
 
 let numOfRenders = 0
-export default function CustomList({
+export default function Layout({
 
   // -> General <-
   children,
@@ -79,30 +80,13 @@ export default function CustomList({
 }) {
   const receivedListStyleStyle = listStyle.flex !== 1000 ? listStyle : {};
 
-  // const tabBarHeight = useBottomTabBarHeight();
 
   const themeColors = useThemeColors();
 
 
-
-  const { width, height } = Dimensions.get("window");
-
-
-
-
-  // console.log("tabBarheight: ", tabBarHeight);
-  // const topHeaderOpacity = useRef(new Animated.Value(1)).current;
-
-  // r
-
   const listRef = useRef(null)
 
 
-  // const [scrolling, setScrolling] = useState(true)
-
-
-  // const scrollMaxSpeed = scrollSpeed === "fast" ? 10000 : scrollSpeed === "normal" ? 6000 : scrollSpeed === "slow" === 4000
-  // const scrollMinSpeed = scrollMaxSpeed / 2
   const scrollMaxSpeed = useMemo(() => {
     return scrollSpeed === "fast" ? 10000 :
            scrollSpeed === "normal" ? 6000 :
@@ -113,20 +97,12 @@ export default function CustomList({
 
   const scrollMinSpeed =  scrollMaxSpeed / 2
 
-  // const { onScroll } = useScrollHandler(scrolling, setScrolling, listRef, topHeaderOpacity, fadeInTopHeader, fadeOutTopHeader, scrollMinSpeed, scrollMaxSpeed);
- 
-
-  // const scrollingEnabled = useScrollController(listRef);
 
 
 
 
   const [dataArray, setDataArray] = useState(listDataArray ? listDataArray : placeHolderArray)
-  // const [numOfRenders, setNumOfRenders] = useState(0)
 
-  // const [headerStatus, setHeaderStatus] = useState("listHeader and bigTitle")
-
-  // console.log("refreshed")
 
   
   useEffect(() => {
@@ -149,27 +125,12 @@ export default function CustomList({
         numOfRenders =+ 1
       }
     }
-    
-
-    // if(numOfRenders < 2) {
-    //   setNumOfRenders(numOfRenders + 1)
-     
-    // }
 
     
 
   }, [])
 
 
-
-
-  
-
-  // const onMomentumScrollEnd = useCallback(() => {
-
-  //   console.log("scrolling",scrolling)
-  //   setScrolling(true); // The scroll momentum has stopped, so the user is no longer scrolling
-  // }, []);
 
 
   if (__DEV__) { 
@@ -195,6 +156,30 @@ export default function CustomList({
 
   };
 
+  const [update, setUpdate] = useState(false)
+
+  setTimeout(()=> {
+    setUpdate(!update)
+    // console.log('re render:', ' at MarketPlaceList file')
+  }, 3000)
+
+
+  function onSelectedTabChange (value) {
+
+    if(value && value.toLowerCase() === "buying") {
+      setUpdate(!update)
+      // setDataArray(listDataArray.buying)
+      // console.log("listDataArray.buying[0]: ", listDataArray.selling[0])
+    } else if(value && value.toLowerCase() === "selling") {
+      setUpdate(!update)
+      // setDataArray(listDataArray.selling)
+      // console.log("listDataArray.buying[0]: ", listDataArray.selling[0])
+    } else {
+      console.error(`Error: the value of selected tab is ${value} in ${this.name}`)
+    }
+  }
+
+
 
 
 
@@ -215,7 +200,6 @@ export default function CustomList({
   isStikcyListHeader ? [0] 
   : null
  
-  console.log("here", this.name)
 
   const backgroundColor = receivedListStyleStyle.backgroundColor
   ? receivedListStyleStyle.backgroundColor
@@ -248,6 +232,11 @@ export default function CustomList({
           headerLayout={(layout) => setHeaderLayout(layout)}
           style={headerStyle ? headerStyle : defaultStyles}
           headerBlur={headerBlur}
+          // AdditionalComponent={() => {
+          //   return (
+          //     <AdditionalComponent onSelectedTabChange={onSelectedTabChange} updateTopTabs={false}/>
+          //   )
+          // }}
         /> 
         }
 
@@ -255,13 +244,15 @@ export default function CustomList({
         {!removeHeader && !!customHeaderComponent &&customHeaderComponent}
 
 
+       
+
         <View style={{flex: 1,}}>
-        {dataArray && dataArray.length > 0 &&
+        {dataArray.buying && dataArray.buying.length > 0 &&
           <List
           receivedListStyleStyle 
           headerLayout={headerLayout}
           listRef={listRef}
-          dataArray={dataArray}
+          dataArray={dataArray.buying}
           scrollMaxSpeed={scrollMaxSpeed}
           scrollMinSpeed={scrollMinSpeed}
           setTopHeaderOpacity={setTopHeaderOpacity}
@@ -275,7 +266,6 @@ export default function CustomList({
           listHeader={listHeader}
           navigation={navigation}
         />
-
         }
 
         {!dataArray || dataArray.length < 1 && <View style={{flex: 1, color: "black", justifyContent: "center", alignItems: "center"}}>
@@ -293,8 +283,48 @@ export default function CustomList({
 }
 
 
+const AdditionalComponent = ({onSelectedTabChange, updateTopTabs}) => {
 
-const List = ({
+
+  return(
+      <TopTabs onSelectedTabChange={(value) => onSelectedTabChange(value)} update={updateTopTabs}/>
+  )
+}
+
+
+
+
+
+
+
+const Test = ({
+  receivedListStyleStyle, 
+}) => {
+
+  const RenderItem = ({item, index}) => {
+
+    return(
+      <>
+       <AdditionalComponent />
+      </>
+
+    )
+  }
+
+  return(
+    <View style={[ receivedListStyleStyle, {flex: 1, }]}>
+      <RenderItem/>
+    </View>
+  )
+}
+
+
+
+
+
+
+
+const ListWithScrollListen = ({
   receivedListStyleStyle, 
   headerLayout, 
   listRef, 
@@ -309,8 +339,11 @@ const List = ({
   listItem,
   listHeader,
   navigation,
-  setTopHeaderOpacity
+  setTopHeaderOpacity,
 
+
+  // children <-
+  TopBarHeader,
 }) => {
 
 
@@ -321,10 +354,14 @@ const List = ({
   }, [topHeaderOpacity])
 
 
+
   const renderItem = ({item, index}) => {
 
     return(
-      <ListCell
+      <>
+       {/* <AdditionalComponent /> */}
+
+       <ListCell
       item={item} 
       index={index}
       removeBigTitle={removeBigTitle}
@@ -334,49 +371,54 @@ const List = ({
       bigHeaderTitle={bigHeaderTitle}
       navigation={navigation}
       />
+      </>
+
     )
   }
 
   return(
-    <View style={[ receivedListStyleStyle, {flex: 1, }]}>
-    <FlashList
-    contentContainerStyle={{paddingTop: headerLayout && headerLayout.height ? headerLayout.height : 0}}
-    ref={listRef}
-    data={dataArray.sort((a,b) => a.priceAdjustmentPercentage - b.priceAdjustmentPercentage)}
-    renderItem={renderItem}
-    // ListHeaderComponent={FlatListHeader}
-    estimatedItemSize={230}
-    onScroll={onScroll}
-    scrollEnabled={scrolling}
-    // onScroll={scrollingEnabled}
-    stickyHeaderIndices={showStickyHeader}
-    keyExtractor={keyExtractor}
-    // scrollEventThrottle={16}
-    // onMomentumScrollEnd={() => {console.log("momentum scroll ended")}}
-    // onMomentumScrollEnd={onMomentumScrollEnd}
-    // disableIntervalMomentum={false}
-    // decelerationRate={"normal"}
-    // refreshing={false}
-    // windowSize={windowSize}
-    // maxToRenderPerBatch={windowSize}
-    // decelerationRate="fast"
-    
-   
-    // decelerationRate={0}
-    // stickyHeaderIndices={[0]}
-    />
+    <>
+      {TopBarHeader}
+     <View style={[ receivedListStyleStyle, {flex: 1, }]}>
+        <FlashList
+        contentContainerStyle={{paddingTop: headerLayout && headerLayout.height ? headerLayout.height : 0}}
+        ref={listRef}
+        data={dataArray.sort((a,b) => a.priceAdjustmentPercentage - b.priceAdjustmentPercentage)}
+        renderItem={renderItem}
+        // ListHeaderComponent={FlatListHeader}
+        estimatedItemSize={230}
+        onScroll={onScroll}
+        scrollEnabled={scrolling}
+        // onScroll={scrollingEnabled}
+        stickyHeaderIndices={showStickyHeader}
+        keyExtractor={keyExtractor}
+        // scrollEventThrottle={16}
+        // onMomentumScrollEnd={() => {console.log("momentum scroll ended")}}
+        // onMomentumScrollEnd={onMomentumScrollEnd}
+        // disableIntervalMomentum={false}
+        // decelerationRate={"normal"}
+        // refreshing={false}
+        // windowSize={windowSize}
+        // maxToRenderPerBatch={windowSize}
+        // decelerationRate="fast"
+        
 
-    {/* <FlatList
-    ref={listRef}
-    data={dataArray}
-    renderItem={renderItem}
-    onScroll={onScroll}
-    stickyHeaderIndices={showStickyHeader}
-    keyExtractor={keyExtractor}
-    scrollEnabled={scrolling}
-    // onMomentumScrollEnd={() => {console.log("momentum scroll ended")}}
-    /> */}
- </View>
+        // decelerationRate={0}
+        // stickyHeaderIndices={[0]}
+        />
+
+        {/* <FlatList
+        ref={listRef}
+        data={dataArray}
+        renderItem={renderItem}
+        onScroll={onScroll}
+        stickyHeaderIndices={showStickyHeader}
+        keyExtractor={keyExtractor}
+        scrollEnabled={scrolling}
+        // onMomentumScrollEnd={() => {console.log("momentum scroll ended")}}
+        /> */}
+     </View>
+ </>
   )
 }
 

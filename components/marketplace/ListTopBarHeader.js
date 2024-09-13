@@ -10,7 +10,7 @@ import Animated from "react-native-reanimated";
 
 import { BlurView } from 'expo-blur';
 
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const defaultIconHeight = useResponsiveHeight(30)
 const defaultContentBottomMargin = useResponsiveHorizontalSpace(8)
@@ -38,6 +38,9 @@ const ListTopBarHeader = ({
   headerLayout,
   headerBlur = true,
   style,
+  AdditionalComponent,
+  onSelectedTabChange,
+  topTabsResultSpeed,
 
 }) => {
 
@@ -210,7 +213,12 @@ const ListTopBarHeader = ({
   const MARGINTOP = topSafeArea 
   //  const PADDINGTOP = noIcons ? 0 : topSafeArea - contentHeight
 
-
+  function randomNumber() {
+   const min = 1000000000; // Minimum 10-digit number
+   const max = 9999999999; // Maximum 10-digit number
+   return Math.floor(Math.random() * (max - min + 1)) + min;
+  }
+  // console.log('re-render: ',randomNumber(), ' at ListTopBarHeader file')
 
 
   return (
@@ -287,6 +295,10 @@ const ListTopBarHeader = ({
 
         {/* {<View style={{width: 10, height: 10}}/>} */}
       </View>
+
+
+  
+      {<AdditionalComponent onSelectedTabChange={onSelectedTabChange} resultSpeed={topTabsResultSpeed} style={{paddingBottom: useResponsiveVerticalSpace(4) }}/>}
 
         {/* bottom line/border */}
       <Animated.View style={{width: "100%", height: useResponsiveHeight(0.5),opacity: titleAndBackgroundAnimationValue}}>

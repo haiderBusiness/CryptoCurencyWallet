@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useState } from "react";
 import { StatusBar } from "expo-status-bar";
 import { StyleSheet, Text, View } from "react-native";
 import ReceiveScreen from "./screens/ReceiveScreen";
@@ -12,8 +12,11 @@ import { getTrades, getOrders } from "./backend/controllers/tradeController";
 
 import Store from "./redux/Store";
 import { Provider } from "react-redux";
+import SplashScreen from "./screens/SplashScreen";
 
 export default function App() {
+
+  const [showSplashScreen, setShowSplashScreen] = useState(true)
 
   // async function retrieveCurrencies() {
   //   return await fetchAllCryptoRates()
@@ -26,16 +29,20 @@ export default function App() {
   // testGethConnection();
 
 
-  const tradesFilter = async () => {
-    const data = useCallback(() => { return getTrades(null)}, [])
-    data.filter(item => item.tradeType === "selling")
-    data.filter(item => item.tradeType === "buying")
-  }
+  useEffect(() => {
+    setTimeout(() => {
+      setShowSplashScreen(false)
+    }, 3000)
+  })
+
 
 
   return (
     <Provider store={Store}>
-    <BottomNavigation />
+
+    {showSplashScreen ? 
+    <SplashScreen/> :
+    <BottomNavigation />}
     </Provider>
     // <Test/>
     // {/* <Text>Open up App.js to start working on your app!</Text> */}

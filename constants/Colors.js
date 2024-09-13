@@ -13,6 +13,8 @@ export const Colors = {
     background: "#ffffff",
     background2: "#FAFAFA",
     background3: "#f6f6f6",
+    background4: "#f0f0f0",
+    background5: "#e6e6e6",
     text: "#000000",
     text2: "#11181C",
     text3: "#7C7C7C",

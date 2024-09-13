@@ -17,6 +17,11 @@ import Store from "../redux/Store.js"
 import { useSelector } from "react-redux";
 import { setTrades } from "../redux/actions";
 
+import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
+import ScrollViewWithAnimatedHeader from "../components/ScrollViewWithAnimatedHeader.js";
+import List from "../components/marketplace/MarketPlaceList.js";
+import MarketPlaceList from "../components/marketplace/MarketPlaceList.js";
+
 
 
 
@@ -25,19 +30,14 @@ import { setTrades } from "../redux/actions";
 export default function Marketplace({ route, navigation }) {
   const themeColors = useThemeColors();
 
+  const Tab = createMaterialTopTabNavigator()
+
   const trades  = useSelector((state) => state.trades);
 
-  console.log("trades: ", trades)
 
-  
-  const dispatch = Store.dispatch
-
-  useEffect(() => {
-    dispatch(setTrades({"updated": "updated"}))
-  }, [])
-
-
-  const data = useCallback(() => { return getTrades(null)}, [])
+  // useEffect(() => {
+  //   dispatch(setTrades({"updated": "updated"}))
+  // }, [])
 
 
 
@@ -62,6 +62,69 @@ export default function Marketplace({ route, navigation }) {
 // );
 
 
+ 
+
+
+
+
+  return (
+    // <ScrollViewWithAnimatedHeader headerTitle={"Main"}  style={{}} navigation={navigation}>
+
+      // <CustomList
+      //   listDataArray={trades.selling}
+      //   listItem={ListItem}
+      //   // headerTitle="MarketPlace"
+      //   headerTitleComponent={({styles}) => {
+      //     return(
+      //       <View style={{...styles}}>
+      //           <Text style={{fontSize: 17, fontWeight: "600"}}>Hello pepole</Text>
+      //       </View>
+ 
+      //     )
+      //   }}
+      //   bigHeaderTitle="Marketplace"
+      //   headerRightImageSource1={interface_plus_black}
+      //   headerRightImageSource2={interfaceHistoryOutlineBlack}
+      //   headerLeftImageSource1={interfaceFilterOutlineBlack}
+      //   scrollSpeed="slowest"
+      //   listStyle={{backgroundColor: themeColors.background3}}
+      //   headerStyle={{backgroundColor: themeColors.background3}}
+      //   // removeBigTitle 
+      //   // removeHeader
+      //   // listHeader={() => (<Text>Hellooooooo</Text>)}
+      //   // isStikcyListHeader={true}
+      //   /> 
+
+
+    <MarketPlaceList 
+
+        listDataArray={trades}
+        listItem={ListItem}
+        headerTitle="MarketPlace"
+        bigHeaderTitle="Marketplace"
+        headerRightImageSource1={interface_plus_black}
+        headerRightImageSource2={interfaceHistoryOutlineBlack}
+        headerLeftImageSource1={interfaceFilterOutlineBlack}
+        scrollSpeed="slowest"
+        listStyle={{backgroundColor: themeColors.background3}}
+        headerStyle={{backgroundColor: themeColors.background3}}
+        // removeBigTitle 
+        // removeHeader
+        // listHeader={() => (<Text>Hellooooooo</Text>)}
+        // isStikcyListHeader={true}
+    />
+
+      
+        
+
+  // </ScrollViewWithAnimatedHeader>
+  );
+}
+
+
+
+const SellingTab = ({ListItem, data}) => {
+
   return (
       <CustomList
       listDataArray={data}
@@ -78,9 +141,33 @@ export default function Marketplace({ route, navigation }) {
       // removeHeader
       // listHeader={() => (<Text>Hellooooooo</Text>)}
       // isStikcyListHeader={true}
-      />
-  );
+      /> 
+  )
 }
+
+
+const BuyingTab = ({ListItem, data}) => {
+
+  return (
+      <CustomList
+      listDataArray={data}
+      listItem={ListItem}
+      headerTitle="MarketPlace"
+      bigHeaderTitle="Marketplace"
+      headerRightImageSource1={interface_plus_black}
+      headerRightImageSource2={interfaceHistoryOutlineBlack}
+      headerLeftImageSource1={interfaceFilterOutlineBlack}
+      scrollSpeed="slowest"
+      listStyle={{backgroundColor: themeColors.background3}}
+      headerStyle={{backgroundColor: themeColors.background3}}
+      // removeBigTitle 
+      // removeHeader
+      // listHeader={() => (<Text>Hellooooooo</Text>)}
+      // isStikcyListHeader={true}
+      /> 
+  )
+}
+
 
 const styles = StyleSheet.create({
   container: {

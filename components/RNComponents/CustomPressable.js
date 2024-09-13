@@ -21,7 +21,7 @@ const darkenHexColor = (hex, percent) => {
 export default function CustomPressable({
   children,
   style = viewStyleSample,
-  onPress = () => {console.log("test")},
+  onPress = () => {console.log("test: ", this.name)},
 }) {
   const styles = style.flex !== 1000 ? style : {};
 
@@ -38,6 +38,7 @@ export default function CustomPressable({
           : { backgroundColor: styles.backgroundColor },
       ]}
     >
+      
       {children}
     </Pressable>
   );

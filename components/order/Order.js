@@ -64,7 +64,7 @@ export default function Order({ orderInfo = placeHolderObj, style = viewStyleSam
 
   const themeColors = useThemeColors();
 
-  console.log("orderStatus", orderInfo && orderInfo.orderStatus)
+  // console.log("orderStatus", orderInfo && orderInfo.orderStatus)
 
 
   // const isRealData = !!order && !!receivedOrderInfo.coin
