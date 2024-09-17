@@ -9,6 +9,7 @@ import {
   useResponsiveRadius,
   useResponsiveVerticalSpace,
   useResponsiveWidth,
+  useResponsiveBothHeightWidth
 } from "../../hooks/useResponsiveness.js";
 import Verified from "../Verified.js";
 import { user_1 } from "../../assets/dummy/users_pictures/index.js";
@@ -120,8 +121,8 @@ const styles = StyleSheet.create({
         elevation: 10,
 
         // backgroundColor: "red",
-        height: useResponsiveHeight(55),
-        width: useResponsiveWidth(55),
+        height: useResponsiveBothHeightWidth(55),
+        width: useResponsiveBothHeightWidth(55),
         borderRadius: useResponsiveRadius(30),
         justifyContent: "center",
         alignItems: "center",
@@ -132,8 +133,8 @@ const styles = StyleSheet.create({
 
 
     onlineCircle: {
-        width: useResponsiveWidth(7), 
-        height: useResponsiveHeight(7), 
+        width: useResponsiveBothHeightWidth(7), 
+        height: useResponsiveBothHeightWidth(7), 
         backgroundColor: "red", 
         position: "absolute", 
         zIndex: 1,
@@ -146,10 +147,10 @@ const styles = StyleSheet.create({
 
 
     userImage: {
-        width: useResponsiveWidth(40),
-        height: useResponsiveHeight(40),
+        width: useResponsiveBothHeightWidth(40),
+        height: useResponsiveBothHeightWidth(40),
         borderRadius: useResponsiveRadius(15),
-        borderWidth: 1.5,
+        borderWidth: useResponsiveWidth(1.5),
         borderColor: "white",
     },
     

@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useRef, useMemo, useCallback } from "react";
-import { StyleSheet, View, Text, TouchableOpacity, FlatList } from "react-native";
+import { StyleSheet, View, Text, TouchableOpacity, FlatList, Pressable } from "react-native";
 import useThemeColors from "../hooks/useThemeColors";
 
 
@@ -21,6 +21,7 @@ import { createMaterialTopTabNavigator } from '@react-navigation/material-top-ta
 import ScrollViewWithAnimatedHeader from "../components/ScrollViewWithAnimatedHeader.js";
 import List from "../components/marketplace/MarketPlaceList.js";
 import MarketPlaceList from "../components/marketplace/MarketPlaceList.js";
+
 
 
 
@@ -96,23 +97,32 @@ export default function Marketplace({ route, navigation }) {
       //   /> 
 
 
-    <MarketPlaceList 
 
-        listDataArray={trades}
-        listItem={ListItem}
-        headerTitle="MarketPlace"
-        bigHeaderTitle="Marketplace"
-        headerRightImageSource1={interface_plus_black}
-        headerRightImageSource2={interfaceHistoryOutlineBlack}
-        headerLeftImageSource1={interfaceFilterOutlineBlack}
-        scrollSpeed="slowest"
-        listStyle={{backgroundColor: themeColors.background3}}
-        headerStyle={{backgroundColor: themeColors.background3}}
-        // removeBigTitle 
-        // removeHeader
-        // listHeader={() => (<Text>Hellooooooo</Text>)}
-        // isStikcyListHeader={true}
-    />
+    //   <View style={{marginTop: 40, height: 600}}>
+    //     {/* <Search/> */}
+
+    <>
+      <MarketPlaceList 
+      listDataArray={trades}
+      listItem={ListItem}
+      headerTitle="MarketPlace"
+      bigHeaderTitle="Marketplace"
+      headerRightImageSource1={interface_plus_black}
+      headerRightImageSource2={interfaceHistoryOutlineBlack}
+      headerLeftImageSource1={interfaceFilterOutlineBlack}
+      scrollSpeed="slowest"
+      listStyle={{backgroundColor: themeColors.background3}}
+      headerStyle={{backgroundColor: themeColors.background3}}
+      navigation={navigation}
+      // removeBigTitle 
+      // removeHeader
+      // listHeader={() => (<Text>Hellooooooo</Text>)}
+      // isStikcyListHeader={true}
+      />
+    </>
+
+    //   </View>
+   
 
       
         

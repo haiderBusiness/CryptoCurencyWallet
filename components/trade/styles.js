@@ -7,6 +7,7 @@ import {
   useResponsiveRadius,
   useResponsiveVerticalSpace,
   useResponsiveWidth,
+  useResponsiveBothHeightWidth
 } from "../../hooks/useResponsiveness.js";
 
 const styles = StyleSheet.create({
@@ -74,14 +75,14 @@ const styles = StyleSheet.create({
   },
 
   coin: {
-    width: useResponsiveWidth(22),
-    height: useResponsiveHeight(22),
+    width: useResponsiveBothHeightWidth(22),
+    height: useResponsiveBothHeightWidth(22),
     marginRight: useResponsiveHorizontalSpace(14),
   },
 
   timer: {
-    width: useResponsiveWidth(18),
-    height: useResponsiveHeight(18),
+    width: useResponsiveBothHeightWidth(18),
+    height: useResponsiveBothHeightWidth(18),
     marginRight: useResponsiveHorizontalSpace(10),
     opacity: 0.7
   },
@@ -140,8 +141,8 @@ const styles = StyleSheet.create({
 
 
   exchangeIcon: {
-    width: useResponsiveWidth(25),
-    height: useResponsiveHeight(25)
+    width: useResponsiveBothHeightWidth(25),
+    height: useResponsiveBothHeightWidth(25)
   },
 
 

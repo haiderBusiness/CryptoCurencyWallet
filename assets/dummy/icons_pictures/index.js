@@ -25,6 +25,10 @@ import interface_heart_outline_black from "./interface_heart_outline_black.png"
 
 import interface_heart_fill_red from "./interface_heart_fill_red.png"
 
+import interface_search_black from "./interface_search_black.png"
+
+import interface_circle_xmark_black from "./interface_circle_xmark_black.png"
+
 
 
 export { 
@@ -47,5 +51,7 @@ export {
     interface_arrow_trend_down_green_fill,
     interface_arrow_trend_up_black_fill,
     interface_heart_outline_black,
-    interface_heart_fill_red
+    interface_heart_fill_red,
+    interface_search_black,
+    interface_circle_xmark_black,
 };

@@ -133,7 +133,7 @@ export const useScrollHandler = (listRef, scrollMinSpeed, scrollMaxSpeed) => {
 
 
         // fade animation regarding top header
-        if (currentOffset >= useResponsiveHeight(38)) {
+        if (currentOffset >= useResponsiveHeight(50)) {
           fadeInTopHeader();
         } else {
           topHeaderOpacity.value = 0;

@@ -1,6 +1,6 @@
 import React, {useEffect, useState, memo} from "react";
 import { View, Text, StyleSheet, Image, Platform } from "react-native";
-import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth } from "@hooks/useResponsiveness";
+import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth, useResponsiveBothHeightWidth } from "@hooks/useResponsiveness";
 import { interfaceFilterOutlineBlack, interfaceAddDocumentOutlineBlack, interfaceHistoryOutlineBlack, interfaceShieldTrustGreen } from "@assets/dummy/icons_pictures";
 import useThemeColors from "@hooks/useThemeColors"
 
@@ -14,6 +14,8 @@ import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const defaultIconHeight = useResponsiveHeight(30)
 const defaultContentBottomMargin = useResponsiveHorizontalSpace(8)
+
+let test = null
 
 const ListTopBarHeader = ({
   navigation,
@@ -33,7 +35,8 @@ const ListTopBarHeader = ({
   onRightImage1Click,
   onRightImage2Click,
   onRightImage3Click,
-  titleAndBackgroundAnimationValue,
+  onFirstTabAnimation,
+  onSecondTabAnimation,
   backgroundColor,
   headerLayout,
   headerBlur = true,
@@ -71,7 +74,6 @@ const ListTopBarHeader = ({
   const BACKGROUND_COLOR = style &&  style.flex !== 1000 ?  style.backgroundColor : themeColors.background
 
   const LeftIcons = ({}) => {
-
     return(
       <>
         <View style={{flexDirection: "row"}}>
@@ -213,10 +215,19 @@ const ListTopBarHeader = ({
   const MARGINTOP = topSafeArea 
   //  const PADDINGTOP = noIcons ? 0 : topSafeArea - contentHeight
 
-  function randomNumber() {
-   const min = 1000000000; // Minimum 10-digit number
-   const max = 9999999999; // Maximum 10-digit number
-   return Math.floor(Math.random() * (max - min + 1)) + min;
+
+  // let onFirstTabAnimation = test ? test : onFirstTabAnimation
+  const [firstAnimation, setFirstAnimation] = useState(true)
+  const [refresh, setRefresh] = useState(false)
+
+  const whenSelectedTabChanges = (button, index) => {
+    if(index === 0) {
+      setFirstAnimation(true)
+    } else {
+      setFirstAnimation(false)
+    }
+    onSelectedTabChange(button, index)
+    setRefresh(!refresh)
   }
   // console.log('re-render: ',randomNumber(), ' at ListTopBarHeader file')
 
@@ -235,7 +246,7 @@ const ListTopBarHeader = ({
                 zIndex: 0,
                 // paddingTop: insets.top * 1.3,
                 // backgroundColor: backgroundColor,
-                // opacity: titleAndBackgroundAnimationValue
+                // opacity: onFirstTabAnimation
                 // backgroundColor: "white"
                 }}/>}
 
@@ -251,7 +262,7 @@ const ListTopBarHeader = ({
                 opacity: 0.5
                 // paddingTop: insets.top * 1.3,
                 // backgroundColor: backgroundColor,
-                // opacity: titleAndBackgroundAnimationValue
+                // opacity: onFirstTabAnimation
                 // backgroundColor: "white"
                 }}/>}
 
@@ -273,7 +284,7 @@ const ListTopBarHeader = ({
         {!TitleComponent &&
           <Animated.View pointerEvents="box-none" 
           style={{...styles.titleView, 
-            opacity: titleAndBackgroundAnimationValue
+            opacity: firstAnimation ? onFirstTabAnimation : onSecondTabAnimation
           }}
           >
             <Text style={styles.title}>
@@ -298,11 +309,11 @@ const ListTopBarHeader = ({
 
 
   
-      {<AdditionalComponent onSelectedTabChange={onSelectedTabChange} resultSpeed={topTabsResultSpeed} style={{paddingBottom: useResponsiveVerticalSpace(4) }}/>}
+      {<AdditionalComponent onSelectedTabChange={whenSelectedTabChanges} resultSpeed={topTabsResultSpeed} style={{paddingBottom: useResponsiveVerticalSpace(4) }}/>}
 
         {/* bottom line/border */}
-      <Animated.View style={{width: "100%", height: useResponsiveHeight(0.5),opacity: titleAndBackgroundAnimationValue}}>
-        <View style={{width: "100%", height: useResponsiveHeight(0.5), backgroundColor: themeColors.text, opacity:0.1}}/>
+      <Animated.View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5),opacity: onFirstTabAnimation}}>
+        <View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5), backgroundColor: themeColors.text, opacity:0.1}}/>
       </Animated.View>
 
     </View>
@@ -345,8 +356,8 @@ const styles = StyleSheet.create({
   },
 
   iconView: {
-    width: useResponsiveWidth(30),
-    height: useResponsiveHeight(30),
+    width: useResponsiveBothHeightWidth(30),
+    height: useResponsiveBothHeightWidth(30),
     justifyContent: "center",
     alignItems: "center",
     borderRadius: useResponsiveRadius(30),
@@ -354,8 +365,8 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: useResponsiveWidth(20),
-    height: useResponsiveHeight(20)
+    width: useResponsiveBothHeightWidth(16),
+    height: useResponsiveBothHeightWidth(16)
   },
 
   titleView: {

@@ -54,6 +54,7 @@ const List = ({
     navigation,
     setTopHeaderOpacity,
     show = true,
+    showSearchField
   }) => {
   
   
@@ -66,18 +67,21 @@ const List = ({
     // console.log("out: ", buyingTopHeaderOpacity)
     const { onScroll, scrolling, topHeaderOpacity} = useScrollHandler(listRef,scrollMinSpeed, scrollMaxSpeed);
 
-    const [snapshotImg, setSnapshotImg] = useState(null)
+    
 
-    const snapshot = async () => {
-        const result = await captureRef(AnimatedViewRef);
-        setSnapshotImg(result)
-        console.log("result: ", result)
+
+    //FIX remove react-native-view-shot (if not used)
+    // const [snapshotImg, setSnapshotImg] = useState(null)
+    // const snapshot = async () => {
+    //     const result = await captureRef(AnimatedViewRef);
+    //     setSnapshotImg(result)
+    //     console.log("result: ", result)
         
-    }
+    // }
 
-    useEffect(() => {
-        console.log("snapshotImg: ", snapshotImg)
-    },[snapshotImg])
+    // useEffect(() => {
+    //     console.log("snapshotImg: ", snapshotImg)
+    // },[snapshotImg])
   
   
   
@@ -142,6 +146,7 @@ const List = ({
         listItem={listItem}
         listHeader={listHeader} 
         bigHeaderTitle={bigHeaderTitle}
+        searchField={showSearchField}
         navigation={navigation}
         />
         </>

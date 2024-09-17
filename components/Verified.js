@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 import useThemeColors from '../hooks/useThemeColors';
-import { useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth } from '../hooks/useResponsiveness';
+import { useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth, useResponsiveBothHeightWidth } from '../hooks/useResponsiveness';
 import { interfaceShieldTrustGreen } from '../assets/dummy/icons_pictures';
 import English from '../constants/English';
 
@@ -23,14 +23,14 @@ export default function Verified({isVerified}) {
 
 const styles = StyleSheet.create({
     verifiedImage: {
-        width: useResponsiveWidth(15),
-        height: useResponsiveHeight(15),
+        width: useResponsiveBothHeightWidth(15),
+        height: useResponsiveBothHeightWidth(15),
         marginRight: useResponsiveHorizontalSpace(5),
       },
     
       verifiedView: {
         // width: useResponsiveWidth(20),
-        // height: useResponsiveHeight(20),
+        // height: useResponsiveBothHeightWidth(20),
         paddingVertical: useResponsiveVerticalSpace(2),
         paddingHorizontal: useResponsiveHorizontalSpace(5),
         flexDirection: "row",

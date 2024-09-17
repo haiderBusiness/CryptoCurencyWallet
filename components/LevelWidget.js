@@ -12,6 +12,7 @@ import {
   useResponsiveHeight,
   useResponsiveWidth,
   useResponsiveRadius,
+  useResponsiveBothHeightWidth,
 } from "../hooks/useResponsiveness";
 
 export default function LevelWidget({
@@ -98,8 +99,8 @@ const styles = StyleSheet.create({
   },
 
   imageView: {
-    width: useResponsiveWidth(35),
-    height: useResponsiveHeight(35),
+    width: useResponsiveBothHeightWidth(35),
+    height: useResponsiveBothHeightWidth(35),
     marginRight: useResponsiveHorizontalSpace(9),
     borderRadius: useResponsiveRadius(20),
     justifyContent: "center",
@@ -107,13 +108,13 @@ const styles = StyleSheet.create({
   },
 
   image: {
-    width: useResponsiveWidth(30),
-    height: useResponsiveHeight(30),
+    width: useResponsiveBothHeightWidth(30),
+    height: useResponsiveBothHeightWidth(30),
   },
 
   arrowIcon: {
-    width: useResponsiveWidth(30),
-    height: useResponsiveHeight(30),
+    width: useResponsiveBothHeightWidth(30),
+    height: useResponsiveBothHeightWidth(30),
     marginRight: useResponsiveHorizontalSpace(-8),
     transform: [{ rotate: "180deg" }],
   },

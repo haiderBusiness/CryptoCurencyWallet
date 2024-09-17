@@ -11,7 +11,6 @@ const emptyFunc = () => {}
 function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
 
 
-  const backgroundViewPosition = useSharedValue(0);
 
     const data = [
       {"name": "Buying"},
@@ -28,7 +27,7 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
     const [selectedTab, setSelectedTab] = useState(0)
 
     const handlePress = (button, index) => {
-      onSelectedTabChange(button.name)
+      onSelectedTabChange(button.name, index)
       setSelectedTab(index)
     }
 
@@ -50,7 +49,18 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
 
     const onTabPress = (button, index) => {
 
-      handlePress(button, index)
+      if (resultSpeed === "fast") {
+        handlePress(button, index)
+      } else if (resultSpeed === "medium") {
+        setTimeout(() => {
+          handlePress(button, index)
+        }, 200)
+      } else if (resultSpeed === "slow") {
+        setTimeout(() => {
+          handlePress(button, index)
+        }, 500)
+      }
+      
       tabPositionX.value = withTiming((tabWidth + px4) * index, {}, () => {
         // runOnJS(handlePress)(button, index)
       })

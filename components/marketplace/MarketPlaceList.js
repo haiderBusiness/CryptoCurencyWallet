@@ -62,6 +62,7 @@ export default function MarketPlaceList({
   headerOnRightImage3Click,
   headerStyle = viewStyleSample,
   headerBlur = true,
+  showSearchField = true, 
 
 
   // -> List <-
@@ -118,8 +119,8 @@ export default function MarketPlaceList({
   const [buyingArray, setBuyingArray] = useState(listDataArray && listDataArray.buying ? listDataArray.buying : [])
   const [sellingArray, setSellingArray] = useState(listDataArray && listDataArray.selling ? listDataArray.selling : [])
 
- const [showBuyingList, setShowBuyingList] = useState(true)
- const [showSellingList, setShowSellingList] = useState(false)
+ const [isBuyingList, setIsBuyingList] = useState(true)
+ const [isSellingList, setIsSellingList] = useState(false)
 
 
   
@@ -132,6 +133,17 @@ export default function MarketPlaceList({
         const sellingFirstItem = buyingArray[0]
         const buyingSecondItem = buyingArray[1]
         const sellingSecondItem = buyingArray[1]
+
+
+        if (showSearchField) {
+          buyingArray.unshift("searchField")
+          setBuyingArray(buyingArray)
+
+          sellingArray.unshift("searchField");
+          setSellingArray(sellingArray)
+        }
+
+
         if(
           // (!headerStatus || !headerStatus.includes("bigTitle")) &&
           isStikcyListHeader
@@ -181,6 +193,8 @@ export default function MarketPlaceList({
           // setDataArray(dataArray)
         } 
 
+
+
         numOfRenders =+ 1
       }
     }
@@ -194,7 +208,7 @@ export default function MarketPlaceList({
 
   if (__DEV__) { 
     if(numOfRenders >= 2) {
-      console.warn(`Reload to reflect changes in ${this.name}`)
+      console.warn(`Reload to reflect changes in MarketPlaceList`)
     }
   }
 
@@ -224,25 +238,25 @@ export default function MarketPlaceList({
   // }, 3000)
 
 
-  function onSelectedTabChange (value) {
+  function onSelectedTabChange (value, index) {
 
-    if(value && value.toLowerCase() === "buying") {
+    if(index === 0) {
       // setUpdate(!update)
       // setDataArray(listDataArray.buying)
       // console.log("listDataArray.buying[0]: ", listDataArray.selling[0])
-      // setShowSellingList(false)
-      // setShowBuyingList(true)
-      scrollToView(-1)
-    } else if(value && value.toLowerCase() === "selling") {
+      // setIsSellingList(false)
+      // setIsBuyingList(true)
+      scrollTo(-1)
+    } else if(index === 1) {
       // console.log("here")
       // setUpdate(!update)
       // setDataArray(listDataArray.selling)
       // console.log("listDataArray.buying[0]: ", listDataArray.selling[0])
-      // setShowSellingList(true)
-      // setShowBuyingList(false)
-      scrollToView(2)
+      // setIsSellingList(true)
+      // setIsBuyingList(false)
+      scrollTo(2)
     } else {
-      console.error(`Error: the value of selected tab is ${value} in ${this.name}`)
+      console.error(`Error: the value of selected tab is ${value} in MarketPlaceList`)
     }
   }
 
@@ -274,10 +288,10 @@ export default function MarketPlaceList({
   const { width, height } = Dimensions.get("window");
 
 
-  const scrollToView = (index) => {
+  const scrollTo = (index) => {
 
     if(scrollViewRef && scrollViewRef.current) {
-      console.log("here")
+      
       scrollViewRef.current.scrollTo({
         x:width * index,
         y:0,
@@ -287,6 +301,7 @@ export default function MarketPlaceList({
 
   }
 
+  console.log("here")
 
   return (
     // <SafeAreaView>
@@ -311,7 +326,9 @@ export default function MarketPlaceList({
           onRightImage2Click={headerOnRightImage2Click}
           onRightImage3Click={headerOnRightImage3Click}
           title={headerTitle}
-          titleAndBackgroundAnimationValue={showBuyingList ? buyingTopHeaderOpacity : sellingTopHeaderOpacity}
+          onFirstTabAnimation={buyingTopHeaderOpacity}
+          onSecondTabAnimation={sellingTopHeaderOpacity}
+          // titleAndBackgroundAnimationValue={isBuyingList ? buyingTopHeaderOpacity : sellingTopHeaderOpacity}
           headerLayout={(layout) => setHeaderLayout(layout)}
           style={headerStyle ? headerStyle : defaultStyles}
           headerBlur={headerBlur}
@@ -349,8 +366,9 @@ export default function MarketPlaceList({
               listItem={listItem}
               listHeader={listHeader}
               navigation={navigation}
-              // show={showBuyingList}
+              // show={isBuyingList}
               show={true}
+              showSearchField={showSearchField}
             />
           }
 
@@ -373,8 +391,9 @@ export default function MarketPlaceList({
               listItem={listItem}
               listHeader={listHeader}
               navigation={navigation}
-              show={showSellingList}
+              // show={isSellingList}
               show={true}
+              showSearchField={showSearchField}
             />
           }
           </ScrollView>

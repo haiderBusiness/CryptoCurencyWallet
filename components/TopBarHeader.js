@@ -1,6 +1,6 @@
 import React, {useState} from "react";
 import { View, Text, StyleSheet, Image, Platform } from "react-native";
-import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth } from "../hooks/useResponsiveness";
+import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth, useResponsiveBothHeightWidth } from "../hooks/useResponsiveness";
 import { interfaceFilterOutlineBlack, interfaceAddDocumentOutlineBlack, interfaceHistoryOutlineBlack, interfaceShieldTrustGreen } from "../assets/dummy/icons_pictures";
 import useThemeColors from "../hooks/useThemeColors"
 
@@ -246,8 +246,8 @@ export default function TopBarHeader({
         {/* {<View style={{width: 10, height: 10}}/>} */}
       </View>
 
-      <Animated.View style={{width: "100%", height: useResponsiveHeight(0.5),opacity: titleAndBackgroundAnimationValue}}>
-        <View style={{width: "100%", height: useResponsiveHeight(0.5), backgroundColor: themeColors.text, opacity:0.1}}/>
+      <Animated.View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5),opacity: titleAndBackgroundAnimationValue}}>
+        <View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5), backgroundColor: themeColors.text, opacity:0.1}}/>
       </Animated.View>
 
     </View>
@@ -277,8 +277,8 @@ const styles = StyleSheet.create({
   },
 
   iconView: {
-    width: useResponsiveWidth(30),
-    height: useResponsiveHeight(30),
+    width: useResponsiveBothHeightWidth(30),
+    height: useResponsiveBothHeightWidth(30),
     justifyContent: "center",
     alignItems: "center",
     borderRadius: useResponsiveRadius(30),
@@ -286,8 +286,8 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: useResponsiveWidth(20),
-    height: useResponsiveHeight(20)
+    width: useResponsiveBothHeightWidth(18),
+    height: useResponsiveBothHeightWidth(18)
   },
 
   titleView: {

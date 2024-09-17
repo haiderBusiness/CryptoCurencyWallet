@@ -2,7 +2,7 @@ import React from 'react';
 import {View, Text, StyleSheet, Image} from 'react-native';
 import { capitalizeFirstLetter } from '../utils/capitalizeFirstLetter';
 import useThemeColors from '../hooks/useThemeColors';
-import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth } from '../hooks/useResponsiveness';
+import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth, useResponsiveBothHeightWidth } from '../hooks/useResponsiveness';
 import {dislikePurple, likeGreen, likePurple, likePurple2, thumbsUpPurple } from '../assets/dummy/icons_pictures';
 import English from '../constants/English';
 import viewStyleSample from './RNComponents/viewStyleSample';
@@ -41,7 +41,7 @@ container: {
 
 likesView: {
     // width: useResponsiveWidth(20),
-    // height: useResponsiveHeight(20),
+    // height: useResponsiveBothHeightWidth(20),
     alignSelf: 'flex-start',
     paddingVertical: useResponsiveVerticalSpace(3),
     paddingHorizontal: useResponsiveHorizontalSpace(10),
@@ -53,15 +53,15 @@ likesView: {
 },
 
 likeImage: {
-    width: useResponsiveWidth(13),
-    height: useResponsiveHeight(13),
+    width: useResponsiveBothHeightWidth(13),
+    height: useResponsiveBothHeightWidth(13),
     marginRight: useResponsiveHorizontalSpace(8),
     // backgroundColor: "red",
 },
 
 dislikeImage: {
-    width: useResponsiveWidth(13),
-    height: useResponsiveHeight(13),
+    width: useResponsiveBothHeightWidth(13),
+    height: useResponsiveBothHeightWidth(13),
     marginRight: useResponsiveHorizontalSpace(8),
     transform: [{scaleY: -1}]
     // backgroundColor: "red",

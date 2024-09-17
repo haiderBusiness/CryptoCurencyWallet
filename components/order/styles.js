@@ -7,6 +7,7 @@ import {
   useResponsiveRadius,
   useResponsiveVerticalSpace,
   useResponsiveWidth,
+  useResponsiveBothHeightWidth
 } from "../../hooks/useResponsiveness.js";
 
 const styles = StyleSheet.create({
@@ -33,8 +34,8 @@ const styles = StyleSheet.create({
     elevation: 10,
 
     // backgroundColor: "red",
-    height: useResponsiveHeight(55),
-    width: useResponsiveWidth(55),
+    height: useResponsiveBothHeightWidth(55),
+    width: useResponsiveBothHeightWidth(55),
     borderRadius: useResponsiveRadius(30),
     justifyContent: "center",
     alignItems: "center",
@@ -44,10 +45,10 @@ const styles = StyleSheet.create({
   },
 
   userImage: {
-    width: useResponsiveWidth(50),
-    height: useResponsiveHeight(50),
+    width: useResponsiveBothHeightWidth(50),
+    height: useResponsiveBothHeightWidth(50),
     borderRadius: useResponsiveRadius(50),
-    borderWidth: 1.5,
+    borderWidth: useResponsiveWidth(1.5),
     borderColor: "white",
   },
 
@@ -113,8 +114,8 @@ const styles = StyleSheet.create({
   },
 
   coin: {
-    width: useResponsiveWidth(25),
-    height: useResponsiveHeight(25),
+    width: useResponsiveBothHeightWidth(25),
+    height: useResponsiveBothHeightWidth(25),
     marginRight: useResponsiveHorizontalSpace(14),
   },
 
@@ -171,8 +172,8 @@ const styles = StyleSheet.create({
 
 
   exchangeIcon: {
-    width: useResponsiveWidth(25),
-    height: useResponsiveHeight(25)
+    width: useResponsiveBothHeightWidth(25),
+    height: useResponsiveBothHeightWidth(25)
   },
 
 

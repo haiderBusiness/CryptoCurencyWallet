@@ -1,6 +1,6 @@
 import React, {useEffect, useState, memo} from "react";
 import { View, Text, StyleSheet, Image, Platform } from "react-native";
-import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth } from "@hooks/useResponsiveness";
+import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth, useResponsiveBothHeightWidth } from "@hooks/useResponsiveness";
 import { interfaceFilterOutlineBlack, interfaceAddDocumentOutlineBlack, interfaceHistoryOutlineBlack, interfaceShieldTrustGreen } from "@assets/dummy/icons_pictures";
 import useThemeColors from "@hooks/useThemeColors"
 
@@ -289,8 +289,8 @@ const ListTopBarHeader = ({
       </View>
 
         {/* bottom line/border */}
-      <Animated.View style={{width: "100%", height: useResponsiveHeight(0.5),opacity: titleAndBackgroundAnimationValue}}>
-        <View style={{width: "100%", height: useResponsiveHeight(0.5), backgroundColor: themeColors.text, opacity:0.1}}/>
+      <Animated.View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5),opacity: titleAndBackgroundAnimationValue}}>
+        <View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5), backgroundColor: themeColors.text, opacity:0.1}}/>
       </Animated.View>
 
     </View>
@@ -333,8 +333,8 @@ const styles = StyleSheet.create({
   },
 
   iconView: {
-    width: useResponsiveWidth(30),
-    height: useResponsiveHeight(30),
+    width: useResponsiveBothHeightWidth(30),
+    height: useResponsiveBothHeightWidth(30),
     justifyContent: "center",
     alignItems: "center",
     borderRadius: useResponsiveRadius(30),
@@ -342,8 +342,8 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: useResponsiveWidth(20),
-    height: useResponsiveHeight(20)
+    width: useResponsiveBothHeightWidth(20),
+    height: useResponsiveBothHeightWidth(20)
   },
 
   titleView: {

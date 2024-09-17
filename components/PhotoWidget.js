@@ -9,6 +9,7 @@ import {
   useResponsiveVerticalSpace,
   useResponsiveHorizontalSpace,
   useResponsiveWidth,
+  useResponsiveBothHeightWidth
 } from "../hooks/useResponsiveness";
 
 export default function PhotoWidget(props) {
@@ -69,8 +70,8 @@ const styles = StyleSheet.create({
     elevation: 10,
 
     // backgroundColor: "red",
-    height: useResponsiveHeight(60),
-    width: useResponsiveWidth(60),
+    height: useResponsiveBothHeightWidth(60),
+    width: useResponsiveBothHeightWidth(60),
     borderRadius: useResponsiveRadius(30),
     justifyContent: "center",
     alignItems: "center",
@@ -78,15 +79,15 @@ const styles = StyleSheet.create({
   },
 
   profileImage: {
-    width: useResponsiveWidth(55),
-    height: useResponsiveHeight(55),
+    width: useResponsiveBothHeightWidth(55),
+    height: useResponsiveBothHeightWidth(55),
     borderRadius: useResponsiveRadius(50),
     borderWidth: 1.5,
     borderColor: "white",
   },
   flagImage: {
-    width: useResponsiveWidth(30),
-    height: useResponsiveHeight(30),
+    width: useResponsiveBothHeightWidth(30),
+    height: useResponsiveBothHeightWidth(30),
   },
 
   imageTextContainer: {
