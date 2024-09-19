@@ -13,6 +13,11 @@ import { getTrades, getOrders } from "./backend/controllers/tradeController";
 import Store from "./redux/Store";
 import { Provider } from "react-redux";
 import SplashScreen from "./screens/SplashScreen";
+import Modal from "./components/modal/OldModal";
+import ModalsScreen from "./screens/ModalsScreen";
+
+import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { GestureHandlerRootView } from 'react-native-gesture-handler';
 
 export default function App() {
 
@@ -29,8 +34,10 @@ export default function App() {
   // testGethConnection();
 
 
+ 
   useEffect(() => {
     setTimeout(() => {
+      // hide splash screen after 3 seconds
       setShowSplashScreen(false)
     }, 3000)
   })
@@ -39,10 +46,27 @@ export default function App() {
 
   return (
     <Provider store={Store}>
+    <SafeAreaProvider>
+    <GestureHandlerRootView style={{flex: 1}}>
 
     {showSplashScreen ? 
+
+    // loading screen 
     <SplashScreen/> :
-    <BottomNavigation />}
+
+    <>
+    {/* Modals screen for displying views on top of everything eg. in app notifications */}
+    
+    <ModalsScreen/>
+    
+    {/* bottom navigation */}
+    <BottomNavigation />
+    </>
+
+    }
+
+    </GestureHandlerRootView>
+    </SafeAreaProvider>
     </Provider>
     // <Test/>
     // {/* <Text>Open up App.js to start working on your app!</Text> */}

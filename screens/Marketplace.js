@@ -15,12 +15,13 @@ import CustomList from "../components/custom_list/CustomList";
 
 import Store from "../redux/Store.js"
 import { useSelector } from "react-redux";
-import { setTrades } from "../redux/actions";
+import { setTrades, setMarketPlaceFilters } from "../redux/actions";
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
 import ScrollViewWithAnimatedHeader from "../components/ScrollViewWithAnimatedHeader.js";
 import List from "../components/marketplace/MarketPlaceList.js";
 import MarketPlaceList from "../components/marketplace/MarketPlaceList.js";
+import Modal from "../components/modal/OldModal.js";
 
 
 
@@ -35,6 +36,12 @@ export default function Marketplace({ route, navigation }) {
 
   const trades  = useSelector((state) => state.trades);
 
+  const dispatch = Store.dispatch
+
+  const onFilterIconClick = () => {
+    console.log("clicked")
+    dispatch(setMarketPlaceFilters({"selling": "selling", "buying": "buying"}))
+  }
 
   // useEffect(() => {
   //   dispatch(setTrades({"updated": "updated"}))
@@ -102,6 +109,7 @@ export default function Marketplace({ route, navigation }) {
     //     {/* <Search/> */}
 
     <>
+
       <MarketPlaceList 
       listDataArray={trades}
       listItem={ListItem}
@@ -110,6 +118,7 @@ export default function Marketplace({ route, navigation }) {
       headerRightImageSource1={interface_plus_black}
       headerRightImageSource2={interfaceHistoryOutlineBlack}
       headerLeftImageSource1={interfaceFilterOutlineBlack}
+      headerOnLeftImage1Click={onFilterIconClick}
       scrollSpeed="slowest"
       listStyle={{backgroundColor: themeColors.background3}}
       headerStyle={{backgroundColor: themeColors.background3}}
