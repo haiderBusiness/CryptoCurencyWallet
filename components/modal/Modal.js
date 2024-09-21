@@ -3,7 +3,8 @@ import {View, Pressable, ViewStyle, Text, Dimensions, StyleSheet } from "react-n
 import { BlurView } from "expo-blur";
 import Animated, 
 { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming ,
-withSpring
+withSpring,
+useAnimatedScrollHandler
 } from "react-native-reanimated";
 
 import useThemeColors from "../../hooks/useThemeColors"
@@ -19,6 +20,7 @@ const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import BackDrop from "./BackDrop.js";
 
 
 const {width, height} = Dimensions.get("window")
@@ -45,6 +47,7 @@ export default function Modal(
     borderTopRightRadius= useResponsiveWidth(20),
     borderTopLeftRadius= useResponsiveWidth(20),
     onHide,
+    rest,
     children,
 
     snapTo = "50%", 
@@ -92,76 +95,78 @@ export default function Modal(
 
   const hideModalTotaly = () => {
     setShowModalValue("hide");
-    onModalHide(false)
+    onHide(false)
+  }
+
+  const startAnimation = (showModalValue) => {
+  if(animationType === "slide") {
+
+      if(showModalValue === "show") {
+          //REVIEW--> SHOW PARENT WHEN ANIMATION FINISHES 
+          parentOpacity.value = withTiming(1,{duration: animationTime,},);
+
+          blurAnimation.value = withTiming(1,{duration: animationTime,},);
+          
+          //REVIEW--> SHOW CHILD AFTER ABOVE ANIMATION FINISHES
+          topAnimation.value = withTiming(openHeight,{duration: animationTime,},);
+          
+      } else if (showModalValue === "animateHide") {
+          //REVIEW--> HIDE CHILD VIEW ANIMAION 
+              //REVIEW--> HIDE PARENT VIEW ANIMAION WHEN ABOVE ANIMATION FINISHES
+              parentOpacity.value = withTiming(0,{duration: animationTime,},);
+
+              blurAnimation.value = withTiming(0,{duration: animationTime,},);
+
+              topAnimation.value = withTiming(closeHeight,{duration: animationTime,},finshed => {
+              if(finshed) {
+                      //REVIEW--> HIDE MODAL WHEN ANIMATION FINISHES 
+                      runOnJS(hideModalTotaly)();
+              }
+          });
+
+          
+      };
+  } 
+  else if(animationType === "fade") {
+      if(showModalValue === "show") {
+              //REVIEW--> SHOW ANIMATION OF PARENT VIEW
+              parentOpacity.value = withTiming(1,{duration: animationTime,},);
+
+              //REVIEW--> SHOW CHILD VIEW WHEN ABOVE ANIMATION FINISHES
+              animateModal.value = withTiming(1)
+
+
+      } else if (showModalValue === "animateHide") {
+              //REVIEW--> HIDE PARENT VIEW ANIMAION WHEN ABOVE ANIMATION FINISHES
+              parentOpacity.value = withTiming(0,{duration: animationTime,},);
+
+              //REVIEW--> HIDE CHILD ANIMAION 
+              topAnimation.value = withTiming(0,{duration: animationTime,},finshed => {
+              if(finshed) {
+                      //REVIEW--> HIDE MODAL WHEN ANIMATION FINISHES 
+                      runOnJS(hideModalTotaly)();
+                  }
+              });
+          };
+          
+  }
+  else if (animationType === "none") {
+      if(showModalValue === "show") {
+          parentOpacity.value = 1;
+          parentOpacity.value = 1;
+          } 
+          else if (showModalValue === "animateHide") {
+              parentOpacity.value = 0; 
+              animateModal.value = hiddenModalValue;
+              setShowModalValue("hide");
+
+          };
+  }
   }
 
   useEffect(() => {
     // slide
-
-    if(animationType === "slide") {
-
-        if(showModalValue === "show") {
-            //REVIEW--> SHOW PARENT WHEN ANIMATION FINISHES 
-            parentOpacity.value = withTiming(1,{duration: animationTime,},);
-
-            blurAnimation.value = withTiming(1,{duration: animationTime,},);
-            
-            //REVIEW--> SHOW CHILD AFTER ABOVE ANIMATION FINISHES
-            topAnimation.value = withTiming(openHeight,{duration: animationTime,},);
-            
-        } else if (showModalValue === "animateHide") {
-            //REVIEW--> HIDE CHILD VIEW ANIMAION 
-                //REVIEW--> HIDE PARENT VIEW ANIMAION WHEN ABOVE ANIMATION FINISHES
-                parentOpacity.value = withTiming(0,{duration: animationTime,},);
-
-                blurAnimation.value = withTiming(0,{duration: animationTime,},);
-
-                topAnimation.value = withTiming(closeHeight,{duration: animationTime,},finshed => {
-                if(finshed) {
-                        //REVIEW--> HIDE MODAL WHEN ANIMATION FINISHES 
-                        runOnJS(hideModalTotaly)();
-                }
-            });
-
-            
-        };
-    } 
-    else if(animationType === "fade") {
-        if(showModalValue === "show") {
-                //REVIEW--> SHOW ANIMATION OF PARENT VIEW
-                parentOpacity.value = withTiming(1,{duration: animationTime,},);
-
-                //REVIEW--> SHOW CHILD VIEW WHEN ABOVE ANIMATION FINISHES
-                animateModal.value = withTiming(1)
-
-
-        } else if (showModalValue === "animateHide") {
-                //REVIEW--> HIDE PARENT VIEW ANIMAION WHEN ABOVE ANIMATION FINISHES
-                parentOpacity.value = withTiming(0,{duration: animationTime,},);
-
-                //REVIEW--> HIDE CHILD ANIMAION 
-                topAnimation.value = withTiming(0,{duration: animationTime,},finshed => {
-                if(finshed) {
-                        //REVIEW--> HIDE MODAL WHEN ANIMATION FINISHES 
-                        runOnJS(hideModalTotaly)();
-                    }
-                });
-            };
-            
-    }
-
-    else if (animationType === "none") {
-        if(showModalValue === "show") {
-            parentOpacity.value = 1;
-            parentOpacity.value = 1;
-            } 
-            else if (showModalValue === "animateHide") {
-                parentOpacity.value = 0; 
-                animateModal.value = hiddenModalValue;
-                setShowModalValue("hide");
-
-            };
-    }
+    startAnimation(showModalValue)
   },[showModalValue]);
 
 
@@ -179,6 +184,9 @@ export default function Modal(
     
 
     const context = useSharedValue(0);
+
+    const scrollBegin = useSharedValue(0)
+    const scrollY = useSharedValue(0)
 
     const doSomeAfter = (duration) => {
         setTimeout(() => {
@@ -249,6 +257,64 @@ export default function Modal(
         }
       });
 
+
+
+      const onScroll = useAnimatedScrollHandler({
+        onBeginDrag: event => {
+          scrollBegin.value = event.contentOffset.y;
+        },
+
+        onScroll: event => {
+          scrollY.value = event.contentOffset.y;
+        }
+      })
+
+
+    const panScroll = Gesture.Pan()
+      .onBegin(() => {
+        context.value = topAnimation.value;
+      })
+      .onUpdate(event => {
+        if (event.translationY < 0) {
+          topAnimation.value = withSpring(openHeight, {
+            damping: 100,
+            stiffness: 400,
+          });
+        } else {
+          topAnimation.value = withSpring(context.value + event.translationY, {
+            damping: 100,
+            stiffness: 400,
+          });
+        }
+      })
+      .onEnd(() => {
+        if (topAnimation.value > openHeight + 50) {
+  
+          //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
+          runOnJS(doSomeAfter)(250)
+  
+          parentOpacity.value = withTiming(0,{duration: 300,},);
+          topAnimation.value = withSpring(closeHeight, {
+            damping: 100,
+            stiffness: 400,
+          }, finshed => {
+  
+            // runOnJS(timer)();
+            if(finshed) {
+              //REVIEW--> DO SOMETHING WHEN ANIMATION FINISHES
+            }
+          });
+        } else {
+          topAnimation.value = withSpring(openHeight, {
+            damping: 100,
+            stiffness: 400,
+          });
+        }
+      });
+
+
+      const scrollViewGesture = Gesture.Native()
+
 if(showModalValue !== "hide")
     return(
         // parent 
@@ -274,16 +340,16 @@ if(showModalValue !== "hide")
             }}/> */}
 
 
-            {/* <BackDrop
+            <BackDrop
             topAnimation={topAnimation}
-            backDropColor={backDropColor}
+            backDropColor={"black"}
             closeHeight={closeHeight}
             openHeight={openHeight}
-            close={close}
-            /> */}
+            close={startAnimation}
+            />
 
 
-            <AnimatedBlurView 
+            {/* <AnimatedBlurView 
             tint="dark"
             intensity={100}
             style={[
@@ -294,7 +360,7 @@ if(showModalValue !== "hide")
             height: "100%", 
             width: "100%"
                 }]}
-            />
+            /> */}
 
                 
 
@@ -315,7 +381,17 @@ if(showModalValue !== "hide")
                         <View style={styles.line} />
                     </View>}
 
-                    {children}
+                    <GestureDetector gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}>
+                      <Animated.ScrollView
+                      {...rest}
+                      scrollEventThrottle={16}
+                      // bounces={false}
+                      onScroll={onScroll}
+                      >
+                      {children}
+                      </Animated.ScrollView>
+                    </GestureDetector>
+
 
                 </Animated.View>
             </GestureDetector>

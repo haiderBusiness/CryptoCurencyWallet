@@ -309,7 +309,7 @@ const ListTopBarHeader = ({
 
 
   
-      {AdditionalComponent && <AdditionalComponent onSelectedTabChange={whenSelectedTabChanges} resultSpeed={topTabsResultSpeed} style={{paddingBottom: useResponsiveVerticalSpace(4) }}/>}
+      {<AdditionalComponent onSelectedTabChange={whenSelectedTabChanges} resultSpeed={topTabsResultSpeed} style={{paddingBottom: useResponsiveVerticalSpace(4) }}/>}
 
         {/* bottom line/border */}
       <Animated.View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5),opacity: onFirstTabAnimation}}>
@@ -338,7 +338,7 @@ const styles = StyleSheet.create({
     // opacity: 0.5,
    
     // backgroundColor: "red",
-    // backgroundColor: "red"         // AdditionalComponent={TopTabs}
+    // backgroundColor: "red"
   },
 
   topHeader: {

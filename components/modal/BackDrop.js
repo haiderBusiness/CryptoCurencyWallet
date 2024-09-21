@@ -30,7 +30,8 @@ const BackDrop = ({
   return (
     <TouchableWithoutFeedback
       onPress={() => {
-        close();
+        close("animateHide");
+        console.log("animateHide")
       }}>
       <Animated.View
         style={[

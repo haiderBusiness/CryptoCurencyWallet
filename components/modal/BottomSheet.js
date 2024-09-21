@@ -46,7 +46,7 @@ const BottomSheet = forwardRef(
       setShowModal(false)
     }
 
-    const expand = () => {
+    const expand = (() => {
       'worklet';
 
       console.log("reached here")
@@ -54,7 +54,7 @@ const BottomSheet = forwardRef(
       parentOpacity.value = withTiming(1);
       topAnimation.value = withTiming(openHeight);
 
-    }
+    }, [openHeight, topAnimation]);
 
     const close = useCallback(() => {
       'worklet';

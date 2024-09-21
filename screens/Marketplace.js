@@ -111,7 +111,7 @@ export default function Marketplace({ route, navigation }) {
     <>
 
       <MarketPlaceList 
-      listDataArray={trades}
+      listDataArray={trades.buying}
       listItem={ListItem}
       headerTitle="MarketPlace"
       bigHeaderTitle="Marketplace"

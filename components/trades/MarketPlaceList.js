@@ -111,22 +111,36 @@ export default function MarketPlaceList({
   const scrollMinSpeed =  scrollMaxSpeed / 2
 
 
-  const [listArray, setListArray] = useState(listDataArray && listDataArray.length > 0 ? listDataArray : [])
 
+
+
+  const [dataArray, setDataArray] = useState(listDataArray ? listDataArray : placeHolderArray)
+
+  const [buyingArray, setBuyingArray] = useState(listDataArray && listDataArray.buying ? listDataArray.buying : [])
+  const [sellingArray, setSellingArray] = useState(listDataArray && listDataArray.selling ? listDataArray.selling : [])
+
+ const [isBuyingList, setIsBuyingList] = useState(true)
+ const [isSellingList, setIsSellingList] = useState(false)
+
+
+  
   useEffect(() => {
     if(numOfRenders < 1) 
       { 
-      if(listArray && listArray.length > 0){
+      if(buyingArray && buyingArray.length > 0){
 
-        const buyingFirstItem = listArray[0]
-        const sellingFirstItem = listArray[0]
-        const buyingSecondItem = listArray[1]
-        const sellingSecondItem = listArray[1]
+        const buyingFirstItem = buyingArray[0]
+        const sellingFirstItem = buyingArray[0]
+        const buyingSecondItem = buyingArray[1]
+        const sellingSecondItem = buyingArray[1]
 
 
         if (showSearchField) {
-          listArray.unshift("searchField")
-          setListArray(listArray)
+          buyingArray.unshift("searchField")
+          setBuyingArray(buyingArray)
+
+          sellingArray.unshift("searchField");
+          setSellingArray(sellingArray)
         }
 
 
@@ -136,10 +150,17 @@ export default function MarketPlaceList({
         ) {
 
           if(buyingFirstItem !== "listHeader") {
-            listArray.unshift("listHeader")
-            setListArray(listArray)
+            buyingArray.unshift("listHeader")
+            setBuyingArray(buyingArray)
+          }
+          if(sellingFirstItem !== "listHeader") {
+            sellingArray.unshift("listHeader");
+            setSellingArray(sellingArray)
           }
          
+          
+          
+          
         }
         if(
           // (!headerStatus || !headerStatus.includes("bigTitle")) &&
@@ -149,20 +170,30 @@ export default function MarketPlaceList({
 
             // if statment to prevent re adding the same item
             if(buyingSecondItem !== "bigTitle") {
-              listArray.unshift("bigTitle")
-              setListArray(listArray)
+              buyingArray.unshift("bigTitle")
+              setBuyingArray(buyingArray)
+            }
+            if(sellingSecondItem !== "bigTitle") {
+              sellingArray.unshift("bigTitle");
+              setSellingArray(sellingArray)
             }
           } else {
 
             // if statment to prevent re adding the same item
             if(buyingSecondItem !== "bigTitle") {
-              listArray.unshift("bigTitle")
-              setListArray(listArray)
+              buyingArray.unshift("bigTitle")
+              setBuyingArray(buyingArray)
+            }
+            if(sellingSecondItem !== "bigTitle") {
+              sellingArray.unshift("bigTitle");
+              setSellingArray(sellingArray)
             }
           }
           // dataArray.unshift("bigTitle")
           // setDataArray(dataArray)
         } 
+
+
 
         numOfRenders =+ 1
       }
@@ -170,7 +201,7 @@ export default function MarketPlaceList({
 
     
 
-  }, [listArray])
+  }, [buyingArray, sellingArray])
 
 
 
@@ -191,12 +222,43 @@ export default function MarketPlaceList({
   const [buyingTopHeaderOpacity, setBuyingTopHeaderOpacity] = useState(null)
   const [sellingTopHeaderOpacity, setSellingTopHeaderOpacity] = useState(null)
 
+  const handlrHeaderLayout = (layout) => {
+    if(layout) {
+      const { height, width, x, y } = layout;
+      setHeaderLayout({ height, width, x, y });
+    }
+
+  };
+
+  const [update, setUpdate] = useState(false)
 
   // setTimeout(()=> {
   //   setUpdate(!update)
   //   // console.log('re render:', ' at MarketPlaceList file')
   // }, 3000)
 
+
+  function onSelectedTabChange (value, index) {
+
+    if(index === 0) {
+      // setUpdate(!update)
+      // setDataArray(listDataArray.buying)
+      // console.log("listDataArray.buying[0]: ", listDataArray.selling[0])
+      // setIsSellingList(false)
+      // setIsBuyingList(true)
+      scrollTo(-1)
+    } else if(index === 1) {
+      // console.log("here")
+      // setUpdate(!update)
+      // setDataArray(listDataArray.selling)
+      // console.log("listDataArray.buying[0]: ", listDataArray.selling[0])
+      // setIsSellingList(true)
+      // setIsBuyingList(false)
+      scrollTo(2)
+    } else {
+      console.error(`Error: the value of selected tab is ${value} in MarketPlaceList`)
+    }
+  }
 
 
 
@@ -221,7 +283,23 @@ export default function MarketPlaceList({
   : themeColors.background;
 
 
+  const scrollViewRef = useRef(null);
 
+  const { width, height } = Dimensions.get("window");
+
+
+  const scrollTo = (index) => {
+
+    if(scrollViewRef && scrollViewRef.current) {
+      
+      scrollViewRef.current.scrollTo({
+        x:width * index,
+        y:0,
+        animated: true
+      })
+    }
+
+  }
 
   console.log("here")
 
@@ -254,9 +332,9 @@ export default function MarketPlaceList({
           headerLayout={(layout) => setHeaderLayout(layout)}
           style={headerStyle ? headerStyle : defaultStyles}
           headerBlur={headerBlur}
-          // AdditionalComponent={TopTabs}
-          // onSelectedTabChange={() => {}}
-          // topTabsResultSpeed={"fast"}
+          AdditionalComponent={TopTabs}
+          onSelectedTabChange={onSelectedTabChange}
+          topTabsResultSpeed={"fast"}
         /> 
         }
 
@@ -267,13 +345,15 @@ export default function MarketPlaceList({
        
 
 
+          <ScrollView scrollEnabled={false} ref={scrollViewRef} horizontal={true} style={{flex: 1}}>
 
-          {listArray && listArray.length > 0 &&
+          
+          {buyingArray && buyingArray.length > 0 &&
             <List
               receivedListStyleStyle
               headerLayout={headerLayout}
               listRef={listRef}
-              dataArray={listArray}
+              dataArray={buyingArray}
               scrollMaxSpeed={scrollMaxSpeed}
               scrollMinSpeed={scrollMinSpeed}
               setTopHeaderOpacity={setBuyingTopHeaderOpacity}
@@ -291,11 +371,38 @@ export default function MarketPlaceList({
               showSearchField={showSearchField}
             />
           }
+
+
+
+          {sellingArray && sellingArray.length > 0 &&
+            <List
+              receivedListStyleStyle 
+              headerLayout={headerLayout}
+              listRef={listRef}
+              dataArray={sellingArray}
+              scrollMaxSpeed={scrollMaxSpeed}
+              scrollMinSpeed={scrollMinSpeed}
+              setTopHeaderOpacity={setSellingTopHeaderOpacity}
+              removeHeader={removeHeader}
+              removeBigTitle={removeBigTitle}
+              bigHeaderTitle={bigHeaderTitle}
+              showStickyHeader={showStickyHeader}
+              keyExtractor={keyExtractor}
+              listItem={listItem}
+              listHeader={listHeader}
+              navigation={navigation}
+              // show={isSellingList}
+              show={true}
+              showSearchField={showSearchField}
+            />
+          }
+          </ScrollView>
+
  
         {/* -> List */}
 
 
-        {(!listArray || listArray.length < 1) && <View style={{flex: 1, color: "black", justifyContent: "center", alignItems: "center"}}>
+        {(!sellingArray || sellingArray.length < 1) && (!buyingArray || buyingArray.length < 1) && <View style={{flex: 1, color: "black", justifyContent: "center", alignItems: "center"}}>
           <Text>listDataArray is undefined... please a valid array</Text>
         </View>}
         
