@@ -5,7 +5,7 @@ import { interface_circle_xmark_black, interface_search_black } from '../../asse
 import useThemeColors from '../../hooks/useThemeColors';
 
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
-import MemoizedTextInput from '../../components/MemoizedTextInput';
+import MemoizedTextInput from '../MemoizedTextInput';
 import Animated from 'react-native-reanimated';
 
 

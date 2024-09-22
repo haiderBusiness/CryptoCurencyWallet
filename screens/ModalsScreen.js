@@ -1,7 +1,7 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
 import {View, Text, StyleSheet, ScrollView} from 'react-native';
 import Modal from '../components/modal/Modal.js';
-import TradeFilter from '../components/trade/TradeFilter';
+import TradeFilter from '../components/trade/tradeFilter/TradeFilter.js';
 import BottomSheet from '../components/modal/BottomSheet';
 
 import Animated from 'react-native-reanimated';
@@ -11,6 +11,7 @@ import { BlurView } from 'expo-blur';
 import Store from "../redux/Store.js"
 import { useSelector } from "react-redux";
 import { setTrades } from "../redux/actions";
+import useThemeColors from '../hooks/useThemeColors.js';
 
 
 
@@ -21,6 +22,9 @@ const bottomSheetRef = useRef(null)
 const expandHandler = useCallback(() => {
   bottomSheetRef.current?.expand()
 },)
+
+
+const themeColors = useThemeColors()
 
 
 //REVIEW MARKET PLACE FILTERS <-
@@ -69,6 +73,8 @@ useEffect(() => {
       showTopNotch={true}
       // animationTime={1000}
       onHide={setShowMarketPlaceFilters}
+      snapTo="95%"
+      backgroundColor={themeColors.background4}
       >
         <TradeFilter/>
       </Modal>

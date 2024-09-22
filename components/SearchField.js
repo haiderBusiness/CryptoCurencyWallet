@@ -6,7 +6,7 @@ import useThemeColors from '../hooks/useThemeColors';
 import Animated from 'react-native-reanimated';
 
 
-export default function SearchField({style, placeholderColor, onPress}) {
+export default function SearchField({style, placeholderColor, onPress, value = "", }) {
 
 
   const {width, height} = Dimensions.get("window")
@@ -83,6 +83,7 @@ const styles = StyleSheet.create({
     //  paddingHorizontal: useResponsiveHorizontalSpace(18),
 
      backgroundColor: "red",
+     width: "100%"
      // backgroundColor: "pink"
    },
  

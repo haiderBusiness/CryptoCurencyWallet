@@ -7,8 +7,8 @@ export default function useLanguage(string) {
 
   
     if (word === "test") {
-      return English;
+      return English[string];
     } else {
-      return English;
+      return English[string];
     }
   }

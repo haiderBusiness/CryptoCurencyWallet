@@ -29,6 +29,7 @@ import interface_search_black from "./interface_search_black.png"
 
 import interface_circle_xmark_black from "./interface_circle_xmark_black.png"
 
+import interface_info_black from "./interface_info_black.png"
 
 
 export { 
@@ -54,4 +55,5 @@ export {
     interface_heart_fill_red,
     interface_search_black,
     interface_circle_xmark_black,
+    interface_info_black,
 };

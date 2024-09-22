@@ -52,7 +52,7 @@ export default function Modal(
 
     snapTo = "50%", 
     backgroundColor, 
-    backDropColor, 
+    backDropColor = "black", 
     showTopNotch = true, 
     }
     ) {
@@ -62,6 +62,9 @@ export default function Modal(
     // console.log("show", show)
     const themColors = useThemeColors()
 
+    const BACKGROUND_COLOR = backgroundColor ? backgroundColor : themColors.background3
+    const BACK_DROP_COLOR = backDropColor ? backDropColor : "#000000"
+
         
     // console.log("show below: ", show)
 
@@ -70,15 +73,40 @@ export default function Modal(
     const parentOpacity = useSharedValue(show ? 1 : 0)
     const blurAnimation = useSharedValue(show ? 1 : 0)
 
+
+    // const inset = useSafeAreaInsets();
+    const inset = useSafeAreaInsets();
+    const {height} = Dimensions.get('screen');
+    const percentage = parseFloat(snapTo.replace('%', '')) / 100;
+    const closeHeight = height;
+    const openHeight = height - height * percentage;
+    const hideModalValue = (height * percentage) * 0.12
+
+    // console.log("openHeight", openHeight)
+    // console.log("hideModalValue", hideModalValue)
+
+    const topAnimation = useSharedValue(showModalValue !== "hide" ? openHeight : closeHeight);
+    
+
+    const context = useSharedValue(0);
+
+    const scrollBegin = useSharedValue(0)
+    const scrollY = useSharedValue(0)
+  
+
+
+ 
+
   // the passed value should be "show" | "hide" | "animateHide"
   const [showModalValue, setShowModalValue] =
   useState(show ? "show" : "hide");
 
-  const handleSpacePress = () => {
-    setShowModalValue("animateHide")
-    onSpacePress()
-  }
 
+  const doSomeAfter = (duration) => {
+    setTimeout(() => {
+      hideModalTotaly()
+    }, duration)
+}
 
 
   const [renders, setRenders] = useState(1);
@@ -173,26 +201,7 @@ export default function Modal(
 
 
 
-    // const inset = useSafeAreaInsets();
-    const inset = useSafeAreaInsets();
-    const {height} = Dimensions.get('screen');
-    const percentage = parseFloat(snapTo.replace('%', '')) / 100;
-    const closeHeight = height;
-    const openHeight = height - height * percentage;
-
-    const topAnimation = useSharedValue(showModalValue !== "hide" ? openHeight : closeHeight);
-    
-
-    const context = useSharedValue(0);
-
-    const scrollBegin = useSharedValue(0)
-    const scrollY = useSharedValue(0)
-
-    const doSomeAfter = (duration) => {
-        setTimeout(() => {
-          hideModalTotaly()
-        }, duration)
-    }
+  
 
 
     const pan = Gesture.Pan()
@@ -213,7 +222,7 @@ export default function Modal(
       }
     })
     .onEnd(() => {
-      if (topAnimation.value > openHeight + 50) {
+      if (topAnimation.value > openHeight + hideModalValue) {
 
         //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
         runOnJS(doSomeAfter)(250)
@@ -288,7 +297,7 @@ export default function Modal(
         }
       })
       .onEnd(() => {
-        if (topAnimation.value > openHeight + 50) {
+        if (topAnimation.value > openHeight + hideModalValue) {
   
           //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
           runOnJS(doSomeAfter)(250)
@@ -321,13 +330,15 @@ if(showModalValue !== "hide")
         <Animated.View
             tint="dark"
             intensity={100}
-            style={[animatedParentStyle,parentStyle ? parentStyle : {
-            backgroundColor: themColors.transparentBlack5, 
-            position: "absolute",
-            width: "100%",
-            height: "100%",
-            zIndex: zIndex,
-            }]}>
+            style={[animatedParentStyle, 
+              parentStyle ? parentStyle : {
+              backgroundColor: "transparent", 
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              zIndex: zIndex,
+            }]}
+            >
 
             {/* Space above content */}
             {/* <Pressable 
@@ -342,7 +353,7 @@ if(showModalValue !== "hide")
 
             <BackDrop
             topAnimation={topAnimation}
-            backDropColor={"black"}
+            backDropColor={BACK_DROP_COLOR}
             closeHeight={closeHeight}
             openHeight={openHeight}
             close={startAnimation}
@@ -372,7 +383,7 @@ if(showModalValue !== "hide")
                         styles.container,
                         animationStyle,
                         {
-                        backgroundColor: "white",
+                        backgroundColor: BACKGROUND_COLOR,
                         paddingBottom: inset.bottom,
                         },
                     ]}>
@@ -385,7 +396,7 @@ if(showModalValue !== "hide")
                       <Animated.ScrollView
                       {...rest}
                       scrollEventThrottle={16}
-                      // bounces={false}
+                      bounces={false}
                       onScroll={onScroll}
                       >
                       {children}
