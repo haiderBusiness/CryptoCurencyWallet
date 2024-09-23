@@ -49,11 +49,15 @@ export default function Modal(
     onHide,
     rest,
     children,
+    
 
     snapTo = "50%", 
     backgroundColor, 
     backDropColor = "black", 
     showTopNotch = true, 
+
+    //scrollView props 
+    keyboardShouldPersistTaps
     }
     ) {
 
@@ -394,6 +398,7 @@ if(showModalValue !== "hide")
 
                     <GestureDetector gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}>
                       <Animated.ScrollView
+                      keyboardShouldPersistTaps={keyboardShouldPersistTaps}
                       {...rest}
                       scrollEventThrottle={16}
                       bounces={false}

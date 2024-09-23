@@ -1,8 +1,8 @@
-import React, { useState, useRef, useEffect } from 'react';
-import {View, Text, StyleSheet, Image, Pressable, FlatList} from 'react-native';
+import React, { useState, useRef, useEffect, useCallback } from 'react';
+import {View, Text, StyleSheet, Image, Pressable, FlatList, TouchableWithoutFeedback, Keyboard} from 'react-native';
 import useThemeColors from "../hooks/useThemeColors"
 
-import {useResponsiveBothHeightWidth, useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius} from "../hooks/useResponsiveness"
+import {useResponsiveBothHeightWidth, useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace, useResponsiveWidth} from "../hooks/useResponsiveness"
 import SearchField from "./SearchField"
 import MemoizedTextInput from "./MemoizedTextInput"
 import { interface_circle_xmark_black, interface_search_black } from '../assets/dummy/icons_pictures';
@@ -10,108 +10,209 @@ import { ScrollView } from 'react-native-gesture-handler';
 import { getPaymentMethods, searchPaymentMethods } from '../backend/controllers/tradeController';
 
 import CustomPressable from "./RNComponents/CustomPressable"
+import useLanguage from '../hooks/useLanguage';
+import hexToRGBA from '../hooks/hexToRGBA';
 
-export default function DropDown({}) {
+let number = 0
+export default function DropDown({inputValue}) {
 
 
     const themeColors = useThemeColors()
 
     const textStyle = {textColor: themeColors.text}
+    const searchStyle = {backgroundColor: themeColors.background}
+    const borderColor = hexToRGBA(themeColors.text, 0.1)
 
-    const [searchText, setSearchText] = useState("PayPal")
+    const [searchText, setSearchText] = useState("")
 
+    const [paymentMethods, setPaymentMethods] = useState([])
+    const [isSearching, setIsSearching] = useState(false)
 
 
     const inputRef = useRef(null)
 
-    const searchStyle = {backgroundColor: themeColors.background4}
-
-    const clearTextInput = () => {
-        if (inputRef.current) {
-          inputRef.current.clear();
-          inputRef.current.focus();
-          setSearchText("")
-        }
-      };
 
 
-    const placeholder = "Search for a payment method"
+    const placeholder = useLanguage("Search for a payment method")
     const initalSearchValue = 'PayPal'
 
-    const [paymentMethods, setPaymentMethods] = useState(searchPaymentMethods(searchText))
 
-    useEffect(() => {
-      if(searchText && searchText.length > 0) {
+    const clearTextInput = () => {
+
+      if (inputRef.current) {
+        inputRef.current.clear();
+        inputRef.current.focus();
+        setSearchText("")
+      }
+    };
+
+
+
+    const updateSearchText =  useCallback((text) => {
+
+      // this function is called when an option is selected
+      if (inputRef.current) {
+        inputRef.current.setNativeProps({ text: text }); // set the input value to the option chosen (passed prop)
+        setPaymentMethods([]) // clear options
+        setIsSearching(false) // stop searching mode
+        Keyboard.dismiss() // hide keyboard
+        // setSearchText(text)
+      }
+    }, []);
+    
+
+    const onBlur = useCallback(() => {
+      setPaymentMethods([])
+      setIsSearching(false)
+      // console.log("onBlur")
+      // if (inputRef.current) {
+      //   inputRef.current.clear();
+      //   inputRef.current.focus();
+      //   setSearchText("")
+      // }
+      // inputRef.current.focus();
+
+    }, []);
+
+    const onFocus = useCallback(() => {
+      if(searchText.length > 0) {
         setPaymentMethods(searchPaymentMethods(searchText))
       } else {
-        console.log("empty")
+        setPaymentMethods(searchPaymentMethods(""))
       }
-    }, [searchText])
+      setIsSearching(true)
+      
+    }, [])
+
+
+
+
+
+    useEffect(() => {
+      number += 1
+      if(searchText && searchText.length > 0 && isSearching) {
+        setPaymentMethods(searchPaymentMethods(searchText))
+      } else {
+        // console.log("DropDown useEffect: ", number, isSearching)
+      }
+
+    }, [searchText, isSearching])
+
+
+    console.log("DropDown: ", number)
+  
+
+
+    // console.log("re render: ", number)
+
+    // console.log("re render")
 
  return (
-  <View style={styles.container}>
-    <View style={[styles.imageTextInputView, searchStyle]}>
-        <Image pointerEvents='none' source={interface_search_black} style={styles.searchIcon}/>
-        <MemoizedTextInput 
-        placeholder={placeholder}
-        onChangeText={setSearchText} 
-        inputRef={inputRef}
-        placeholderColor={themeColors.text3} 
-        initalText={initalSearchValue}
-        style={styles.textInput}
-        onBlur={() => {setPaymentMethods([])}}
-        />
 
-        <EarseButton 
-        onPress={clearTextInput} 
-        //setSearchValue={setSearchValue}  
-        searchValue={searchText}/>
+  <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+  <View style={[styles.container, {backgroundColor: themeColors.background}]}>
+
+    {/* Broder */}
+    {/* <View pointerEvents="none" style={[styles.border, {padding: 0}]}> */}
+      <View pointerEvents="none" 
+      style={[
+        styles.border, 
+        {
+          borderColor: borderColor,
+          borderWidth: useResponsiveBothHeightWidth(2), 
+        }
+      ]}/>
+    {/* </View> */}
+
+
+    <View style={styles.content}>
+
+
+        <View style={[styles.imageTextInputView, searchStyle]}>
+            <Image pointerEvents='none' source={interface_search_black} style={styles.searchIcon}/>
+              <MemoizedTextInput 
+              placeholder={placeholder}
+              placeholderColor={themeColors.text3} 
+              onChangeText={setSearchText} 
+              inputRef={inputRef}
+              
+              defaultValue={initalSearchValue}
+              style={styles.textInput}
+              onBlur={onBlur}
+              onFocus={onFocus}
+              />
+            <EarseButton 
+            onPress={clearTextInput} 
+            //setSearchValue={setSearchValue}  
+            searchValue={searchText}/>
+        </View>
+
+
+  
+
+      {paymentMethods && paymentMethods.length > 0 &&  
+      <View style={[styles.searchResults, searchStyle, {borderColor: borderColor} ]}>
+            {/* <FlatList
+            data={["test", "test"]}
+            renderItem={(({item, index}) => {
+                return(
+                    <Text>
+                        item
+                    </Text>
+                )
+            })}
+            keyExtractor={(item, index) => index.toString()}
+            /> */}
+
+            <ScrollView keyboardShouldPersistTaps='always'>
+
+            {paymentMethods.map((item, index) => {
+
+              const paddingVertical =  paymentMethods.length < 2 ? useResponsiveVerticalSpace(10) : 0
+              return(
+                <CustomPressable 
+                style={
+                  {...styles.searchResult, 
+                      backgroundColor: themeColors.background,
+                      paddingVertical: paddingVertical,
+                      flex: 1
+                  }
+                } 
+                onPress={() => {updateSearchText(item)}} 
+                key={index}>
+                  <Text style={[styles.searchResultText, textStyle]}>
+                  {item}
+                  </Text>
+                </CustomPressable>
+      
+              )
+              
+              })}
+
+            </ScrollView>
+        </View>}
     </View>
 
-   {paymentMethods && paymentMethods.length > 0 &&  <View style={[styles.searchResults, searchStyle ]}>
-        {/* <FlatList
-        data={["test", "test"]}
-        renderItem={(({item, index}) => {
-            return(
-                <Text>
-                    item
-                </Text>
-            )
-        })}
-        keyExtractor={(item, index) => index.toString()}
-        /> */}
 
-        <ScrollView >
 
-        {paymentMethods.map((item, index) => {
-          return(
-            <CustomPressable style={[styles.searchResult, {backgroundColor: themeColors.background4}]} onPress={() => {}} key={index}>
-              <Text style={[styles.searchResultText, textStyle]}>
-              {item}
-              </Text>
-            </CustomPressable>
-  
-          )
-          
-          })}
-
-        </ScrollView>
-    </View>}
   </View>
+
+  </TouchableWithoutFeedback>
  );
 }
 
 
 const EarseButton = ({onPress, searchValue}) => {
 
- 
+  
 
     return(
-        <Pressable onPress={onPress} style={{height: "100%", justifyContent: "center"}}>
+        <Pressable onPress={onPress} style={styles.earseButton}>
             {({pressed}) => {
      
                 const hasText = searchValue.length > 0
-                
+             
+                // console.log('re render: ', ' at DropDown file')
                 const opacity = hasText && pressed ? 1 : hasText ? 0.4 : 0 
                 return(
                     <Image style={[styles.earseIcon, {opacity: opacity}]} source={interface_circle_xmark_black}/>
@@ -124,28 +225,48 @@ const EarseButton = ({onPress, searchValue}) => {
   }
 
 
+  const DismissKeyboardHOC = (Comp) => {
+    return ({ children, ...props }) => (
+      <TouchableWithoutFeedback onPress={Keyboard.dismiss} accessible={false}>
+        <Comp {...props}>
+          {children}
+        </Comp>
+      </TouchableWithoutFeedback>
+    );
+  };
+  const DismissKeyboardView = DismissKeyboardHOC(View)
+
+
 const styles = StyleSheet.create({
  container: {
   alignItems: 'flex-start',
   justifyContent: 'flex-start',
-  width: "100%",
+  flex: 1,
   zIndex: 10,
+  height: "100%",
   position: "relative",
-  },
-  activeTitle: {
-    fontSize: useResponsiveFontSize(16),
+  // paddingLeft: useResponsiveHorizontalSpace(12),
+  // borderWidth: useResponsiveBothHeightWidth(2),
+  borderRadius: useResponsiveRadius(10),
+  
+  // marginHorizontal: useResponsiveHorizontalSpace(1),
   },
 
-  textInput: {
-    fontSize: useResponsiveFontSize(16),
-    fontWeight: "400",
-    // width: "100%",
-    // backgroundColor: "green",
+  border: {
+
+    position: "absolute", 
+    width: "100%", 
     height: "100%",
-    flex: 1,
-    marginRight: 10,
-    // maxWidth: "94%",
-    // alignSelf: 'stretch',
+    zIndex: 1,
+    borderRadius: useResponsiveRadius(10),
+  },
+
+  content: {
+    paddingVertical: useResponsiveBothHeightWidth(5),
+  },
+
+  activeTitle: {
+    fontSize: useResponsiveFontSize(16),
   },
 
   imageTextInputView: {
@@ -156,15 +277,30 @@ const styles = StyleSheet.create({
     width: "100%",
     // backgroundColor: "green",
     // width: "100%",
-    borderRadius: useResponsiveRadius(10)
+    borderRadius: useResponsiveRadius(10),
   },
+
+  textInput: {
+    fontSize: useResponsiveFontSize(16),
+    fontWeight: "400",
+    // width: "100%",
+    // backgroundColor: "green",
+    height: "100%",
+    flex: 1,
+    marginRight: useResponsiveHorizontalSpace(10),
+    // backgroundColor: "red"
+    // maxWidth: "94%",
+    // alignSelf: 'stretch',
+  },
+
+
 
 
   searchIcon: {
     width: useResponsiveBothHeightWidth(16),
     height: useResponsiveBothHeightWidth(16),
     marginRight: useResponsiveHorizontalSpace(7),
-    marginLeft: useResponsiveHorizontalSpace(7),
+    marginLeft: useResponsiveHorizontalSpace(18),
     opacity: 0.5
   },
 
@@ -173,28 +309,44 @@ const styles = StyleSheet.create({
     height: useResponsiveBothHeightWidth(16),
     marginRight: useResponsiveHorizontalSpace(7),
     marginLeft: useResponsiveHorizontalSpace(7),
-    opacity: 0.4
+    opacity: 0.4,
+    
+  },
+
+  earseButton: {
+    height: "100%", 
+    justifyContent: "center",
+    // backgroundColor: "red"
   },
 
   searchResults: {
-    height: useResponsiveHeight(160),
-    paddingTop: 10,
-    paddingHorizontal: useResponsiveHorizontalSpace(10),
+    maxHeight: useResponsiveHeight(160),
+    paddingTop: useResponsiveVerticalSpace(10),
+
+    
     width: "100%",
     position: "absolute",
-    top: 30,
-    zIndex: 1,
+    top: useResponsiveVerticalSpace(30),
+    zIndex: -1,
+    borderBottomEndRadius: useResponsiveRadius(10),
+    borderBottomStartRadius: useResponsiveRadius(10),
+    borderBottomLeftRadius: useResponsiveRadius(10),
+    borderBottomRightRadius: useResponsiveRadius(10),
+    backgroundColor: "red",
+    borderWidth: useResponsiveBothHeightWidth(2),
   },
 
   searchResult: {
-    marginTop: 5,
-    height: 30,
+    paddingHorizontal: useResponsiveHorizontalSpace(10),
+    marginTop: useResponsiveVerticalSpace(5),
+    minHeight: useResponsiveHeight(30),
     justifyContent: "center",
-    alignItems: "flex-start"
+    alignItems: "flex-start",
   },
 
   searchResultText: {
-    fontSize: useResponsiveFontSize(16)
+    fontSize: useResponsiveFontSize(16),
+ 
   }
 
 });

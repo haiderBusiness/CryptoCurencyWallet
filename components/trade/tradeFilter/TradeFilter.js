@@ -34,7 +34,7 @@ export default function TradeFilter({}) {
     {/* //REVIEW Apply last used filter section  */}
     <View style={[styles.applyLastFiltersView, sectionBackgroundStyle]}>
      <Text style={[styles.applyLastFiltersText, textStyle]}>
-        {useLanguage("apply_last_used_filter")}
+        {useLanguage("Apply last used filter")}
      </Text>
 
      <CustomSwitch activeColor={themeColors.green2} inActiveColor={themeColors.background4} />
@@ -52,7 +52,7 @@ export default function TradeFilter({}) {
         <Image source={interface_info_black} style={{...styles.infoImage}}/>
       </View>
 
-      <View style={[styles.applyLastFiltersView, sectionBackgroundStyle]}>
+      <View style={[styles.applyLastFiltersView, sectionBackgroundStyle, {paddingHorizontal: 0, paddingVertical: 0}]}>
         <DropDown/>
         {/* <Image source={interface_info_black} style={{...styles.infoImage}}/> */}
       </View>
@@ -67,7 +67,7 @@ export default function TradeFilter({}) {
 
       <View style={styles.titleView}>
         <Text style={[styles.title, textStyle]}>
-          {useLanguage("trade_limit")}
+          {useLanguage("Trade limit")}
           </Text>
 
         <Image source={interface_info_black} style={{...styles.infoImage}}/>

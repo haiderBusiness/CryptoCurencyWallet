@@ -31,6 +31,8 @@ import interface_circle_xmark_black from "./interface_circle_xmark_black.png"
 
 import interface_info_black from "./interface_info_black.png"
 
+import interface_digital_payment_black from "./interface_digital_payment_black.png"
+
 
 export { 
     btc, 
@@ -56,4 +58,5 @@ export {
     interface_search_black,
     interface_circle_xmark_black,
     interface_info_black,
+    interface_digital_payment_black,
 };

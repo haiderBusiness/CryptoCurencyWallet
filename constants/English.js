@@ -6,9 +6,10 @@ const English = {
     "completed": "completed",
     "waiting": "waiting",
     "paid": "paid",
-    "apply_last_used_filter": "Apply last used filter",
-    "trade_limit": "Trade limit",
-    "payment_method": "Payment method"
+    "Apply last used filter": "Apply last used filter",
+    "Trade limit": "Trade limit",
+    "payment_method": "Payment method",
+    "Search for a payment method": "Search for a payment method",
 }
 
 export default English;

@@ -75,6 +75,7 @@ useEffect(() => {
       onHide={setShowMarketPlaceFilters}
       snapTo="95%"
       backgroundColor={themeColors.background4}
+      keyboardShouldPersistTaps="always"
       >
         <TradeFilter/>
       </Modal>

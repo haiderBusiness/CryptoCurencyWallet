@@ -102,7 +102,7 @@ export const searchPaymentMethods = (searchValue="") => {
 
     if(searchValue && searchValue.length > 0) {
         const results = array1.filter((item) => item.toLowerCase().includes(searchValue.toLocaleLowerCase()))
-        console.log("results: ", results)
+        // console.log("results: ", results)
         return results
     }
     return array1
