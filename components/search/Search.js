@@ -80,7 +80,7 @@ export default function Search({onCancel}) {
                 <Image pointerEvents='none' source={interface_search_black} style={styles.searchIcon}/>
                 <MemoizedTextInput 
                 onChangeText={setSearchText} 
-                inputRef={inputRef}
+                componentRef={inputRef}
                 placeholderColor={themeColors.text3} 
                 style={styles.textInput}
                 />

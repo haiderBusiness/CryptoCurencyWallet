@@ -27,6 +27,8 @@ const RangeSlider = ({sliderWidth = 300, min, max, step, onValueChange, symbol =
     })
     .onUpdate(e => {
       opacity.value = 1;
+
+      
       if (context.value + e.translationX < 0) {
         position.value = 0;
       } else if (context.value + e.translationX > position2.value) {
@@ -86,12 +88,12 @@ const RangeSlider = ({sliderWidth = 300, min, max, step, onValueChange, symbol =
 
   const animatedStyle = useAnimatedStyle(() => ({
     
-    transform: [{translateX: position.value + THUMB_HORIZONTAL_PADDING}],
+    transform: [{translateX: position.value}],
     zIndex: zIndex.value,
   }));
 
   const animatedStyle2 = useAnimatedStyle(() => ({
-    transform: [{translateX: position2.value - THUMB_HORIZONTAL_PADDING}],
+    transform: [{translateX: position2.value}],
     zIndex: zIndex2.value,
   }));
 
@@ -152,6 +154,8 @@ const RangeSlider = ({sliderWidth = 300, min, max, step, onValueChange, symbol =
           </Animated.View>
         </Animated.View>
       </GestureDetector>
+
+      
       <GestureDetector gesture={pan2}>
         <Animated.View style={[animatedStyle2, styles.thumb]}>
           <Animated.View style={[opacityStyle2, styles.label]}>
@@ -195,18 +199,18 @@ const styles = StyleSheet.create({
   },
   thumb: {
     left: -10,
-    width: 20,
-    height: 20,
+    width: 25,
+    height: 25,
     position: 'absolute',
     backgroundColor: 'white',
     borderColor: '#3F4CF6',
-    borderWidth: 5,
+    borderWidth: 2,
     borderRadius: 10,
   },
   label: {
     position: 'absolute',
     top: -40,
-    bottom: 20,
+    bottom: 28,
     backgroundColor: 'black',
     borderRadius: 5,
     alignSelf: 'center',

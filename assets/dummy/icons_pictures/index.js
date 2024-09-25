@@ -2,7 +2,8 @@ import btc from "./bitcoin.png";
 import usdt from "./usdt.png";
 import usdc from "./usdc.png";
 import eth from "./ethereum.png";
-import arrowBackWhite from "./arrow_back_white.png";
+import arrow_back_white from "./arrow_back_white.png";
+import arrow_back_black from "./arrow_back_black.png"
 import interfaceExchangeCryptoBlack from "./interface_exchange-cryptocurrency_black.png";
 import interfaceShieldTrustGreen from "./interface_shield-trust_green.png";
 import likeGreen from "./like_green.png"
@@ -33,13 +34,19 @@ import interface_info_black from "./interface_info_black.png"
 
 import interface_digital_payment_black from "./interface_digital_payment_black.png"
 
+import interface_population_globe_black from "./interface_population_globe_black.png"
+
+import interface_expense_black from "./interface_expense_black.png";
+
+import interface_hashtag_lock_black from "./interface_hashtag_lock_black.png"
 
 export { 
     btc, 
     usdc, 
     usdt, 
     eth, 
-    arrowBackWhite, 
+    arrow_back_white, 
+    arrow_back_black,
     interfaceExchangeCryptoBlack, 
     interfaceShieldTrustGreen,likeGreen, 
     likePurple, 
@@ -59,4 +66,7 @@ export {
     interface_circle_xmark_black,
     interface_info_black,
     interface_digital_payment_black,
+    interface_population_globe_black,
+    interface_expense_black,
+    interface_hashtag_lock_black,
 };

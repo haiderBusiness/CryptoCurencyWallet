@@ -58,7 +58,7 @@
 import trade_array from "../../assets/dummy/data/fake_trades_array.json"
 import order_array from "../../assets/dummy/data/fake_orders_array.json";
 import payment_methods from "../../assets/dummy/data/payment_methods.json"
-import { includes } from "lodash";
+import { includes, result } from "lodash";
 
 
 export const getTrades = async (someParameters) => {
@@ -94,16 +94,22 @@ export const getPaymentMethods = (someParameters) => {
     
 }
 
-export const searchPaymentMethods = (searchValue="") => {
+export const searchPaymentMethods = (searchValue="", exact) => {
 
     const array1 = payment_methods
 
 
 
     if(searchValue && searchValue.length > 0) {
-        const results = array1.filter((item) => item.toLowerCase().includes(searchValue.toLocaleLowerCase()))
-        // console.log("results: ", results)
-        return results
+        if(exact) {
+            const results = array1.filter((item) => item.toLowerCase() === searchValue.toLocaleLowerCase())
+            return results
+        } else {
+            const results = array1.filter((item) => item.toLowerCase().includes(searchValue.toLocaleLowerCase()))
+            // console.log("results: ", results)
+            return results
+        }
+
     }
     return array1
     

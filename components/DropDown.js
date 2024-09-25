@@ -14,7 +14,7 @@ import useLanguage from '../hooks/useLanguage';
 import hexToRGBA from '../hooks/hexToRGBA';
 
 let number = 0
-export default function DropDown({inputValue}) {
+export default function DropDown({inputValue, onFinish}) {
 
 
     const themeColors = useThemeColors()
@@ -34,7 +34,10 @@ export default function DropDown({inputValue}) {
 
 
     const placeholder = useLanguage("Search for a payment method")
-    const initalSearchValue = 'PayPal'
+    const initialSearchValue = 'PayPal'
+
+
+  
 
 
     const clearTextInput = () => {
@@ -57,7 +60,9 @@ export default function DropDown({inputValue}) {
         setIsSearching(false) // stop searching mode
         Keyboard.dismiss() // hide keyboard
         // setSearchText(text)
-      }
+
+        onFinish(text) //update the passed prop
+      }onSubmitEditing
     }, []);
     
 
@@ -82,6 +87,13 @@ export default function DropDown({inputValue}) {
       }
       setIsSearching(true)
       
+    }, [])
+
+
+    const onSubmitEditing = useCallback((text) => {
+
+      const exact = true
+      searchPaymentMethods(text, exact)
     }, [])
 
 
@@ -134,9 +146,9 @@ export default function DropDown({inputValue}) {
               placeholder={placeholder}
               placeholderColor={themeColors.text3} 
               onChangeText={setSearchText} 
-              inputRef={inputRef}
+              componentRef={inputRef}
               
-              defaultValue={initalSearchValue}
+              defaultValue={initialSearchValue}
               style={styles.textInput}
               onBlur={onBlur}
               onFocus={onFocus}

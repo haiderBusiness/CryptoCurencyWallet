@@ -10,6 +10,7 @@ const tintColorDark = "#fff";
 export const Colors = {
   light: {
     mainColor: "#25D366",
+    mainColorOpposite: "#ffffff",
     background: "#ffffff",
     background2: "#FAFAFA",
     background3: "#f6f6f6",

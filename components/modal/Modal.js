@@ -47,7 +47,6 @@ export default function Modal(
     borderTopRightRadius= useResponsiveWidth(20),
     borderTopLeftRadius= useResponsiveWidth(20),
     onHide,
-    rest,
     children,
     
 
@@ -57,7 +56,10 @@ export default function Modal(
     showTopNotch = true, 
 
     //scrollView props 
-    keyboardShouldPersistTaps
+    
+    AdditionalComponent,
+    additionalComponentHeight,
+    ...rest
     }
     ) {
 
@@ -84,7 +86,7 @@ export default function Modal(
     const percentage = parseFloat(snapTo.replace('%', '')) / 100;
     const closeHeight = height;
     const openHeight = height - height * percentage;
-    const hideModalValue = (height * percentage) * 0.12
+    const hideModalValue = 10
 
     // console.log("openHeight", openHeight)
     // console.log("hideModalValue", hideModalValue)
@@ -210,6 +212,7 @@ export default function Modal(
 
     const pan = Gesture.Pan()
     .onBegin(() => {
+      // reset context 
       context.value = topAnimation.value;
     })
     .onUpdate(event => {
@@ -225,23 +228,34 @@ export default function Modal(
         });
       }
     })
-    .onEnd(() => {
-      if (topAnimation.value > openHeight + hideModalValue) {
+    .onEnd((event) => {
+      if (topAnimation.value > openHeight) {
 
-        //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
-        runOnJS(doSomeAfter)(250)
+        const gestureSpeed = Math.abs(event.velocityY);
 
-        parentOpacity.value = withTiming(0,{duration: 300,},);
-        topAnimation.value = withSpring(closeHeight, {
-          damping: 100,
-          stiffness: 400,
-        }, finshed => {
+        // Example: Use gesture speed to decide some action
+        if (gestureSpeed > 2000) {  // Adjust the speed threshold as needed
 
-          // runOnJS(timer)();
-          if(finshed) {
-            //REVIEW--> DO SOMETHING WHEN ANIMATION FINISHES
-          }
-        });
+          //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
+          runOnJS(doSomeAfter)(250)
+  
+          parentOpacity.value = withTiming(0,{duration: 300,},);
+          topAnimation.value = withSpring(closeHeight, {
+            damping: 100,
+            stiffness: 400,
+          }, finshed => {
+  
+            // runOnJS(timer)();
+            if(finshed) {
+              //REVIEW--> DO SOMETHING WHEN ANIMATION FINISHES
+            }
+          });
+        } else {
+          topAnimation.value = withSpring(openHeight, {
+            damping: 100,
+            stiffness: 400,
+          });
+        }
       } else {
         topAnimation.value = withSpring(openHeight, {
           damping: 100,
@@ -249,6 +263,8 @@ export default function Modal(
         });
       }
     });
+
+    console.log("re-render", )
 
 
     const animatedParentStyle = useAnimatedStyle(() => {
@@ -282,51 +298,99 @@ export default function Modal(
         }
       })
 
-
+    let panSavedUpScroll = useSharedValue(0)
+    const [bounces, setBounces] = useState(true)
     const panScroll = Gesture.Pan()
-      .onBegin(() => {
+      .onBegin((event) => {
+        // reset context 
         context.value = topAnimation.value;
+        console.log(event.translationY)
       })
       .onUpdate(event => {
+        
+
+        // update pan s
+
+        // else if(event.translationY < 0 && panSavedUpScroll <= 0) {
+
+        // } 
+
+
         if (event.translationY < 0) {
           topAnimation.value = withSpring(openHeight, {
             damping: 100,
             stiffness: 400,
           });
+
         } else {
-          topAnimation.value = withSpring(context.value + event.translationY, {
-            damping: 100,
-            stiffness: 400,
-          });
+         
+          if(panSavedUpScroll.value >= 0) {
+            topAnimation.value = withSpring(context.value + event.translationY, {
+              damping: 100,
+              stiffness: 400,
+              });
+
+            if(topAnimation.value > ((height * percentage) / 2)) {
+              //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
+              runOnJS(doSomeAfter)(250)
+      
+              parentOpacity.value = withTiming(0,{duration: 300,},);
+              topAnimation.value = withSpring(closeHeight, {
+                damping: 100,
+                stiffness: 400,
+              });
+            }
+          } 
+
+
+
         }
       })
-      .onEnd(() => {
-        if (topAnimation.value > openHeight + hideModalValue) {
+      .onEnd((event) => {
+        panSavedUpScroll.value = event.translationY
+
+        if (topAnimation.value > openHeight) {
   
-          //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
-          runOnJS(doSomeAfter)(250)
-  
-          parentOpacity.value = withTiming(0,{duration: 300,},);
-          topAnimation.value = withSpring(closeHeight, {
-            damping: 100,
-            stiffness: 400,
-          }, finshed => {
-  
-            // runOnJS(timer)();
-            if(finshed) {
-              //REVIEW--> DO SOMETHING WHEN ANIMATION FINISHES
-            }
-          });
+          const gestureSpeed = Math.abs(event.velocityY);
+
+          // Example: Use gesture speed to decide some action
+          if (gestureSpeed > 2000) {  // Adjust the speed threshold as needed
+
+            //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
+            runOnJS(doSomeAfter)(250)
+    
+            parentOpacity.value = withTiming(0,{duration: 300,},);
+
+            topAnimation.value = withSpring(closeHeight, {
+              damping: 100,
+              stiffness: 400,
+            }, finshed => {
+    
+              // runOnJS(timer)();
+              if(finshed) {
+                //REVIEW--> DO SOMETHING WHEN ANIMATION FINISHES
+              }
+            });
+          } else {
+            topAnimation.value = withSpring(openHeight, {
+              damping: 100,
+              stiffness: 400,
+            });
+          }
+
+
         } else {
           topAnimation.value = withSpring(openHeight, {
             damping: 100,
             stiffness: 400,
           });
         }
-      });
+        });
 
 
       const scrollViewGesture = Gesture.Native()
+
+      console.log("AdditionalComponent: ", AdditionalComponent.openHeight)
 
 if(showModalValue !== "hide")
     return(
@@ -388,7 +452,7 @@ if(showModalValue !== "hide")
                         animationStyle,
                         {
                         backgroundColor: BACKGROUND_COLOR,
-                        paddingBottom: inset.bottom,
+                        // paddingBottom: inset.bottom,
                         },
                     ]}>
                     {showTopNotch && 
@@ -396,18 +460,26 @@ if(showModalValue !== "hide")
                         <View style={styles.line} />
                     </View>}
 
+
+
                     <GestureDetector gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}>
                       <Animated.ScrollView
-                      keyboardShouldPersistTaps={keyboardShouldPersistTaps}
-                      {...rest}
                       scrollEventThrottle={16}
-                      bounces={false}
+                      bounces={bounces}
                       onScroll={onScroll}
+                      {...rest}
                       >
                       {children}
-                      </Animated.ScrollView>
-                    </GestureDetector>
 
+                      <View style={{width: "100%", height: inset.bottom}}/>
+                      {AdditionalComponent && <View style={{width: width, height:additionalComponentHeight}}/>}
+                      </Animated.ScrollView>
+
+                      
+                    </GestureDetector>
+                             
+                    {AdditionalComponent}
+        
 
                 </Animated.View>
             </GestureDetector>
@@ -422,6 +494,7 @@ const styles = StyleSheet.create({
       ...StyleSheet.absoluteFillObject,
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
+      backgroundColor: "red"
     },
     lineContainer: {
       marginVertical: 10,

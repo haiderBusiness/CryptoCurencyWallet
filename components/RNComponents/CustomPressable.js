@@ -21,22 +21,25 @@ const darkenHexColor = (hex, percent) => {
 export default function CustomPressable({
   children,
   style = viewStyleSample,
-  onPress = () => {console.log("test: ", this.name)},
+  onPress = () => {console.log("test: ", "CustomPressable")},
+  colorChangePercent = 15,
+  ...props
 }) {
   const styles = style.flex !== 1000 ? style : {};
 
-  const backgroundColorAfterPress = styles.backgroundColor ?  darkenHexColor(styles.backgroundColor, 15) : null;
+  const backgroundColorAfterPress = styles.backgroundColor ?  darkenHexColor(styles.backgroundColor, colorChangePercent) : null;
 
 
   return (
     <Pressable
-      onPress={onPress}
       style={({ pressed }) => [
         styles,
         pressed
           ? { backgroundColor: backgroundColorAfterPress }
           : { backgroundColor: styles.backgroundColor },
       ]}
+      onPress={onPress}
+      {...props}
     >
       
       {children}

@@ -1,5 +1,5 @@
 import React, {useCallback, useEffect, useRef, useState} from 'react';
-import {View, Text, StyleSheet, ScrollView} from 'react-native';
+import {View, Text, StyleSheet, ScrollView, Dimensions} from 'react-native';
 import Modal from '../components/modal/Modal.js';
 import TradeFilter from '../components/trade/tradeFilter/TradeFilter.js';
 import BottomSheet from '../components/modal/BottomSheet';
@@ -12,7 +12,16 @@ import Store from "../redux/Store.js"
 import { useSelector } from "react-redux";
 import { setTrades } from "../redux/actions";
 import useThemeColors from '../hooks/useThemeColors.js';
+import CustomPressable from '../components/RNComponents/CustomPressable.js';
+import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace } from '../hooks/useResponsiveness.js';
 
+import { useSafeAreaInsets } from "react-native-safe-area-context";
+
+
+const {height} = Dimensions.get('screen');
+
+const applyFiltersButtonVerticalPadding = useResponsiveVerticalSpace(15)
+const applyFiltersButtonHeight = useResponsiveHeight(45) + applyFiltersButtonVerticalPadding
 
 
 export default function ModalsScreen({}) {
@@ -46,6 +55,11 @@ useEffect(() => {
   }
 }, [marketPlaceFilters])
 
+
+const tradeFilterModalHeight = "92.5%"
+
+
+
  return (
   <>
       {/* <Modal 
@@ -73,15 +87,50 @@ useEffect(() => {
       showTopNotch={true}
       // animationTime={1000}
       onHide={setShowMarketPlaceFilters}
-      snapTo="95%"
+      snapTo={tradeFilterModalHeight}
       backgroundColor={themeColors.background4}
-      keyboardShouldPersistTaps="always"
+      AdditionalComponent={<ApplyFiltersButton snapTo={tradeFilterModalHeight}/>}
+      additionalComponentHeight={applyFiltersButtonHeight}
       >
         <TradeFilter/>
       </Modal>
   </>
 
  );
+}
+
+
+const ApplyFiltersButton = ({snapTo}) => {
+
+  // const {height} = {}
+
+  const inset = useSafeAreaInsets();
+  const themColors = useThemeColors()
+
+  const percentage = parseFloat(snapTo.replace('%', '')) / 100;
+
+  const openHeight = ((height * percentage) - useResponsiveHeight(75));
+  // (height * percentage) * 0.12
+
+  const top = openHeight
+
+  console.log("height: ", height)
+  const marginVertical = useResponsiveVerticalSpace(0)
+  const componentHeight = useResponsiveHeight(0) + marginVertical
+  return(
+    <View style={[styles.applyFiltersView, {top: top}]}>
+      <CustomPressable style={{...styles.applyFiltersButton, backgroundColor: themColors.mainColor}}>
+            <Text 
+            style={{
+              ...styles.applyFiltersText, 
+              color: themColors.mainColorOpposite
+            }}
+            >
+              Apply filters
+            </Text>
+      </CustomPressable>
+    </View>
+  )
 }
 
 
@@ -93,4 +142,31 @@ const styles = StyleSheet.create({
   alignItems: 'center',
   justifyContent: 'center',
   },
+
+  applyFiltersView: {
+    width: "100%",
+    // backgroundColor: "orange",
+    position: "absolute",
+    alignItems: "center",
+  },
+
+  applyFiltersButton: {
+    backgroundColor: "green",
+    height: useResponsiveHeight(42.5),
+    paddingHorizontal: "35%",
+    borderRadius: useResponsiveRadius(10),
+    justifyContent: "center",
+    alignItems: "center",
+
+    shadowOffset: { width: -1, height: 1 },
+    shadowColor: "rgba(0,0,0,0.5)",
+    shadowOpacity: 0.35,
+    shadowRadius: useResponsiveRadius(7),
+    elevation: 10,
+  },
+
+  applyFiltersText: {
+    fontSize: useResponsiveFontSize(16),
+    fontWeight: "500"
+  }
 });

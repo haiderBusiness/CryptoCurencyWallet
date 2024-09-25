@@ -1,13 +1,24 @@
 /* eslint-disable react-native/no-inline-styles */
 import {Alert, Pressable, StyleSheet, Text, TextInput, View} from 'react-native';
-import React, {useRef, useState} from 'react';
+import React, {useEffect, useRef, useState, useCallback} from 'react';
 import RangeSlider from '../../RangeSlider';
-import { useResponsiveWidth } from '../../../hooks/useResponsiveness';
+import { useResponsiveFontSize, useResponsiveVerticalSpace, useResponsiveWidth } from '../../../hooks/useResponsiveness';
+import MemoizedTextInput from '../../MemoizedTextInput';
+import Animated from 'react-native-reanimated';
+import AnimatedView from '../../AnimatedView';
+import useLanguage from '../../../hooks/useLanguage';
+import useThemeColors from '../../../hooks/useThemeColors';
 const RangeSliderWidget = () => {
   const MIN_DEFAULT = 10;
-  const MAX_DEFAULT = 500;
+  const MAX_DEFAULT = 1000000;
   const [minValue, setMinValue] = useState(MIN_DEFAULT);
   const [maxValue, setMaxValue] = useState(MAX_DEFAULT);
+
+  const themeColors = useThemeColors()
+
+
+  const minValueTextInput = useRef(null)
+  const maxValueTextInput = useRef(null)
 
   const focusInput = (textInput) => {
     console.log("clicked")
@@ -16,103 +27,84 @@ const RangeSliderWidget = () => {
     }
   }
 
+  const onMinValueInputBlur = useCallback(() => {
+    // if(minValueTextInput && minValueTextInput.current) {
 
-  const handleMinTextChange = (value)=>{
-    /* 
-      If text is above or below length of limits then exit function
-    */
-    //   console.log("newText: ", typeof newText )
-    // // if (newText < 10 || newText.length > 6000000){
-    // //   return;
-    // // }
-    // // Else update text
-    // setMinValue(newText);
+    //   const text = minValueTextInput.current.value || minValueTextInput.current._lastNativeText
+    //   console.log("text: ", text)
+    //   if(minValue < 10 || !minValue) {
 
-    if (value === '') {
-      Alert.alert('Error', 'Please enter a number.');
-      return;
-    }
+    //     minValueTextInput.current.setNativeProps({ text: "10" });
+    //     setMinValue(10)
+        
+    //   }
+    // }
+  }, [])
 
-    const number = parseInt(value, 10);
-    if (number < 10) {
-      Alert.alert('Error', `Value must be at least ${10}`);
-      return;
-    }
 
-    // Proceed with the valid number
-    Alert.alert('Success', `You entered: ${number}`);
-  }
-
-  const handleMaxTextChange = (newText)=>{
-    /* 
-      If text is above or below length of limits then exit function
-    */
-    if (newText.length < 10 || newText.length> 6000000){
-      return;
-    }
-    // Else update text
-    setMaxValue(newText);
-  }
-
-  const minValueTextInput = useRef(null)
-  const maxValueTextInput = useRef(null)
-
-  const [layout, setLayout] = useState(null);
-  const handleLayout = (event) => {
-    const { height, width, x, y } = event.nativeEvent.layout;
-    setLayout({ height, width, x, y });
-
-    // headerLayout(event)
-  };
 
   const currency = "€"
 
+
+  useEffect(() => {
+    console.log("minValue: ", minValue > maxValue)
+  }, [minValue])
 
   
   return (
 
 
-      <View onLayout={handleLayout}  style={styles.contentContainer}>
+      <View   style={styles.contentContainer}>
           <View style={styles.content}>
           {/* <Text style={styles.text}>Price Slider</Text> */}
-          {layout && layout.width && <RangeSlider
-              sliderWidth={layout.width}
+          {/* {layout && layout.width && <RangeSlider
+              sliderWidth={layout.width - 20}
               min={MIN_DEFAULT}
               max={MAX_DEFAULT}
               symbol={currency}
-              step={10}
+              step={100}
               onValueChange={range => {
               setMinValue(range.min);
               setMaxValue(range.max);
               }}
-          />}
+          />} */}
           <View style={styles.tableContainer}>
-              <View style={{marginBottom: 20}}>
-              <Text style={styles.colorBlack}>Min Price</Text>
-              <View style={styles.table}>
-                {/* <Text>$</Text> */}
-                {/* <TextInput 
-                keyboardType='number-pad' 
-                ref={minValueTextInput} 
-                value={`${minValue}`}
-                onChangeText={handleMinTextChange}
-                style={styles.colorBlack}
-                /> */}
-                <Text>{currency}{minValue}</Text>
-              </View>
+              <View style={{marginBottom: useResponsiveVerticalSpace(10)}}>
+                <Text style={styles.colorBlack}>Min Price</Text>
+                <Pressable onPress={() => focusInput(minValueTextInput)} style={styles.table}>
+                  <Text>{currency}</Text>
+                  <MemoizedTextInput 
+                  keyboardType='number-pad' 
+                  componentRef={minValueTextInput} 
+                  defaultValue={`${MIN_DEFAULT}`}
+                  onChangeText={setMinValue}
+                  style={styles.textInput}
+                  onBlur={onMinValueInputBlur}
+                  />
+                  {/* <Text>{currency}{minValue}</Text> */}
+                </Pressable>
+
+                <AnimatedView animationType="fade" useDisplayStyle={true} show={minValue > maxValue}>
+                  <Text style={[styles.errorText, {color: themeColors.red}]}>
+                    {useLanguage("The minimum price must be less then the maximum")}
+                  </Text>
+                </AnimatedView>
               </View>
               <View>
-              <Text style={styles.colorBlack}>Max Price</Text>
-              <View style={styles.table}>
-                {/* <Text>$</Text> */}
-                {/* <TextInput 
-                keyboardType='number-pad'
-                ref={maxValueTextInput} 
-                style={styles.colorBlack}
-                value={`${maxValue}`}
-                />   */}
-                 <Text>{currency}{maxValue}</Text>
-              </View>
+                <Text style={styles.colorBlack}>Max Price</Text>
+                <Pressable onPress={() => focusInput(minValueTextInput)} style={styles.table}>
+                    <Text>{currency}</Text>
+                    <MemoizedTextInput 
+                    keyboardType='number-pad' 
+                    componentRef={maxValueTextInput} 
+                    defaultValue={`${MAX_DEFAULT}`}
+                    onChangeText={setMaxValue}
+                    style={styles.textInput}
+                    // onBlur={onMinValueInputBlur}
+                    />
+                    {/* <Text>{currency}{minValue}</Text> */}
+                  </Pressable>
+                 {/* <Text>{currency}{maxValue}</Text> */}
               </View>
           </View>
           </View>
@@ -134,20 +126,22 @@ const styles = StyleSheet.create({
   },
   content: {
     paddingHorizontal: 0,
-    paddingVertical: 16,
+    paddingVertical: useResponsiveVerticalSpace(10),
     flex: 1,
     justifyContent: "flex-end",
     alignItems: "flex-end",
   },
   text: {
     color: 'black',
-    fontSize: 20,
+    fontSize: useResponsiveFontSize(20),
   },
   tableContainer: {
-    marginTop: 20,
+    // marginTop: useResponsiveVerticalSpace(20),
     // flexDirection: 'column',
     // justifyContent: 'space-between',
     width: "100%",
+    // flexDirection: "row",
+    // justifyContent: "space-between"
 
   },
   table: {
@@ -159,5 +153,26 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     // backgroundColor: "red"
   },
-  colorBlack: {color: 'black'},
+  colorBlack: {
+    color: 'black',
+  },
+
+  errorText: {
+    marginTop:  useResponsiveVerticalSpace(5),
+    fontSize: useResponsiveFontSize(14)
+  },
+
+  textInput: {
+    fontSize: useResponsiveFontSize(16),
+    fontWeight: "400",
+    // width: "100%",
+    // backgroundColor: "green",
+    height: "100%",
+    flex: 1,
+    // backgroundColor: "red"
+    // marginRight: useResponsiveHorizontalSpace(10),
+    // backgroundColor: "red"
+    // maxWidth: "94%",
+    // alignSelf: 'stretch',
+  },
 });
