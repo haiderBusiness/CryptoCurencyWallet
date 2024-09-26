@@ -22,6 +22,7 @@ const English = {
     "Offer tags": "Offer tags",
     "Offer hashtags": "Offer hashtags",
     "None selected": "None selected",
+    "Trade filters": "Trade filters",
 }
 
 export default English;

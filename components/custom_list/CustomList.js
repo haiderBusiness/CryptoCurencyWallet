@@ -58,12 +58,12 @@ export default function CustomList({
   headerRightImageSource2,
   headerRightImageSource3,
   headerTitleComponent,
-  headerOnLeftImage1Click,
-  headerOnLeftImage2Click,
-  headerOnLeftImage3Click,
-  headerOnRightImage1Click,
-  headerOnRightImage2Click,
-  headerOnRightImage3Click,
+  headerOnLeftImage1Press,
+  headerOnLeftImage2Press,
+  headerOnLeftImage3Press,
+  headerOnRightImage1Press,
+  headerOnRightImage2Press,
+  headerOnRightImage3Press,
   headerStyle = viewStyleSample,
   headerBlur = true,
 
@@ -237,12 +237,12 @@ export default function CustomList({
           rightImageSource2={headerRightImageSource2}
           rightImageSource3={headerRightImageSource3}
           titleComponent={headerTitleComponent}
-          onLeftImage1Click={headerOnLeftImage1Click}
-          onLeftImage2Click={headerOnLeftImage2Click}
-          onLeftImage3Click={headerOnLeftImage3Click}
-          onRightImage1Click={headerOnRightImage1Click}
-          onRightImage2Click={headerOnRightImage2Click}
-          onRightImage3Click={headerOnRightImage3Click}
+          onLeftImage1Press={headerOnLeftImage1Press}
+          onLeftImage2Press={headerOnLeftImage2Press}
+          onLeftImage3Press={headerOnLeftImage3Press}
+          onRightImage1Press={headerOnRightImage1Press}
+          onRightImage2Press={headerOnRightImage2Press}
+          onRightImage3Press={headerOnRightImage3Press}
           title={headerTitle}
           titleAndBackgroundAnimationValue={topHeaderOpacity}
           headerLayout={(layout) => setHeaderLayout(layout)}

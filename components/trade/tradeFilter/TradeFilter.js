@@ -49,7 +49,13 @@ export default function TradeFilter({}) {
   <View style={{...styles.container}}>
 
 
+      <View
+      style={{ ...styles.header, }}
+      >
+      <Text style={styles.bigTitle}>{"Trade filters"}</Text>
+      <Text style={styles.slugText}>{"Disply trades based on your filters"}</Text>
 
+    </View>
 
 
     {/* //REVIEW Apply last used filter section  */}
@@ -260,6 +266,26 @@ const styles = StyleSheet.create({
   paddingHorizontal: useResponsiveHorizontalSpace(18)
 
 
+  },
+
+  header: {
+    width: "100%",
+    paddingTop: useResponsiveVerticalSpace(15),
+    paddingBottom: useResponsiveVerticalSpace(20),
+    alignItems: "flex-start",
+    justifyContent: "flex-end",
+  },
+
+  bigTitle: {
+    fontSize: useResponsiveFontSize(34),
+    fontWeight: "bold",
+  },
+
+  slugText: {
+    marginTop: useResponsiveVerticalSpace(5),
+    fontSize: useResponsiveFontSize(14),
+    opacity: 0.6
+    // fontWeight: "bold",
   },
 
 

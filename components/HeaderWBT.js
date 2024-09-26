@@ -5,10 +5,12 @@ import {
   useResponsiveHorizontalSpace,
 } from "../hooks/useResponsiveness";
 
-export default function HeaderWBT({title, route, navigation, paddingTop }) {
+export default function HeaderWBT({...props}) {
+
+  const {title, route, navigation, paddingTop, style} = props
   return (
     <View
-      style={{ ...styles.container, paddingTop: paddingTop ? paddingTop : 90 }}
+      style={{ ...styles.container, paddingTop, ...style }}
     >
       <View style={{ opacity: 0.2 }} />
       <Text style={styles.bigTitle}>{title ? title : "Title"}</Text>

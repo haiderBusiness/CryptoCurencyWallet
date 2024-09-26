@@ -25,6 +25,7 @@ import {
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
 import viewStyleSample from "./RNComponents/viewStyleSample";
+import TopBarHeader2 from "./TopBarHeader2";
 
 export default function ScrollViewWithAnimatedHeader({
   children,
@@ -40,12 +41,12 @@ export default function ScrollViewWithAnimatedHeader({
   rightImageSource3,
   title,
   titleComponent,
-  onLeftImage1Click,
-  onLeftImage2Click,
-  onLeftImage3Click,
-  onRightImage1Click,
-  onRightImage2Click,
-  onRightImage3Click,
+  onLeftImage1Press,
+  onLeftImage2Press,
+  onLeftImage3Press,
+  onRightImage1Press,
+  onRightImage2Press,
+  onRightImage3Press,
   style = viewStyleSample,
 }) {
   const receivedStyles = style.flex !== 1000 ? style : {};
@@ -93,11 +94,15 @@ export default function ScrollViewWithAnimatedHeader({
     }
   };
 
+  const [topBarHeaderLayout, setTopBarHeaderLayout] = useState()
+
+
+
   const windowHeightMinusNavigation = height - useResponsiveHeight(175);
   return (
     // <SafeAreaView>
       <>
-      <View 
+      {/* <View 
       // style={{ opacity: topHeaderOpacity }}
       >
         <TopBarHeader 
@@ -110,22 +115,54 @@ export default function ScrollViewWithAnimatedHeader({
           rightImageSource2={rightImageSource2}
           rightImageSource3={rightImageSource3}
           titleComponent={titleComponent}
-          onLeftImage1Click={onLeftImage1Click}
-          onLeftImage2Click={onLeftImage2Click}
-          onLeftImage3Click={onLeftImage3Click}
-          onRightImage1Click={onRightImage1Click}
-          onRightImage2Click={onRightImage2Click}
-          onRightImage3Click={onRightImage3Click}
+          onLeftImage1Press={onLeftImage1Press}
+          onLeftImage2Press={onLeftImage2Press}
+          onLeftImage3Press={onLeftImage3Press}
+          onRightImage1Press={onRightImage1Press}
+          onRightImage2Press={onRightImage2Press}
+          onRightImage3Press={onRightImage3Press}
           title={headerTitle}
           titleAndBackgroundAnimationValue={topHeaderOpacity}
         />
-      </View>
+      </View> */}
+
+        <TopBarHeader2 
+          // leftComponent={headerLeftComponent}
+          // rightComponent={headerRightComponent}
+          // leftImageSource1={headerLeftImageSource1}
+          // leftImageSource2={headerLeftImageSource2} 
+          // leftImageSource3={headerLeftImageSource3} 
+          // rightImageSource1={headerRightImageSource1}
+          // rightImageSource2={headerRightImageSource2}
+          // rightImageSource3={headerRightImageSource3}
+          // titleComponent={headerTitleComponent}
+          // onLeftImage1Press={headerOnLeftImage1Press}
+          // onLeftImage2Press={headerOnLeftImage2Press}
+          // onLeftImage3Press={headerOnLeftImage3Press}
+          // onRightImage1Press={headerOnRightImage1Press}
+          // onRightImage2Press={headerOnRightImage2Press}
+          // onRightImage3Press={headerOnRightImage3Press}
+          leftImageSource1={null}
+          title={headerTitle}
+          backgroundOpacity={topHeaderOpacity}
+          // onSecondTabAnimation={sellingTopHeaderOpacity}
+          // titleAndBackgroundAnimationValue={isBuyingList ? buyingTopHeaderOpacity : sellingTopHeaderOpacity}
+          headerLayout={(layout) => setTopBarHeaderLayout(layout)}
+          // style={headerStyle}
+          headerBlur={true}
+          // AdditionalComponent={TopTabs}
+          // onSelectedTabChange={() => {}}
+          // topTabsResultSpeed={"fast"}
+        /> 
+
+        <View />
 
       <ScrollView
         style={{
           ...receivedStyles,
           height: windowHeightMinusNavigation,
           backgroundColor: backgroundColor,
+          paddingTop: topBarHeaderLayout && topBarHeaderLayout.height ? topBarHeaderLayout.height : 0,
           borderBottomStartRadius: borderBottomStartRadius,
           borderBottomEndRadius: borderBottomEndRadius,
         }}

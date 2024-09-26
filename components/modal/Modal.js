@@ -9,6 +9,7 @@ useAnimatedScrollHandler
 
 import useThemeColors from "../../hooks/useThemeColors"
 import {
+  useResponsiveBothHeightWidth,
     useResponsiveFontSize,
     useResponsiveHeight,
     useResponsiveHorizontalSpace,
@@ -21,6 +22,10 @@ const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
 import {Gesture, GestureDetector} from 'react-native-gesture-handler';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BackDrop from "./BackDrop.js";
+import HeaderWBT from "../HeaderWBT.js";
+import TopBarHeader from "../TopBarHeader.js";
+import TopBarHeader2 from "../TopBarHeader2.js";
+import { interface_circle_xmark_black, interface_x_black } from "../../assets/dummy/icons_pictures/index.js";
 
 
 const {width, height} = Dimensions.get("window")
@@ -57,7 +62,8 @@ export default function Modal(
 
     //scrollView props 
     
-    AdditionalComponent,
+    footerComponent,
+    headerComponent,
     additionalComponentHeight,
     ...rest
     }
@@ -210,59 +216,59 @@ export default function Modal(
   
 
 
-    const pan = Gesture.Pan()
-    .onBegin(() => {
-      // reset context 
-      context.value = topAnimation.value;
-    })
-    .onUpdate(event => {
-      if (event.translationY < 0) {
-        topAnimation.value = withSpring(openHeight, {
-          damping: 100,
-          stiffness: 400,
-        });
-      } else {
-        topAnimation.value = withSpring(context.value + event.translationY, {
-          damping: 100,
-          stiffness: 400,
-        });
-      }
-    })
-    .onEnd((event) => {
-      if (topAnimation.value > openHeight) {
+    // const pan = Gesture.Pan()
+    // .onBegin(() => {
+    //   // reset context 
+    //   context.value = topAnimation.value;
+    // })
+    // .onUpdate(event => {
+    //   if (event.translationY < 0) {
+    //     topAnimation.value = withSpring(openHeight, {
+    //       damping: 100,
+    //       stiffness: 400,
+    //     });
+    //   } else {
+    //     topAnimation.value = withSpring(context.value + event.translationY, {
+    //       damping: 100,
+    //       stiffness: 400,
+    //     });
+    //   }
+    // })
+    // .onEnd((event) => {
+    //   if (topAnimation.value > openHeight) {
 
-        const gestureSpeed = Math.abs(event.velocityY);
+    //     const gestureSpeed = Math.abs(event.velocityY);
 
-        // Example: Use gesture speed to decide some action
-        if (gestureSpeed > 2000) {  // Adjust the speed threshold as needed
+    //     // Example: Use gesture speed to decide some action
+    //     if (gestureSpeed > 2000) {  // Adjust the speed threshold as needed
 
-          //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
-          runOnJS(doSomeAfter)(250)
+    //       //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
+    //       runOnJS(doSomeAfter)(250)
   
-          parentOpacity.value = withTiming(0,{duration: 300,},);
-          topAnimation.value = withSpring(closeHeight, {
-            damping: 100,
-            stiffness: 400,
-          }, finshed => {
+    //       parentOpacity.value = withTiming(0,{duration: 300,},);
+    //       topAnimation.value = withSpring(closeHeight, {
+    //         damping: 100,
+    //         stiffness: 400,
+    //       }, finshed => {
   
-            // runOnJS(timer)();
-            if(finshed) {
-              //REVIEW--> DO SOMETHING WHEN ANIMATION FINISHES
-            }
-          });
-        } else {
-          topAnimation.value = withSpring(openHeight, {
-            damping: 100,
-            stiffness: 400,
-          });
-        }
-      } else {
-        topAnimation.value = withSpring(openHeight, {
-          damping: 100,
-          stiffness: 400,
-        });
-      }
-    });
+    //         // runOnJS(timer)();
+    //         if(finshed) {
+    //           //REVIEW--> DO SOMETHING WHEN ANIMATION FINISHES
+    //         }
+    //       });
+    //     } else {
+    //       topAnimation.value = withSpring(openHeight, {
+    //         damping: 100,
+    //         stiffness: 400,
+    //       });
+    //     }
+    //   } else {
+    //     topAnimation.value = withSpring(openHeight, {
+    //       damping: 100,
+    //       stiffness: 400,
+    //     });
+    //   }
+    // });
 
     console.log("re-render", )
 
@@ -286,8 +292,6 @@ export default function Modal(
         }
       });
 
-
-
       const onScroll = useAnimatedScrollHandler({
         onBeginDrag: event => {
           scrollBegin.value = event.contentOffset.y;
@@ -298,32 +302,29 @@ export default function Modal(
         }
       })
 
+
+      // const onScroll = (event) => {
+      //   headerScrollFunction(event)
+      //   animatedOnScroll;
+      // }
+
     let panSavedUpScroll = useSharedValue(0)
-    const [bounces, setBounces] = useState(true)
+
+    // this pan is for the scrollView
     const panScroll = Gesture.Pan()
       .onBegin((event) => {
         // reset context 
         context.value = topAnimation.value;
-        console.log(event.translationY)
       })
       .onUpdate(event => {
-        
-
-        // update pan s
-
-        // else if(event.translationY < 0 && panSavedUpScroll <= 0) {
-
-        // } 
-
-
         if (event.translationY < 0) {
           topAnimation.value = withSpring(openHeight, {
             damping: 100,
             stiffness: 400,
           });
-
         } else {
          
+          //if condition here to make sure modal does not scroll if the scrollView was scrolled up before. 
           if(panSavedUpScroll.value >= 0) {
             topAnimation.value = withSpring(context.value + event.translationY, {
               damping: 100,
@@ -390,7 +391,33 @@ export default function Modal(
 
       const scrollViewGesture = Gesture.Native()
 
-      console.log("AdditionalComponent: ", AdditionalComponent.openHeight)
+
+
+      const topHeaderOpacity = useSharedValue(0);
+
+
+      const fadeInTopHeader = () => {
+        topHeaderOpacity.value = 1;
+      };
+
+      const fadeOutTopHeader = () => {
+        topHeaderOpacity.value = 0;
+      };
+
+      const headerScrollFunction = (event) => {
+        const scrollingValue = event.nativeEvent.contentOffset.y;
+
+        if (scrollingValue >= useResponsiveHeight(25)) {
+          fadeInTopHeader();
+        } else {
+          // topHeaderOpacity.value = 0;
+          fadeOutTopHeader();
+        }
+      };
+
+
+      const [topBarHeaderLayout, setTopBarHeaderLayout] = useState()
+
 
 if(showModalValue !== "hide")
     return(
@@ -445,7 +472,7 @@ if(showModalValue !== "hide")
 
 
             {/* Content view */}
-            <GestureDetector gesture={pan}>
+            {/* <GestureDetector > */}
                 <Animated.View
                     style={[
                         styles.container,
@@ -460,29 +487,51 @@ if(showModalValue !== "hide")
                         <View style={styles.line} />
                     </View>}
 
+                    {headerComponent && headerComponent}
 
+        
+                      
+                    <TopBarHeader2 
+                      leftImageSource1={interface_x_black}
+                      leftImage1Style={{
+                        backgroundColor: themColors.background4,
+                        size: useResponsiveBothHeightWidth(30)
+                      }}
+                      style={{
+                        backgroundColor: themColors.background4
+                      }}
+                      title={rest.headerTitle}
+                      // backgroundOpacity={topHeaderOpacity}
+                      disableTopSafeAreaInsets={true}
+                      headerLayout={(layout) => setTopBarHeaderLayout(layout)}
+                      headerBlur={true}
+                    /> 
+         
 
                     <GestureDetector gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}>
                       <Animated.ScrollView
                       scrollEventThrottle={16}
-                      bounces={bounces}
+                      bounces={true}
                       onScroll={onScroll}
                       {...rest}
                       >
+
+                      {<View style={{width: "100%", height: topBarHeaderLayout && topBarHeaderLayout.height ? topBarHeaderLayout.height : 0}}/>}
+
                       {children}
 
                       <View style={{width: "100%", height: inset.bottom}}/>
-                      {AdditionalComponent && <View style={{width: width, height:additionalComponentHeight}}/>}
+                      {footerComponent && additionalComponentHeight && <View style={{width: "100%", height:additionalComponentHeight}}/>}
                       </Animated.ScrollView>
 
                       
                     </GestureDetector>
                              
-                    {AdditionalComponent}
+                    {footerComponent}
         
 
                 </Animated.View>
-            </GestureDetector>
+            {/* </GestureDetector> */}
         </Animated.View>
     )
 }
@@ -494,7 +543,8 @@ const styles = StyleSheet.create({
       ...StyleSheet.absoluteFillObject,
       borderTopLeftRadius: 20,
       borderTopRightRadius: 20,
-      backgroundColor: "red"
+      backgroundColor: "red",
+      overflow: "hidden"
     },
     lineContainer: {
       marginVertical: 10,

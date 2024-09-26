@@ -16,6 +16,8 @@ import CustomPressable from '../components/RNComponents/CustomPressable.js';
 import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace } from '../hooks/useResponsiveness.js';
 
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import HeaderWBT from '../components/HeaderWBT.js';
+import useLanguage from '../hooks/useLanguage.js';
 
 
 const {height} = Dimensions.get('screen');
@@ -84,13 +86,15 @@ const tradeFilterModalHeight = "92.5%"
       zIndex={1} 
       Content={TradeFilter} 
       show={showMarketPlaceFilters}
-      showTopNotch={true}
+      showTopNotch={false}
+
       // animationTime={1000}
       onHide={setShowMarketPlaceFilters}
       snapTo={tradeFilterModalHeight}
       backgroundColor={themeColors.background4}
-      AdditionalComponent={<ApplyFiltersButton snapTo={tradeFilterModalHeight}/>}
+      footerComponent={<ApplyFiltersButton snapTo={tradeFilterModalHeight}/>}
       additionalComponentHeight={applyFiltersButtonHeight}
+      headerTitle={useLanguage("Trade filters")}
       >
         <TradeFilter/>
       </Modal>
@@ -118,18 +122,23 @@ const ApplyFiltersButton = ({snapTo}) => {
   const marginVertical = useResponsiveVerticalSpace(0)
   const componentHeight = useResponsiveHeight(0) + marginVertical
   return(
-    <View style={[styles.applyFiltersView, {top: top}]}>
-      <CustomPressable style={{...styles.applyFiltersButton, backgroundColor: themColors.mainColor}}>
-            <Text 
-            style={{
-              ...styles.applyFiltersText, 
-              color: themColors.mainColorOpposite
-            }}
-            >
-              Apply filters
-            </Text>
-      </CustomPressable>
-    </View>
+    <>
+    
+
+
+      <View style={[styles.applyFiltersView, {top: top}]}>
+        <CustomPressable style={{...styles.applyFiltersButton, backgroundColor: themColors.mainColor}}>
+              <Text 
+              style={{
+                ...styles.applyFiltersText, 
+                color: themColors.mainColorOpposite
+              }}
+              >
+                Apply filters
+              </Text>
+        </CustomPressable>
+      </View>
+    </>
   )
 }
 

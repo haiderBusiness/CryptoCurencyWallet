@@ -10,34 +10,57 @@ import Animated from "react-native-reanimated";
 
 import { BlurView } from 'expo-blur';
 
-import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 const defaultIconHeight = useResponsiveHeight(30)
 const defaultContentBottomMargin = useResponsiveHorizontalSpace(8)
 
-const ListTopBarHeader = ({
-  navigation,
-  leftComponent,
-  rightComponent,
+let test = null
+
+const AnimatedBlurView = Animated.createAnimatedComponent(BlurView);
+
+const TopBarHeader2 = ({
+  //icons 
   leftImageSource1 = interfaceFilterOutlineBlack,
   leftImageSource2, 
   leftImageSource3, 
   rightImageSource1,
   rightImageSource2,
   rightImageSource3,
-  title,
-  titleComponent,
+
+  //icons styles
+  leftImage1Style = {size: useResponsiveBothHeightWidth(30)},
+  leftImage2Style = {size: useResponsiveBothHeightWidth(30)},
+  leftImage3Style = {size: useResponsiveBothHeightWidth(30)},
+  rightImage1Style = {size: useResponsiveBothHeightWidth(30)},
+  rightImage2Style = {size: useResponsiveBothHeightWidth(30)},
+  rightImage3Style = {size: useResponsiveBothHeightWidth(30)},
+
+  //icons on press
   onLeftImage1Press,
   onLeftImage2Press,
   onLeftImage3Press,
   onRightImage1Press,
   onRightImage2Press,
   onRightImage3Press,
-  titleAndBackgroundAnimationValue,
+
+  navigation,
+  leftComponent,
+  rightComponent,
+
+  title,
+  titleComponent,
+
+  backgroundOpacity,
+  onSecondTabAnimation,
   backgroundColor,
   headerLayout,
   headerBlur = true,
   style,
+  AdditionalComponent,
+  onSelectedTabChange,
+  topTabsResultSpeed,
+  disableTopSafeAreaInsets
 
 }) => {
 
@@ -68,7 +91,6 @@ const ListTopBarHeader = ({
   const BACKGROUND_COLOR = style &&  style.flex !== 1000 ?  style.backgroundColor : themeColors.background
 
   const LeftIcons = ({}) => {
-
     return(
       <>
         <View style={{flexDirection: "row"}}>
@@ -77,10 +99,11 @@ const ListTopBarHeader = ({
             ...styles.iconView, 
             backgroundColor: BACKGROUND_COLOR,
             marginLeft: useResponsiveHorizontalSpace(14),
+            ...leftImage3Style
           }} 
           onPress={onLeftImage3Press}
           >
-          <Image source={leftImageSource3} style={styles.icon}/>
+          <Image source={leftImageSource3} style={[styles.icon, {width: leftImage3Style.size, height: leftImage3Style.size}]}/>
           </CustomPressable>}
 
           {leftImageSource2 && 
@@ -89,10 +112,11 @@ const ListTopBarHeader = ({
                 ...styles.iconView, 
                 backgroundColor: BACKGROUND_COLOR,
                 marginLeft: useResponsiveHorizontalSpace(14),
+                ...leftImage2Style
               }} 
               onPress={onLeftImage2Press}
               >
-                <Image source={leftImageSource2} style={styles.icon}/>
+                <Image source={leftImageSource2} style={[styles.icon, {width: leftImage2Style.size, height: leftImage2Style.size}]}/>
             </CustomPressable>
             }
 
@@ -103,10 +127,12 @@ const ListTopBarHeader = ({
                 ...styles.iconView, 
                 backgroundColor: BACKGROUND_COLOR,
                 marginLeft: useResponsiveHorizontalSpace(14),
+                ...leftImage1Style,
+                
               }}  
               onPress={onLeftImage1Press}
               >
-                <Image source={leftImageSource1} style={styles.icon}/>
+                <Image source={leftImageSource1} style={[styles.icon, {width: leftImage1Style.size, height: leftImage1Style.size}]}/>
               </CustomPressable>
             }
         </View>
@@ -130,10 +156,11 @@ const ListTopBarHeader = ({
           ...styles.iconView, 
           backgroundColor: BACKGROUND_COLOR,
           marginLeft: useResponsiveHorizontalSpace(14),
+          ...rightImage3Style
         }} 
         onPress={onRightImage3Press}
         >
-        <Image source={rightImageSource3} style={styles.icon}/>
+        <Image source={rightImageSource3} style={[styles.icon, {width: rightImage3Style.size, height: rightImage3Style.size}]}/>
         </CustomPressable>}
 
         {rightImageSource2 && 
@@ -142,10 +169,11 @@ const ListTopBarHeader = ({
               ...styles.iconView, 
               backgroundColor: BACKGROUND_COLOR,
               marginLeft: useResponsiveHorizontalSpace(14),
+              ...rightImage2Style
             }} 
             onPress={onRightImage2Press}
             >
-              <Image source={rightImageSource2} style={styles.icon}/>
+              <Image source={rightImageSource2} style={[styles.icon, {width: rightImage2Style.size, height: rightImage2Style.size}]}/>
             </CustomPressable>
           }
 
@@ -156,10 +184,11 @@ const ListTopBarHeader = ({
               ...styles.iconView, 
               backgroundColor: BACKGROUND_COLOR,
               marginLeft: useResponsiveHorizontalSpace(14),
+              ...rightImage1Style
             }} 
             onPress={onRightImage1Press}
             >
-              <Image source={rightImageSource1} style={styles.icon}/>
+              <Image source={rightImageSource1} style={[styles.icon, {width: rightImage1Style.size, height: rightImage1Style.size}]}/>
             </CustomPressable>
           }
                   {/* end space */}
@@ -189,7 +218,10 @@ const ListTopBarHeader = ({
 
   useEffect(() => {
     if(layout) {
-      headerLayout(layout)
+      if(headerLayout) {
+        headerLayout(layout)
+      }
+
     }
     
   }, [layout])
@@ -211,13 +243,17 @@ const ListTopBarHeader = ({
   //  const PADDINGTOP = noIcons ? 0 : topSafeArea - contentHeight
 
 
+  // let backgroundOpacity = test ? test : backgroundOpacity
+
+
+  // console.log('re-render: ',randomNumber(), ' at ListTopBarHeader file')
 
 
   return (
-    <View onLayout={handleLayout}   style={styles.container}>
+    <View onLayout={handleLayout} style={{...styles.container, style}}>
 
             {layout && headerBlur && 
-            <BlurView 
+            <AnimatedBlurView 
               intensity={100}
               style={{
                 width: layout.width, 
@@ -227,12 +263,12 @@ const ListTopBarHeader = ({
                 zIndex: 0,
                 // paddingTop: insets.top * 1.3,
                 // backgroundColor: backgroundColor,
-                // opacity: titleAndBackgroundAnimationValue
+                opacity: backgroundOpacity
                 // backgroundColor: "white"
                 }}/>}
 
               {layout && 
-              <View 
+              <Animated.View 
               style={{
                 width: layout.width, 
                 height: layout.height , 
@@ -240,17 +276,17 @@ const ListTopBarHeader = ({
                 top: 0,
                 zIndex: 0,
                 backgroundColor: BACKGROUND_COLOR,
-                opacity: 0.5
+                // opacity: 0.5
                 // paddingTop: insets.top * 1.3,
                 // backgroundColor: backgroundColor,
-                // opacity: titleAndBackgroundAnimationValue
+                opacity: 0.8
                 // backgroundColor: "white"
                 }}/>}
 
               
       <View style={{
         ...styles.topHeader, 
-        marginTop: MARGINTOP, 
+        marginTop: disableTopSafeAreaInsets ? 0 : MARGINTOP, 
         }}>
 
  
@@ -263,9 +299,9 @@ const ListTopBarHeader = ({
 
 
         {!TitleComponent &&
-          <Animated.View pointerEvents="box-none" 
+          <Animated.View pointerEvents="none" 
           style={{...styles.titleView, 
-            opacity: titleAndBackgroundAnimationValue
+            opacity: backgroundOpacity 
           }}
           >
             <Text style={styles.title}>
@@ -288,8 +324,12 @@ const ListTopBarHeader = ({
         {/* {<View style={{width: 10, height: 10}}/>} */}
       </View>
 
+
+  
+      {AdditionalComponent && <AdditionalComponent onSelectedTabChange={whenSelectedTabChanges} resultSpeed={topTabsResultSpeed} style={{paddingBottom: useResponsiveVerticalSpace(4) }}/>}
+
         {/* bottom line/border */}
-      <Animated.View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5),opacity: titleAndBackgroundAnimationValue}}>
+      <Animated.View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5),opacity: backgroundOpacity}}>
         <View style={{width: "100%", height: useResponsiveBothHeightWidth(0.5), backgroundColor: themeColors.text, opacity:0.1}}/>
       </Animated.View>
 
@@ -298,7 +338,7 @@ const ListTopBarHeader = ({
 }
 
 
-export default ListTopBarHeader;
+export default TopBarHeader2;
 
 
 
@@ -315,7 +355,7 @@ const styles = StyleSheet.create({
     // opacity: 0.5,
    
     // backgroundColor: "red",
-    // backgroundColor: "red"
+    // backgroundColor: "red"         // AdditionalComponent={TopTabs}
   },
 
   topHeader: {
@@ -342,8 +382,8 @@ const styles = StyleSheet.create({
   },
 
   icon: {
-    width: useResponsiveBothHeightWidth(20),
-    height: useResponsiveBothHeightWidth(20)
+    width: useResponsiveBothHeightWidth(16),
+    height: useResponsiveBothHeightWidth(16)
   },
 
   titleView: {

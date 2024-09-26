@@ -40,6 +40,8 @@ import interface_expense_black from "./interface_expense_black.png";
 
 import interface_hashtag_lock_black from "./interface_hashtag_lock_black.png"
 
+import interface_x_black from "./interface_x_black.png"
+
 export { 
     btc, 
     usdc, 
@@ -69,4 +71,5 @@ export {
     interface_population_globe_black,
     interface_expense_black,
     interface_hashtag_lock_black,
+    interface_x_black
 };

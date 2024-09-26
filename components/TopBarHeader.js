@@ -25,12 +25,12 @@ export default function TopBarHeader({
   rightImageSource3,
   title,
   titleComponent,
-  onLeftImage1Click,
-  onLeftImage2Click,
-  onLeftImage3Click,
-  onRightImage1Click,
-  onRightImage2Click,
-  onRightImage3Click,
+  onLeftImage1Press,
+  onLeftImage2Press,
+  onLeftImage3Press,
+  onRightImage1Press,
+  onRightImage2Press,
+  onRightImage3Press,
   titleAndBackgroundAnimationValue,
   backgroundColor,
   style,
@@ -73,7 +73,7 @@ export default function TopBarHeader({
             backgroundColor: themeColors.background,
             marginLeft: useResponsiveHorizontalSpace(14),
           }} 
-          onPress={onLeftImage3Click}
+          onPress={onLeftImage3Press}
           >
           <Image source={leftImageSource3} style={styles.icon}/>
           </CustomPressable>}
@@ -85,7 +85,7 @@ export default function TopBarHeader({
                 backgroundColor: themeColors.background,
                 marginLeft: useResponsiveHorizontalSpace(14),
               }} 
-              onPress={onLeftImage2Click}
+              onPress={onLeftImage2Press}
               >
                 <Image source={leftImageSource2} style={styles.icon}/>
               </CustomPressable>
@@ -99,7 +99,7 @@ export default function TopBarHeader({
                 backgroundColor: themeColors.background,
                 marginLeft: useResponsiveHorizontalSpace(14),
               }}  
-              onPress={onLeftImage1Click}
+              onPress={onLeftImage1Press}
               >
                 <Image source={leftImageSource1} style={styles.icon}/>
               </CustomPressable>
@@ -126,7 +126,7 @@ export default function TopBarHeader({
           backgroundColor: themeColors.background,
           marginLeft: useResponsiveHorizontalSpace(14),
         }} 
-        onPress={onRightImage3Click}
+        onPress={onRightImage3Press}
         >
         <Image source={rightImageSource3} style={styles.icon}/>
         </CustomPressable>}
@@ -138,7 +138,7 @@ export default function TopBarHeader({
               backgroundColor: themeColors.background,
               marginLeft: useResponsiveHorizontalSpace(14),
             }} 
-            onPress={onRightImage2Click}
+            onPress={onRightImage2Press}
             >
               <Image source={rightImageSource2} style={styles.icon}/>
             </CustomPressable>
@@ -152,7 +152,7 @@ export default function TopBarHeader({
               backgroundColor: themeColors.background,
               marginLeft: useResponsiveHorizontalSpace(14),
             }} 
-            onPress={onRightImage1Click}
+            onPress={onRightImage1Press}
             >
               <Image source={rightImageSource1} style={styles.icon}/>
             </CustomPressable>

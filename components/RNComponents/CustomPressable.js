@@ -23,6 +23,7 @@ export default function CustomPressable({
   style = viewStyleSample,
   onPress = () => {console.log("test: ", "CustomPressable")},
   colorChangePercent = 15,
+  disableExtraPadding = false,
   ...props
 }) {
   const styles = style.flex !== 1000 ? style : {};
@@ -32,17 +33,27 @@ export default function CustomPressable({
 
   return (
     <Pressable
-      style={({ pressed }) => [
-        styles,
-        pressed
-          ? { backgroundColor: backgroundColorAfterPress }
-          : { backgroundColor: styles.backgroundColor },
-      ]}
+      style={{
+        // padding: disableExtraPadding ? 0 : 10
+      }}
       onPress={onPress}
       {...props}
     >
-      
-      {children}
+      {({ pressed }) => {
+        return (
+          <View 
+          style={[
+            styles,
+            pressed
+            ? { backgroundColor: backgroundColorAfterPress }
+            : { backgroundColor: styles.backgroundColor },
+          ]}
+          >
+          {children}
+          </View>
+        )
+
+      }}
     </Pressable>
   );
 }

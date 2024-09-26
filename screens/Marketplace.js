@@ -38,7 +38,7 @@ export default function Marketplace({ route, navigation }) {
 
   const dispatch = Store.dispatch
 
-  const onFilterIconClick = () => {
+  const onFilterIconPress = () => {
     console.log("clicked")
     dispatch(setMarketPlaceFilters({"selling": "selling", "buying": "buying"}))
   }
@@ -118,7 +118,7 @@ export default function Marketplace({ route, navigation }) {
       headerRightImageSource1={interface_plus_black}
       headerRightImageSource2={interfaceHistoryOutlineBlack}
       headerLeftImageSource1={interfaceFilterOutlineBlack}
-      headerOnLeftImage1Click={onFilterIconClick}
+      headerOnLeftImage1Press={onFilterIconPress}
       scrollSpeed="slowest"
       listStyle={{backgroundColor: themeColors.background3}}
       headerStyle={{backgroundColor: themeColors.background3}}
