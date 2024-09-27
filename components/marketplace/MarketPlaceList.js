@@ -251,7 +251,11 @@ export default function MarketPlaceList({
           onFirstTabAnimation={buyingTopHeaderOpacity}
           onSecondTabAnimation={sellingTopHeaderOpacity}
           // titleAndBackgroundAnimationValue={isBuyingList ? buyingTopHeaderOpacity : sellingTopHeaderOpacity}
-          headerLayout={(layout) => setHeaderLayout(layout)}
+          headerLayout={(layout) => {
+            //TODO
+            console.log("layout.height: " ,useResponsiveHeight(layout.height + 2.4), layout.height)
+            setHeaderLayout(layout)
+          }}
           style={headerStyle}
           headerBlur={headerBlur}
           // AdditionalComponent={TopTabs}

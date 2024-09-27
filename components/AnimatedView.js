@@ -53,7 +53,6 @@ useEffect(() => {
 // slide
 const hideModalTotaly = () => {
     setShowThisComponent("hide");
-    
 }
 
 if(animationType === "slide") {
@@ -157,7 +156,7 @@ if(!useDisplayStyle && showThisComponent !== "hide") {
        );
 } else if (useDisplayStyle) {
 
-    console.log("showThisComponent",showThisComponent)
+    // console.log("showThisComponent",showThisComponent)
     return (
         <Animated.View
          pointerEvents={showThisComponent !== "hide" ? "auto" : "none"}

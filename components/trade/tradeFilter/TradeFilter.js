@@ -3,7 +3,7 @@ import {View, Text, StyleSheet, Image, Dimensions} from 'react-native';
 import useThemeColors from '../../../hooks/useThemeColors';
 import CustomSwitch from '../../RNComponents/CustomSwitch';
 import { useResponsiveBothHeightWidth, useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace } from '../../../hooks/useResponsiveness';
-import { arrow_back_black, interface_arrow_trend_up_black_fill, interface_digital_payment_black, interface_expense_black, interface_hashtag_lock_black, interface_info_black, interface_population_globe_black } from '../../../assets/dummy/icons_pictures';
+import { arrow_back_black, interface_arrow_trend_up_black_fill, interface_credit_card_white, interface_digital_payment_black, interface_expense_black, interface_hashtag_lock_black, interface_info_black, interface_population_globe_black } from '../../../assets/dummy/icons_pictures';
 import RangeSlider from '../../RangeSlider';
 import RangeSliderWidget from './RangeSliderWidget';
 import DropDown from '../../DropDown';
@@ -67,27 +67,36 @@ export default function TradeFilter({}) {
      <CustomSwitch activeColor={themeColors.green2} inActiveColor={themeColors.background4} />
     </View>
 
+    <Text style={styles.infoText}>
+      {
+      useLanguage("Activate to auto-apply your last-used filter to future settings for the same currency and trade side")
+      }.
+    </Text>
+
 
 
        {/* //REVIEW payment methods section  */}
     <View style={[{zIndex: 1}]}>
-      <View style={styles.titleView}>
+      {/* <View style={styles.titleView}>
           <Text style={[styles.title, textStyle]}>
             {useLanguage("Payment method")}
           </Text>
 
           <Image source={interface_info_black} style={{...styles.infoImage}}/>
-        </View>
+        </View> */}
 
 
         <CustomPressable 
         
         colorChangePercent={5}
-        style={{...styles.section, ...sectionBackgroundStyle}}
+        style={{...styles.section, ...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(20)}}
         >
 
           <View style={{flexDirection: "row", alignItems: "center"}}>
-            {/* <Image source={interface_expense_black} style={{...styles.paymentImage}}/> */}
+            <View style={[styles.paymentImageView, {backgroundColor: themeColors.purple}]}>
+              <Image source={interface_credit_card_white} style={{...styles.paymentImage}}/>
+            </View>
+
             <Text style={[styles.sectionText, textStyle]}>
             {useLanguage("All payment methods")}
             </Text>
@@ -112,10 +121,15 @@ export default function TradeFilter({}) {
     </View>
 
 
+    {/* <Text style={styles.infoText}>
+     Activate to auto-apply your last-used filter to future settings for the same currency and trade side.
+    </Text> */}
+
+
 
 
     {/* //REVIEW trade limits section  */}
-    <View style={[styles.tradeLimitView, {zIndex: 0,}]}>
+    {/* <View style={[styles.tradeLimitView, {zIndex: 0,}]}>
 
       <View style={styles.titleView}>
         <Text style={[styles.title, textStyle]}>
@@ -126,13 +140,11 @@ export default function TradeFilter({}) {
       </View>
   
       <View style={[,sectionBackgroundStyle]}>
-      {/* <Text>Minimum</Text>
-      <Text>Maximum</Text>  */}
 
         <RangeSliderWidget/>
       </View>
 
-    </View>
+    </View> */}
 
 
     {/* //REVIEW user type section  */}
@@ -141,25 +153,74 @@ export default function TradeFilter({}) {
     </View> */}
 
 
+
+    <View style={[{zIndex: 10}]}>
+
+        <View style={[styles.section, sectionBackgroundStyle, {paddingHorizontal: 0, paddingVertical: 0}]}>
+          <DropDown onFinish={setPaymentMethod}/>
+        </View>
+        
+        {paymentMethod && paymentMethod.length < 1 && <Text style={[styles.error, errorTextStyle]}>
+            {useLanguage("No such payment method")}
+        </Text>}
+        
+        
+    </View>
+
+
+
+
+
+
+
+
     {/* //REVIEW offer location section  */}
 
     <View style={[{zIndex: 1}]}>
-      <View style={styles.titleView}>
+      {/* <View style={styles.titleView}>
           <Text style={[styles.title, textStyle]}>
             {useLanguage("Trader country")}
           </Text>
 
           <Image source={interface_info_black} style={{...styles.infoImage}}/>
-        </View>
+        </View> */}
+        {/*
+        <CustomPressable style={{flexDirection: "row", alignItems: "center"}}>
+
+          {({ pressed }) => {
+
+          return (
+            <>
+              <Checkbox
+              style={{
+                borderRadius: useResponsiveRadius(5),
+                opacity: 0.4,
+                marginRight: useResponsiveHorizontalSpace(10),
+                borderColor: themeColors.text
+              }}
+              size={useResponsiveBothHeightWidth(25)}
+              checked={pressed ? true : false}
+              />
+              
+              <Text style={[styles.sectionText, textStyle]}>
+              {useLanguage("All regions")}
+              </Text>
+            </>      
+          )
+          }}
+
+
+
+        </CustomPressable> */}
 
 
         <CustomPressable 
         colorChangePercent={5}
-        style={{...styles.section, ...sectionBackgroundStyle}}
+        style={{...styles.section, ...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(20)}}
         >
 
           <View style={{flexDirection: "row", alignItems: "center"}}>
-            <Image source={interface_population_globe_black} style={{...styles.paymentImage}}/>
+            <Image source={interface_population_globe_black} style={{...styles.iconImage}}/>
             <Text style={[styles.sectionText, textStyle]}>
             {useLanguage("All regions")}
             </Text>
@@ -171,6 +232,14 @@ export default function TradeFilter({}) {
         </CustomPressable>
         
     </View>
+
+    <Text style={styles.infoText}>
+      {
+      useLanguage("Change this to find trades created by vendors from your specified location")
+      }.
+    </Text>
+
+    
 
 
     {/* //REVIEW offer hashtags section  */}
@@ -191,7 +260,7 @@ export default function TradeFilter({}) {
         >
 
           <View style={{flexDirection: "row", alignItems: "center"}}>
-            <Image source={interface_hashtag_lock_black} style={{...styles.paymentImage}}/>
+            <Image source={interface_hashtag_lock_black} style={{...styles.iconImage}}/>
             <Text style={[styles.sectionText, textStyle]}>
             {useLanguage("None selected")}
             </Text>
@@ -232,18 +301,29 @@ export default function TradeFilter({}) {
 
     {/* //REVIEW Recently active traders  */}
 
-    <View style={[]}>
-      <View style={styles.titleView}>
+    <View style={{marginTop: useResponsiveVerticalSpace(20) }}>
+      {/* <View style={styles.titleView}>
           <Text style={[styles.title, textStyle]}>
             {useLanguage("Trader verification")}
           </Text>
 
           <Image source={interface_info_black} style={{...styles.infoImage}}/>
-        </View>
+        </View> */}
       <View style={[styles.section, sectionBackgroundStyle]}>
-        <Text style={[styles.sectionText, textStyle]}>
+        <View style={{flexDirection: "row", alignItems: "center"}}>
+
+        <Text style={[styles.sectionText, textStyle, {marginRight: useResponsiveHorizontalSpace(10)}]}>
             {useLanguage("Recently active traders")}
         </Text>
+
+        <CustomPressable style={{padding: 10, backgroundColor: themeColors.background, borderRadius: 10}}
+        >
+        <Image source={interface_info_black} 
+        style={{...styles.infoImage}}
+        />
+        </CustomPressable>
+
+        </View>
 
         <CustomSwitch activeColor={themeColors.green2} inActiveColor={themeColors.background4} />
       </View>
@@ -296,6 +376,13 @@ const styles = StyleSheet.create({
     opacity: 0.5
   },
 
+  infoText: {
+    marginTop: useResponsiveVerticalSpace(10),
+    marginHorizontal: useResponsiveHorizontalSpace(18),
+    fontSize: useResponsiveFontSize(13.5),
+    opacity: 0.6,
+  },  
+
   titleView : {
     flexDirection: "row",
     alignItems: "center",
@@ -338,17 +425,31 @@ const styles = StyleSheet.create({
   arrowImage: {
     width: useResponsiveBothHeightWidth(25),
     height: useResponsiveBothHeightWidth(25),
-    opacity: 0.5,
+    opacity: 0.3,
     transform: [{scaleX: -1}],
     // backgroundColor: "red"
   },
 
-  paymentImage: {
+  iconImage: {
+    marginRight: useResponsiveHorizontalSpace(10),
     width: useResponsiveBothHeightWidth(20),
     height: useResponsiveBothHeightWidth(20),
     opacity: 0.5,
-    marginRight: useResponsiveHorizontalSpace(10)
   },
+
+  paymentImageView: {
+    marginRight: useResponsiveHorizontalSpace(10),
+    padding: useResponsiveBothHeightWidth(5),
+    borderRadius: useResponsiveRadius(10),
+  },
+  paymentImage: {
+    width: useResponsiveBothHeightWidth(15),
+    height: useResponsiveBothHeightWidth(15),
+    opacity: 1,
+  
+  },
+
+
 
  
 

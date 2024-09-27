@@ -9,23 +9,23 @@ import {
   // Animated,
   Dimensions,
 } from "react-native";
-import { Colors } from "../constants/Colors";
-import useThemeColors from "../hooks/useThemeColors";
-import PhotoWidget from "../components/PhotoWidget";
-import { SafeAreaView } from "react-native-safe-area-context";
-import HeaderWBT from "../components/HeaderWBT";
-import TopBarHeader from "./TopBarHeader";
-import Animated, { useSharedValue, withTiming } from "react-native-reanimated";
+import { Colors } from "../../constants/Colors";
+import useThemeColors from "../../hooks/useThemeColors";
+import PhotoWidget from "../PhotoWidget";
+import { SafeAreaView, useSafeAreaInsets } from "react-native-safe-area-context";
+import HeaderWBT from "../HeaderWBT";
+import TopBarHeader from "../TopBarHeader";
+import Animated, { useAnimatedScrollHandler, useSharedValue, withTiming } from "react-native-reanimated";
 import {
   useResponsiveHeight,
   useResponsiveHorizontalSpace,
   useResponsiveRadius,
   useResponsiveVerticalSpace,
-} from "../hooks/useResponsiveness";
+} from "../../hooks/useResponsiveness";
 
 import { useBottomTabBarHeight } from "@react-navigation/bottom-tabs";
-import viewStyleSample from "./RNComponents/viewStyleSample";
-import TopBarHeader2 from "./TopBarHeader2";
+import viewStyleSample from "../RNComponents/viewStyleSample";
+import TopBarHeader2 from "../TopBarHeader/TopBarHeader2";
 
 export default function ScrollViewWithAnimatedHeader({
   children,
@@ -50,6 +50,10 @@ export default function ScrollViewWithAnimatedHeader({
   style = viewStyleSample,
 }) {
   const receivedStyles = style.flex !== 1000 ? style : {};
+
+  const scrollViewRef = useRef(null)
+
+  const scroll = useSharedValue(0)
 
   const tabBarHeight = useBottomTabBarHeight();
 
@@ -85,8 +89,9 @@ export default function ScrollViewWithAnimatedHeader({
 
   const scrollFunction = (event) => {
     const scrollingValue = event.nativeEvent.contentOffset.y;
+    scroll.value = scrollingValue
 
-    if (scrollingValue >= useResponsiveHeight(38)) {
+    if (scrollingValue >= useResponsiveHeight(34)) {
       fadeInTopHeader();
     } else {
       topHeaderOpacity.value = 0;
@@ -94,11 +99,19 @@ export default function ScrollViewWithAnimatedHeader({
     }
   };
 
+  // const scrollFunction = useAnimatedScrollHandler((event) => {
+  //   scroll.value = event.nativeEvent.contentOffset.y; // Update shared value without re-rendering
+  // });
+
   const [topBarHeaderLayout, setTopBarHeaderLayout] = useState()
 
 
 
   const windowHeightMinusNavigation = height - useResponsiveHeight(175);
+
+  const inset = useSafeAreaInsets();
+
+  const topBarHeaderHeight = useResponsiveHeight(47.2)
   return (
     // <SafeAreaView>
       <>
@@ -144,12 +157,18 @@ export default function ScrollViewWithAnimatedHeader({
           // onRightImage3Press={headerOnRightImage3Press}
           leftImageSource1={null}
           title={headerTitle}
-          backgroundOpacity={topHeaderOpacity}
+          // backgroundOpacity={topHeaderOpacity}
           // onSecondTabAnimation={sellingTopHeaderOpacity}
           // titleAndBackgroundAnimationValue={isBuyingList ? buyingTopHeaderOpacity : sellingTopHeaderOpacity}
           headerLayout={(layout) => setTopBarHeaderLayout(layout)}
           // style={headerStyle}
           headerBlur={true}
+          style={{backgroundColor: themeColors.background}}
+          height={topBarHeaderHeight}
+          scroll={scroll}
+          scrollViewRef={scrollViewRef}
+          animatedScrollY={scroll}
+          topExtraSpace={inset.top}
           // AdditionalComponent={TopTabs}
           // onSelectedTabChange={() => {}}
           // topTabsResultSpeed={"fast"}
@@ -157,7 +176,10 @@ export default function ScrollViewWithAnimatedHeader({
 
         <View />
 
+      
+
       <ScrollView
+        ref={scrollViewRef}
         style={{
           ...receivedStyles,
           height: windowHeightMinusNavigation,
@@ -168,6 +190,8 @@ export default function ScrollViewWithAnimatedHeader({
         }}
         onScroll={scrollFunction}
       >
+          {/* TopBarHeader sapce */}
+          {<View style={{width: "100%", height:topBarHeaderHeight + inset.top,}}/>}
         <HeaderWBT
           navigation={navigation}
           title={headerTitle}

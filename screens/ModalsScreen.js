@@ -95,6 +95,7 @@ const tradeFilterModalHeight = "92.5%"
       footerComponent={<ApplyFiltersButton snapTo={tradeFilterModalHeight}/>}
       additionalComponentHeight={applyFiltersButtonHeight}
       headerTitle={useLanguage("Trade filters")}
+      style={{backgroundColor: themeColors.background4}}
       >
         <TradeFilter/>
       </Modal>

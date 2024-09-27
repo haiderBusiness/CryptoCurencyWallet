@@ -18,7 +18,7 @@ import { useSelector } from "react-redux";
 import { setTrades, setMarketPlaceFilters } from "../redux/actions";
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import ScrollViewWithAnimatedHeader from "../components/ScrollViewWithAnimatedHeader.js";
+import ScrollViewWithAnimatedHeader from "../components/ScrollViewWithAnimatedHeader./ScrollViewWithAnimatedHeader.js";
 import List from "../components/marketplace/MarketPlaceList.js";
 import MarketPlaceList from "../components/marketplace/MarketPlaceList.js";
 import Modal from "../components/modal/OldModal.js";
@@ -114,7 +114,7 @@ export default function Marketplace({ route, navigation }) {
       listDataArray={trades.buying}
       listItem={ListItem}
       headerTitle="MarketPlace"
-      bigHeaderTitle="Marketplace"
+      bigHeaderTitle="MarketPlace"
       headerRightImageSource1={interface_plus_black}
       headerRightImageSource2={interfaceHistoryOutlineBlack}
       headerLeftImageSource1={interfaceFilterOutlineBlack}

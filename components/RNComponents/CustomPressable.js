@@ -49,7 +49,8 @@ export default function CustomPressable({
             : { backgroundColor: styles.backgroundColor },
           ]}
           >
-          {children}
+          {/* Check if children is a function, and pass the pressed state */}
+          {typeof children === 'function' ? children({ pressed }) : children}
           </View>
         )
 

@@ -42,6 +42,9 @@ import interface_hashtag_lock_black from "./interface_hashtag_lock_black.png"
 
 import interface_x_black from "./interface_x_black.png"
 
+import interface_check_white from "./interface_check_white.png"
+import interface_credit_card_white from "./interface_credit_card_white.png"
+
 export { 
     btc, 
     usdc, 
@@ -71,5 +74,7 @@ export {
     interface_population_globe_black,
     interface_expense_black,
     interface_hashtag_lock_black,
-    interface_x_black
+    interface_x_black,
+    interface_check_white,
+    interface_credit_card_white,
 };

@@ -24,7 +24,7 @@ import { useSafeAreaInsets } from "react-native-safe-area-context";
 import BackDrop from "./BackDrop.js";
 import HeaderWBT from "../HeaderWBT.js";
 import TopBarHeader from "../TopBarHeader.js";
-import TopBarHeader2 from "../TopBarHeader2.js";
+import TopBarHeader2 from "../TopBarHeader/TopBarHeader2.js";
 import { interface_circle_xmark_black, interface_x_black } from "../../assets/dummy/icons_pictures/index.js";
 
 
@@ -45,7 +45,7 @@ export default function Modal(
     show,
     spaceBetweenContent = HEADER_HEIGHT_NARROWED, 
     onSpacePress = () => {}, 
-    parentStyle,
+    style = {},
     zIndex = 100,
     animationType = "slide",
     animationTime = 300,
@@ -96,8 +96,10 @@ export default function Modal(
 
     // console.log("openHeight", openHeight)
     // console.log("hideModalValue", hideModalValue)
+      // the passed value should be "show" | "hide" | "animateHide"
+    const [showModalValue, setShowModalValue] = useState(show ? "show" : "hide");
 
-    const topAnimation = useSharedValue(showModalValue !== "hide" ? openHeight : closeHeight);
+    const topAnimation = useSharedValue(show ? openHeight : closeHeight);
     
 
     const context = useSharedValue(0);
@@ -109,9 +111,7 @@ export default function Modal(
 
  
 
-  // the passed value should be "show" | "hide" | "animateHide"
-  const [showModalValue, setShowModalValue] =
-  useState(show ? "show" : "hide");
+
 
 
   const doSomeAfter = (duration) => {
@@ -292,23 +292,41 @@ export default function Modal(
         }
       });
 
-      const onScroll = useAnimatedScrollHandler({
+
+
+      let panSavedUpScroll = useSharedValue(0)
+
+
+      const animatedOnScroll = useAnimatedScrollHandler({
         onBeginDrag: event => {
           scrollBegin.value = event.contentOffset.y;
         },
 
         onScroll: event => {
           scrollY.value = event.contentOffset.y;
+          // scrollY.value = event.contentOffset.y;
         }
       })
 
 
-      // const onScroll = (event) => {
-      //   headerScrollFunction(event)
-      //   animatedOnScroll;
-      // }
 
-    let panSavedUpScroll = useSharedValue(0)
+      const scrollViewRef = useRef(null)
+      const animatedScrollY = useSharedValue(0);
+
+      const onScroll = (event) => {
+        // headerScrollFunction(event)
+  
+        animatedScrollY.value = event.nativeEvent.contentOffset.y;
+        animatedOnScroll;
+      }
+
+
+
+      const enableScrolling = (val = false) => {
+
+        // enable or disable scrolling functionality of the ScrollView
+        scrollViewRef.current.setNativeProps({ scrollEnabled: val });;
+      }
 
     // this pan is for the scrollView
     const panScroll = Gesture.Pan()
@@ -326,6 +344,8 @@ export default function Modal(
          
           //if condition here to make sure modal does not scroll if the scrollView was scrolled up before. 
           if(panSavedUpScroll.value >= 0) {
+
+            runOnJS(enableScrolling)(false)
             topAnimation.value = withSpring(context.value + event.translationY, {
               damping: 100,
               stiffness: 400,
@@ -349,7 +369,7 @@ export default function Modal(
       })
       .onEnd((event) => {
         panSavedUpScroll.value = event.translationY
-
+        runOnJS(enableScrolling)(true)
         if (topAnimation.value > openHeight) {
   
           const gestureSpeed = Math.abs(event.velocityY);
@@ -391,32 +411,7 @@ export default function Modal(
 
       const scrollViewGesture = Gesture.Native()
 
-
-
-      const topHeaderOpacity = useSharedValue(0);
-
-
-      const fadeInTopHeader = () => {
-        topHeaderOpacity.value = 1;
-      };
-
-      const fadeOutTopHeader = () => {
-        topHeaderOpacity.value = 0;
-      };
-
-      const headerScrollFunction = (event) => {
-        const scrollingValue = event.nativeEvent.contentOffset.y;
-
-        if (scrollingValue >= useResponsiveHeight(25)) {
-          fadeInTopHeader();
-        } else {
-          // topHeaderOpacity.value = 0;
-          fadeOutTopHeader();
-        }
-      };
-
-
-      const [topBarHeaderLayout, setTopBarHeaderLayout] = useState()
+      const topBarHeaderHeight = useResponsiveHeight(55)
 
 
 if(showModalValue !== "hide")
@@ -426,24 +421,15 @@ if(showModalValue !== "hide")
             tint="dark"
             intensity={100}
             style={[animatedParentStyle, 
-              parentStyle ? parentStyle : {
-              backgroundColor: "transparent", 
-              position: "absolute",
-              width: "100%",
-              height: "100%",
-              zIndex: zIndex,
+              {
+             backgroundColor: "transparent", 
+             position: "absolute",
+             width: "100%",
+             height: "100%",
+             zIndex: zIndex,
+             ...style,
             }]}
             >
-
-            {/* Space above content */}
-            {/* <Pressable 
-            onPress={handleSpacePress} 
-            style={spaceStyle ? spaceStyle :{
-            height: spaceBetweenContent, 
-            width: width,
-            backgroundColor: "red",
-            opacity: 1,
-            }}/> */}
 
 
             <BackDrop
@@ -455,20 +441,6 @@ if(showModalValue !== "hide")
             />
 
 
-            {/* <AnimatedBlurView 
-            tint="dark"
-            intensity={100}
-            style={[
-            blurViewAnimatedStyle,
-                {
-            position: "absolute",
-            zIndex: 0,
-            height: "100%", 
-            width: "100%"
-                }]}
-            /> */}
-
-                
 
 
             {/* Content view */}
@@ -494,33 +466,44 @@ if(showModalValue !== "hide")
                     <TopBarHeader2 
                       leftImageSource1={interface_x_black}
                       leftImage1Style={{
-                        backgroundColor: themColors.background4,
+                        backgroundColor: style.backgroundColor,
                         size: useResponsiveBothHeightWidth(30)
                       }}
+                      onLeftImage1Press={() => startAnimation("animateHide")}
                       style={{
-                        backgroundColor: themColors.background4
+                        backgroundColor: style.backgroundColor
                       }}
                       title={rest.headerTitle}
                       // backgroundOpacity={topHeaderOpacity}
                       disableTopSafeAreaInsets={true}
-                      headerLayout={(layout) => setTopBarHeaderLayout(layout)}
+                      // headerLayout={(layout) => setTopBarHeaderLayout(layout)}
                       headerBlur={true}
+                      blurBackgroundOpacity={0.6}
+                      height={topBarHeaderHeight}
+                      animatedScrollY={animatedScrollY}
+                      showWhenReaches={useResponsiveBothHeightWidth(45)}
                     /> 
          
 
                     <GestureDetector gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}>
                       <Animated.ScrollView
+                      // scrollEnabled={!isPanActive.value}
                       scrollEventThrottle={16}
                       bounces={true}
                       onScroll={onScroll}
+                      ref={scrollViewRef}
                       {...rest}
                       >
 
-                      {<View style={{width: "100%", height: topBarHeaderLayout && topBarHeaderLayout.height ? topBarHeaderLayout.height : 0}}/>}
+                      {/* TopBarHeader sapce */}
+                      {<View style={{width: "100%", height:topBarHeaderHeight }}/>}
 
                       {children}
 
+                      {/* TopBarHeader sapce */}
                       <View style={{width: "100%", height: inset.bottom}}/>
+
+
                       {footerComponent && additionalComponentHeight && <View style={{width: "100%", height:additionalComponentHeight}}/>}
                       </Animated.ScrollView>
 

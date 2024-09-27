@@ -65,7 +65,7 @@ const List = ({
     const AnimatedViewRef = useRef(null)
   
     // console.log("out: ", buyingTopHeaderOpacity)
-    const { onScroll, scrolling, topHeaderOpacity} = useScrollHandler(listRef,scrollMinSpeed, scrollMaxSpeed);
+    const { onScroll, scrolling, topHeaderOpacity } = useScrollHandler(listRef,scrollMinSpeed, scrollMaxSpeed);
 
     
 

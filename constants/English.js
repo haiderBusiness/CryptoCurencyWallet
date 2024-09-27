@@ -23,6 +23,13 @@ const English = {
     "Offer hashtags": "Offer hashtags",
     "None selected": "None selected",
     "Trade filters": "Trade filters",
+
+    "Activate to auto-apply your last-used filter to future settings for the same currency and trade side": "Activate to auto-apply your last-used filter to future settings for the same currency and trade side",
+
+    "Change this to find trades created by vendors from your specified location": "Change this to find trades created by vendors from your specified location",
+
+    "EUR €": "EUR €"
+
 }
 
 export default English;

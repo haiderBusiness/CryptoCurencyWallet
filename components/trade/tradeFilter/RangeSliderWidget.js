@@ -46,9 +46,9 @@ const RangeSliderWidget = () => {
   const currency = "€"
 
 
-  useEffect(() => {
-    console.log("minValue: ", minValue > maxValue)
-  }, [minValue])
+  // useEffect(() => {
+  //   console.log("minValue: ", minValue > maxValue)
+  // }, [minValue])
 
   
   return (

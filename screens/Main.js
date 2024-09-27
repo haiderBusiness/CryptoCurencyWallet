@@ -4,7 +4,7 @@ import { Colors } from "../constants/Colors";
 import useThemeColors from "../hooks/useThemeColors";
 import PhotoWidget from "../components/PhotoWidget";
 import { SafeAreaView } from "react-native-safe-area-context";
-import ScrollViewWithAnimatedHeader from "../components/ScrollViewWithAnimatedHeader";
+import ScrollViewWithAnimatedHeader from "../components/ScrollViewWithAnimatedHeader./ScrollViewWithAnimatedHeader";
 import BalanceWithCoinsWidget from "../components/BalanceWithCoinsWidget";
 import LevelWidget from "../components/LevelWidget";
 
@@ -20,7 +20,7 @@ export default function Main({ navigation }) {
 
 
   return (
-    <ScrollViewWithAnimatedHeader headerTitle={"Main"}  style={{}} navigation={navigation}>
+    <ScrollViewWithAnimatedHeader headerTitle={"MarketPlace"}  style={{}} navigation={navigation}>
       <View style={styles.container}>
         <View
           style={{ ...styles.child, backgroundColor: themeColors.background }}
