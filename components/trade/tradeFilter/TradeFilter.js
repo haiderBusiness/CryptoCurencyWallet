@@ -11,6 +11,7 @@ import useLanguage from '../../../hooks/useLanguage';
 import CustomPressable from '../../RNComponents/CustomPressable';
 import OfferTagsHorizontal from './OfferTagsHorizontal';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
+import CheckboxList from './CheckboxList';
 
 
 const {width, height} = Dimensions.get("window")
@@ -72,7 +73,6 @@ export default function TradeFilter({}) {
       useLanguage("Activate to auto-apply your last-used filter to future settings for the same currency and trade side")
       }.
     </Text>
-
 
 
        {/* //REVIEW payment methods section  */}
@@ -153,7 +153,7 @@ export default function TradeFilter({}) {
     </View> */}
 
 
-
+{/* 
     <View style={[{zIndex: 10}]}>
 
         <View style={[styles.section, sectionBackgroundStyle, {paddingHorizontal: 0, paddingVertical: 0}]}>
@@ -165,7 +165,7 @@ export default function TradeFilter({}) {
         </Text>}
         
         
-    </View>
+    </View> */}
 
 
 
@@ -249,27 +249,30 @@ export default function TradeFilter({}) {
             {useLanguage("Offer hashtags")}
           </Text>
 
-        <Image source={interface_info_black} style={{...styles.infoImage}}/>
+        {/* <Image source={interface_info_black} style={{...styles.infoImage}}/> */}
       </View>
 
 
 
-      <CustomPressable 
-        colorChangePercent={5}
-        style={{...styles.section, ...sectionBackgroundStyle}}
+      <View 
+        // style={{...sectionBackgroundStyle}}
         >
-
+{/* 
           <View style={{flexDirection: "row", alignItems: "center"}}>
             <Image source={interface_hashtag_lock_black} style={{...styles.iconImage}}/>
             <Text style={[styles.sectionText, textStyle]}>
             {useLanguage("None selected")}
             </Text>
-          </View>
+          </View> */}
 
 
-          <Image source={arrow_back_black} style={{...styles.arrowImage}}/>
+          {/* <Image source={arrow_back_black} style={{...styles.arrowImage}}/> */}
+
+          <CheckboxList useLanguage={useLanguage} themeColors={themeColors}/>
         
-        </CustomPressable>
+        </View>
+
+
 
         {/* <View style={[styles.section,  {paddingHorizontal: 0, paddingVertical: 0}]}>
           <OfferTagsHorizontal onFinish={setPaymentMethod}/>
@@ -281,22 +284,32 @@ export default function TradeFilter({}) {
 
     {/* //REVIEW Verified offers  */}
     <View style={[{}]}>
-      <View style={styles.titleView}>
+      {/* <View style={styles.titleView}>
           <Text style={[styles.title, textStyle]}>
             {useLanguage("Trader verification")}
           </Text>
 
         <Image source={interface_info_black} style={{...styles.infoImage}}/>
-      </View>
+      </View> */}
 
-      <View style={[styles.section, sectionBackgroundStyle]}>
-        <Text style={[styles.sectionText, textStyle]}>
+      <View style={[styles.section, sectionBackgroundStyle, {marginTop: useResponsiveVerticalSpace(20)} ]}>
+        <Text style={[styles.sectionText, textStyle, ]}>
             {useLanguage("Verified traders")}
         </Text>
 
         <CustomSwitch activeColor={themeColors.green2} inActiveColor={themeColors.background4} />
       </View>
     </View>
+
+
+
+    <Text style={styles.infoText}>
+      {
+      useLanguage("Only display offers from users that have met certain performance criteria including evidence of fair trading and a minimum volume requirement. Please always review offers cautiously and trade at your discretion")
+      }.
+    </Text>
+
+
 
 
     {/* //REVIEW Recently active traders  */}
@@ -344,8 +357,6 @@ const styles = StyleSheet.create({
   width: '100%',
   height: '100%',
   paddingHorizontal: useResponsiveHorizontalSpace(18)
-
-
   },
 
   header: {
@@ -381,6 +392,7 @@ const styles = StyleSheet.create({
     marginHorizontal: useResponsiveHorizontalSpace(18),
     fontSize: useResponsiveFontSize(13.5),
     opacity: 0.6,
+    lineHeight: useResponsiveHeight(20)
   },  
 
   titleView : {
@@ -448,11 +460,5 @@ const styles = StyleSheet.create({
     opacity: 1,
   
   },
-
-
-
- 
-
-
 
 });

@@ -1,4 +1,6 @@
 
+const row32 = "Only display offers from users that have met certain performance criteria including evidence of fair trading and a minimum volume requirement. Please always review offers cautiously and trade at your discretion"
+
 const English = {
     "verified": "verified",
     "canceled": "canceled",
@@ -28,7 +30,21 @@ const English = {
 
     "Change this to find trades created by vendors from your specified location": "Change this to find trades created by vendors from your specified location",
 
-    "EUR €": "EUR €"
+    "EUR €": "EUR €",
+
+    "See all hashtags": "See all hashtags",
+
+    "Invoices are accepted": "Invoices are accepted",
+
+    "No receipt needed": "No receipt needed",
+
+    "No third parties": "No third parties",
+
+    "Photo ID required": "Photo ID required",
+
+    "Only display offers from users that have met certain performance criteria including evidence of fair trading and a minimum volume requirement. Please always review offers cautiously and trade at your discretion": "Only display offers from users that have met certain performance criteria including evidence of fair trading and a minimum volume requirement. Please always review offers cautiously and trade at your discretion",
+
+    "Traders active within the past 10 minutes": "Traders active within the past 10 minutes",
 
 }
 
