@@ -4,7 +4,7 @@ import CustomPressable from '../../RNComponents/CustomPressable';
 import Checkbox from '../../Checkbox';
 import { useResponsiveBothHeightWidth, useResponsiveFontSize, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace } from '../../../hooks/useResponsiveness';
 import { Image } from 'react-native';
-import { arrow_back_black, interface_credit_card_white, interface_first_hashtag_bold_white, interface_first_hashtag_white, interface_second_hashtag_white, interface_third_hashtag_white } from '@icons';
+import { interface_credit_card_white, interface_first_hashtag_bold_white, interface_first_hashtag_white, interface_second_hashtag_white, interface_third_hashtag_white } from '@icons';
 
 
 export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }) {

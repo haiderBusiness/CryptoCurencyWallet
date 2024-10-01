@@ -169,7 +169,7 @@ export default function ScrollViewWithAnimatedHeader({
           scrollViewRef={scrollViewRef}
           animatedScrollY={scroll}
           topExtraSpace={inset.top}
-          // AdditionalComponent={TopTabs}
+          // AdditionalComponent={TabsSlider}
           // onSelectedTabChange={() => {}}
           // topTabsResultSpeed={"fast"}
         /> 

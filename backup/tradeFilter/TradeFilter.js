@@ -12,20 +12,9 @@ import CustomPressable from '../../RNComponents/CustomPressable';
 import OfferTagsHorizontal from './OfferTagsHorizontal';
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import CheckboxList from './CheckboxList';
-import { btc, currencies_white, currency_exchange_white, eth, interface_population_globe_bold_white, usdc, usdt } from '../../../assets/dummy/icons_pictures';
-import TabsSlider from '../../TabsSlider';
-import CryptoDropdown from './CryptoDropdown';
 
 
 const {width, height} = Dimensions.get("window")
-
-
-const cryptoSelectionArray = [
-  {"name": "USDT", "image": usdt},
-  {"name": "USDC", "image": usdc},
-  {"name": "ETH", "image": eth},
-  {"name": "BTC", "image": btc},
-]
 
 export default function TradeFilter({}) {
 
@@ -39,17 +28,11 @@ export default function TradeFilter({}) {
     const textStyle = {color: themeColors.text}
     const errorTextStyle = {color: themeColors.red}
 
-    const HORIZONTAL_PADDING = useResponsiveHorizontalSpace(18)
-
     const sectionBackgroundStyle = {
       backgroundColor: themeColors.background,
       borderRadius: useResponsiveRadius(10),
       paddingVertical: useResponsiveVerticalSpace(10),
-      paddingHorizontal: HORIZONTAL_PADDING,
-    }
-
-    const backgroundStyle = {
-      backgroundColor: themeColors.background
+      paddingHorizontal: useResponsiveHorizontalSpace(18),
     }
 
 
@@ -95,61 +78,21 @@ export default function TradeFilter({}) {
     </Text>
 
 
+       {/* //REVIEW payment methods section  */}
+    <View style={[{zIndex: 1}]}>
+      {/* <View style={styles.titleView}>
+          <Text style={[styles.title, textStyle]}>
+            {useLanguage("Payment method")}
+          </Text>
 
-    {/* //REVIEW buying/selling selection  */}
-    <View style={{
-      marginTop: useResponsiveVerticalSpace(20),
-      }}>
-
-      <TabsSlider parentHorizontalPadding={HORIZONTAL_PADDING}/>
-
-      <Text style={styles.infoText}>
-      {
-      useLanguage("Choose whether you are buying or selling Crypto")
-      }.
-    </Text>
-    </View>
+          <Image source={interface_info_black} style={{...styles.infoImage}}/>
+        </View> */}
 
 
-        {/* //REVIEW crypto selection selection  */}
-      <View style={[styles.section, sectionBackgroundStyle]}>
-
-      {/* <TabsSlider data={cryptoSelectionArray} parentHorizontalPadding={HORIZONTAL_PADDING}/> */}
-
-      <CryptoDropdown data={cryptoSelectionArray} themeColors={themeColors}/>
-
-      <Text style={styles.infoText}>
-      {
-      useLanguage("Choose Crypto type")
-      }.
-    </Text>
-    </View>
-
-
-
-
-
-    {/* //REVIEW offer location section  */}
-
-    <View style={[backgroundStyle, 
-      {
-        borderRadius: useResponsiveRadius(10),
-        marginTop: useResponsiveVerticalSpace(20)
-       
-      }]}>
-
-
-
-    <CustomPressable 
-
-        // colorChangePercent={5}
-        style={[
-          styles.section, 
-          sectionBackgroundStyle,
-          {borderRadius: 0}
-
-          // marginTop: useResponsiveVerticalSpace(20)
-        ]}
+        <CustomPressable 
+        
+        colorChangePercent={5}
+        style={{...styles.section, ...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(20)}}
         >
 
           <View style={{flexDirection: "row", alignItems: "center"}}>
@@ -173,20 +116,17 @@ export default function TradeFilter({}) {
 
         <CustomPressable 
         
-        style={[
-          styles.section, 
-          sectionBackgroundStyle,
-          {marginTop: useResponsiveVerticalSpace(10), borderRadius: 0},
-        ]}
+        colorChangePercent={5}
+        style={{...styles.section, ...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(20)}}
         >
 
           <View style={{flexDirection: "row", alignItems: "center"}}>
-            <View style={[styles.paymentImageView, {backgroundColor: themeColors.mainColor}]}>
-              <Image source={currency_exchange_white} style={{...styles.paymentImage}}/>
+            <View style={[styles.paymentImageView, {backgroundColor: themeColors.purple}]}>
+              <Image source={interface_credit_card_white} style={{...styles.paymentImage}}/>
             </View>
 
             <Text style={[styles.sectionText, textStyle]}>
-            {useLanguage("All currencies")}
+            {useLanguage("All payment methods")}
             </Text>
           </View>
 
@@ -194,20 +134,121 @@ export default function TradeFilter({}) {
           <Image source={arrow_back_black} style={{...styles.arrowImage}}/>
         
         </CustomPressable>
+        
+
+        {/* //REVIEW dropdown */}
+       
+        {/* <View style={[styles.section, sectionBackgroundStyle, {paddingHorizontal: 0, paddingVertical: 0}]}>
+          <DropDown onFinish={setPaymentMethod}/>
+        </View>  */}
+        {/* 
+        {paymentMethod && paymentMethod.length < 1 && <Text style={[styles.error, errorTextStyle]}>
+            {useLanguage("No such payment method")}
+        </Text>} */}
+
+    </View>
+
+
+    {/* <Text style={styles.infoText}>
+     Activate to auto-apply your last-used filter to future settings for the same currency and trade side.
+    </Text> */}
+
+
+
+
+    {/* //REVIEW trade limits section  */}
+    {/* <View style={[styles.tradeLimitView, {zIndex: 0,}]}>
+
+      <View style={styles.titleView}>
+        <Text style={[styles.title, textStyle]}>
+          {useLanguage("Trade limit")}
+          </Text>
+
+        <Image source={interface_info_black} style={{...styles.infoImage}}/>
+      </View>
+  
+      <View style={[,sectionBackgroundStyle]}>
+
+        <RangeSliderWidget/>
+      </View>
+
+    </View> */}
+
+
+    {/* //REVIEW user type section  */}
+    {/* <View>
+      <Text>User Type</Text>
+    </View> */}
+
+
+{/* 
+    <View style={[{zIndex: 10}]}>
+
+        <View style={[styles.section, sectionBackgroundStyle, {paddingHorizontal: 0, paddingVertical: 0}]}>
+          <DropDown onFinish={setPaymentMethod}/>
+        </View>
+        
+        {paymentMethod && paymentMethod.length < 1 && <Text style={[styles.error, errorTextStyle]}>
+            {useLanguage("No such payment method")}
+        </Text>}
+        
+        
+    </View> */}
+
+
+
+
+
+
+
+
+    {/* //REVIEW offer location section  */}
+
+    <View style={[{zIndex: 1}]}>
+      {/* <View style={styles.titleView}>
+          <Text style={[styles.title, textStyle]}>
+            {useLanguage("Trader country")}
+          </Text>
+
+          <Image source={interface_info_black} style={{...styles.infoImage}}/>
+        </View> */}
+        {/*
+        <CustomPressable style={{flexDirection: "row", alignItems: "center"}}>
+
+          {({ pressed }) => {
+
+          return (
+            <>
+              <Checkbox
+              style={{
+                borderRadius: useResponsiveRadius(5),
+                opacity: 0.4,
+                marginRight: useResponsiveHorizontalSpace(10),
+                borderColor: themeColors.text
+              }}
+              size={useResponsiveBothHeightWidth(25)}
+              checked={pressed ? true : false}
+              />
+              
+              <Text style={[styles.sectionText, textStyle]}>
+              {useLanguage("All regions")}
+              </Text>
+            </>      
+          )
+          }}
+
+
+
+        </CustomPressable> */}
+
 
         <CustomPressable 
-        style={[
-          styles.section, 
-          sectionBackgroundStyle,
-          {marginTop: useResponsiveVerticalSpace(10), borderRadius: 0},
-        ]}
+        colorChangePercent={5}
+        style={{...styles.section, ...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(20)}}
         >
 
           <View style={{flexDirection: "row", alignItems: "center"}}>
-            <View style={[styles.paymentImageView, {backgroundColor: themeColors.lightEasternBlue}]}>
-              <Image source={interface_population_globe_bold_white} style={{...styles.paymentImage}}/>
-            </View>
-
+            <Image source={interface_population_globe_black} style={{...styles.iconImage}}/>
             <Text style={[styles.sectionText, textStyle]}>
             {useLanguage("All regions")}
             </Text>

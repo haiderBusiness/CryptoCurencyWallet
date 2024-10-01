@@ -2,26 +2,36 @@ import React, { memo, useState} from 'react';
 import {View, Text, StyleSheet, Pressable, Dimensions} from 'react-native';
 
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs';
-import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace } from '../../hooks/useResponsiveness';
-import CustomPressable from '../RNComponents/CustomPressable';
-import useThemeColors from '../../hooks/useThemeColors';
+import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpace, useResponsiveRadius, useResponsiveVerticalSpace } from '../hooks/useResponsiveness';
+import CustomPressable from './RNComponents/CustomPressable';
+import useThemeColors from '../hooks/useThemeColors';
 import Animated,{ runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 const emptyFunc = () => {}
-function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
+function TabsSlider({
+  onSelectedTabChange = emptyFunc, 
+  resultSpeed, 
+  style={},
+
+  //TODO pass this prop to work properly 
+  parentHorizontalPadding
+}) {
 
 
 
     const data = [
       {"name": "Buying"},
       {"name": "Selling"},
-        
+      {"name": "Buying"},
+      {"name": "Selling"},
     ]
 
     const {width, height} = Dimensions.get("window")
 
     // screen wisth minus margin and padding
-    const tabWidth = (width - useResponsiveHorizontalSpace(18) - useResponsiveHorizontalSpace(5)) / 2.15
+    // const tabWidth = (layout.width - useResponsiveHorizontalSpace(18) - useResponsiveHorizontalSpace(5)) / 2.15
+
+    const [tabWidth, setTabWidth] = useState(0)
 
 
     const [selectedTab, setSelectedTab] = useState(0)
@@ -39,15 +49,17 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
     //  const max = 9999999999; // Maximum 10-digit number
     //  return Math.floor(Math.random() * (max - min + 1)) + min;
     // }
-    // console.log('re-render: ',randomNumber(), ' at TopTabs file')
+    // console.log('re-render: ',randomNumber(), ' at TabsSlider file')
 
 
-    const tabPositionX = useSharedValue(0)
+    const tabPositionX = useSharedValue(0 + 0.03)
     const unActiveTabTextOpacity = useSharedValue(0.4)
     const activeTabTextOpacity = useSharedValue(1)
-    const px4 = useResponsiveHorizontalSpace(4)
+
+    const margin_between_tabs = useResponsiveHorizontalSpace(6)
 
     const onTabPress = (button, index) => {
+      
 
       if (resultSpeed === "fast") {
         handlePress(button, index)
@@ -60,8 +72,10 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
           handlePress(button, index)
         }, 500)
       }
+
+      // const multiplier = index === 0 ? (index + 0.03) : (index + 0.07)
       
-      tabPositionX.value = withTiming((tabWidth + px4) * index, {}, () => {
+      tabPositionX.value = withTiming((tabWidth * index) + margin_between_tabs, {}, () => {
         // runOnJS(handlePress)(button, index)
       })
 
@@ -94,25 +108,56 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
       }
     })
 
+
+    const handleLayout = (event) => {
+      const { height, width, x, y } = event.nativeEvent.layout;
+
+    const availableWidth = width - parentHorizontalPadding;
+    setTabWidth(availableWidth / data.length); // Divide the available width by the number of tabs
+
+      console.log('layout width: :', width, ' at TabsSlider file')
+    };
+
  return (
 
-    <View style={[styles.container, style]}>
+    <View onLayout={handleLayout} style={[styles.container, style]}>
 
 
-      <View style={[styles.tabsView, {backgroundColor: themeColors.background4},]}>
+      <View style={[
+        styles.tabsView, 
+        {
+          backgroundColor: themeColors.background4,
+          backgroundColor: "red",
+          alignItems: "center"
+        }
+        ]}>
 
-        <Animated.View
+
+      <Animated.View
         style={[animatedBackgroundStyle, {
           backgroundColor: "#FFFFFF",
           height: "100%", 
-          width: tabWidth,
+          width: tabWidth - margin_between_tabs,
           position: "absolute",
           top: useResponsiveVerticalSpace(4),
-          marginHorizontal: useResponsiveHorizontalSpace(5),
+          // marginHorizontal: useResponsiveHorizontalSpace(5),
           borderRadius: useResponsiveRadius(8),
+          zIndex: 10,
           
         }]}
         />
+
+
+        <View style={[
+        styles.tabsView, 
+        {
+          backgroundColor: themeColors.background4,
+          backgroundColor: "red",
+          alignItems: "center",
+          // marginLeft: 5,
+        }
+        ]}>
+
 
         {data.map((button, index) => {
 
@@ -123,8 +168,17 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
 
             const animatedStyle = index === 0 ? animatedTextStyle1 : animatedTextStyle2
 
+
+            // const tabWidth = (index + 1) === (data.length) ? tabWidth - : 10
+
             return(
-                <Pressable style={{...styles.tabView, width: tabWidth}}
+                <Pressable style={{
+                  ...styles.tabView,
+
+                  marginLeft: margin_between_tabs - 2.5 ,
+                  // marginRight: (index + 1) === (data.length) ? 10 : 10, 
+                  width: tabWidth ,
+                }}
                 key={index}
                 onPress={() => onTabPress(button, index)}
                 >
@@ -141,7 +195,7 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
                 </Pressable>
             )
         })}
-        
+        </View>
         {/* <Tab name={"Buying"}/> */}
       </View>
     </View>
@@ -153,7 +207,7 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
 const areEqual = (prevProps, nextProps) => true;
 
 
-export default  memo(TopTabs, areEqual)
+export default  memo(TabsSlider, areEqual)
 
 
 
@@ -171,12 +225,15 @@ const styles = StyleSheet.create({
     // width: "100%",
     // width: "100%",
     flexDirection: "row",
-    justifyContent: "space-between",
+    //  justifyContent: "center",
+    alignItems: "center",
     backgroundColor: "transparent",
     height: useResponsiveHeight(45),
-    marginHorizontal: useResponsiveHorizontalSpace(18),
+    // marginHorizontal: useResponsiveHorizontalSpace(18),
+
     paddingVertical: useResponsiveVerticalSpace(4),
-    paddingHorizontal: useResponsiveHorizontalSpace(5),
+    backgroundColor: "white",
+    // paddingHorizontal: useResponsiveHorizontalSpace(5),
     borderRadius: useResponsiveRadius(10),
     
   },
@@ -188,12 +245,14 @@ const styles = StyleSheet.create({
     justifyContent: "center",
     alignItems: "center",
     height: "100%",
-    borderRadius: useResponsiveRadius(8)
+    borderRadius: useResponsiveRadius(8),
+    backgroundColor: "orange",
   },
 
   tabText: {
     fontSize: useResponsiveFontSize(15),
-    fontWeight: "600"
+    fontWeight: "600",
+    // backgroundColor: "orange"
   },
 
   

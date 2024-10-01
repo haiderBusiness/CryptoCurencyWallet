@@ -147,6 +147,31 @@ export const Colors = {
     lightPurple9: "#eae9ff",
     lightPurple10: "#f4f4ff",
 
+    easternBlue: "#2596be",
+    easternBlue2: "#2187ab",
+    easternBlue3: "#1e7898",
+    easternBlue4: "#1a6985",
+    easternBlue5: "#165a72",
+    easternBlue6: "#134b5f",
+    easternBlue7: "#0f3c4c",
+    easternBlue8: "#0b2d39",
+    easternBlue9: "#071e26",
+    easternBlue10: "#040f13",
+
+    lightEasternBlue: "#34c6fa",
+    lightEasternBlue2: "#48ccfb",
+    lightEasternBlue3: "#5dd1fb",
+    lightEasternBlue4: "#71d7fc",
+    lightEasternBlue5: "#85ddfc",
+    lightEasternBlue6: "#85ddfc",
+    lightEasternBlue7: "#aee8fd",
+    lightEasternBlue8: "#c2eefe",
+    lightEasternBlue9: "#d6f4fe",
+    lightEasternBlue10: "#ebf9ff",
+    
+
+
+
     white: "#ffffff",
   },
   dark: {

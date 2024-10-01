@@ -8,7 +8,7 @@ import useThemeColors from '../../hooks/useThemeColors';
 import Animated,{ runOnJS, useAnimatedStyle, useSharedValue, withTiming } from 'react-native-reanimated';
 
 const emptyFunc = () => {}
-function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
+function TabsSlider({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
 
 
 
@@ -39,7 +39,7 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
     //  const max = 9999999999; // Maximum 10-digit number
     //  return Math.floor(Math.random() * (max - min + 1)) + min;
     // }
-    // console.log('re-render: ',randomNumber(), ' at TopTabs file')
+    // console.log('re-render: ',randomNumber(), ' at TabsSlider file')
 
 
     const tabPositionX = useSharedValue(0)
@@ -153,7 +153,7 @@ function TopTabs({onSelectedTabChange = emptyFunc, resultSpeed, style={}}) {
 const areEqual = (prevProps, nextProps) => true;
 
 
-export default  memo(TopTabs, areEqual)
+export default  memo(TabsSlider, areEqual)
 
 
 

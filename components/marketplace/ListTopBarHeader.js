@@ -341,7 +341,7 @@ const styles = StyleSheet.create({
     // opacity: 0.5,
    
     // backgroundColor: "red",
-    // backgroundColor: "red"         // AdditionalComponent={TopTabs}
+    // backgroundColor: "red"         // AdditionalComponent={TabsSlider}
   },
 
   topHeader: {

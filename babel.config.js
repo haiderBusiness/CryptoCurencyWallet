@@ -12,7 +12,8 @@ module.exports = function(api) {
             '@RNComponents': './components/RNComponents',
             '@assets': './assets',
             '@backend': './backend',
-            '@custom_list': './components/custom_list'
+            '@custom_list': './components/custom_list',
+            '@icons': './assets/dummy/icons_pictures',
 
              // Add more aliases as needed
           },

@@ -9,7 +9,7 @@ import Animated, {
   useDerivedValue,
 } from 'react-native-reanimated';
 
-const CustomSwitch = ({activeColor, inActiveColor}) => {
+const CustomSwitch = ({activeColor, inActiveColor, borderRadius = 30}) => {
   // value for Switch Animation
   const switchTranslate = useSharedValue(0);
   // state for activate Switch
@@ -63,8 +63,8 @@ const CustomSwitch = ({activeColor, inActiveColor}) => {
       onPress={() => {
         setActive(!active);
       }}>
-      <Animated.View style={[styles.container, backgroundColorStyle]}>
-        <Animated.View style={[styles.circle, customSpringStyles]} />
+      <Animated.View style={[styles.container, backgroundColorStyle, {borderRadius: borderRadius}]}>
+        <Animated.View style={[styles.circle, customSpringStyles, {borderRadius: borderRadius}]} />
       </Animated.View>
     </TouchableWithoutFeedback>
   );

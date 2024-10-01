@@ -27,7 +27,7 @@ import viewStyleSample from "../RNComponents/viewStyleSample";
 
 import placeHolderArray from "./placeholder.json"
 
-import TopTabs from "./TopTabs";
+import TabsSlider from "../TabsSlider";
 import List from "./List";
 
 
@@ -258,7 +258,7 @@ export default function MarketPlaceList({
           }}
           style={headerStyle}
           headerBlur={headerBlur}
-          // AdditionalComponent={TopTabs}
+          // AdditionalComponent={TabsSlider}
           // onSelectedTabChange={() => {}}
           // topTabsResultSpeed={"fast"}
         /> 

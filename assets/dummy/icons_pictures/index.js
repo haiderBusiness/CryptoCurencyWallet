@@ -36,6 +36,8 @@ import interface_digital_payment_black from "./interface_digital_payment_black.p
 
 import interface_population_globe_black from "./interface_population_globe_black.png"
 
+import interface_population_globe_bold_white from "./interface_population_globe_bold_white.png"
+
 import interface_expense_black from "./interface_expense_black.png";
 
 import interface_hashtag_lock_black from "./interface_hashtag_lock_black.png"
@@ -43,7 +45,7 @@ import interface_hashtag_lock_black from "./interface_hashtag_lock_black.png"
 import interface_x_black from "./interface_x_black.png"
 
 import interface_check_white from "./interface_check_white.png";
-import interface_check_bold_white from "./interface_check_bold_white.png"
+import interface_check_bold_white from "./interface_check_bold_white.png";
 
 import interface_credit_card_white from "./interface_credit_card_white.png";
 
@@ -54,6 +56,10 @@ import interface_first_hashtag_bold_white from "./interface_first_hashtag_bold_w
 import interface_second_hashtag_white from "./interface_second_hashtag_white.png"
 
 import interface_third_hashtag_white from "./interface_third_hashtag_white.png"
+
+import currencies_white from "./currencies_white.png"
+
+import currency_exchange_white from "./currency_exchange_white.png"
 
 export { 
     btc, 
@@ -92,5 +98,7 @@ export {
     interface_first_hashtag_bold_white,
     interface_second_hashtag_white,
     interface_third_hashtag_white,
-
+    currencies_white,
+    currency_exchange_white,
+    interface_population_globe_bold_white
 };

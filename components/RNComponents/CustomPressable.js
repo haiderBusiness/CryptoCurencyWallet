@@ -20,7 +20,7 @@ const darkenHexColor = (hex, percent) => {
 
 export default function CustomPressable({
   children,
-  style = viewStyleSample,
+  style,
   onPress = () => {console.log("test: ", "CustomPressable")},
   colorChangePercent = 15,
   disableExtraPadding = false,
@@ -28,7 +28,24 @@ export default function CustomPressable({
 }) {
   const styles = style.flex !== 1000 ? style : {};
 
-  const backgroundColorAfterPress = styles.backgroundColor ?  darkenHexColor(styles.backgroundColor, colorChangePercent) : null;
+  const receivedStyle = Array.isArray(style) ? [...style] : [style];
+
+// Function to extract the backgroundColor from the style array or object
+const extractBackgroundColor = (stylesArray) => {
+  for (let styleObj of stylesArray) {
+    if (styleObj && styleObj.backgroundColor) {
+      return styleObj.backgroundColor;
+    }
+  }
+  return null; // No background color found
+};
+
+const currentBackgroundColor = extractBackgroundColor(receivedStyle);
+
+// If there's a background color, apply darkening logic
+const backgroundColorAfterPress = currentBackgroundColor
+  ? darkenHexColor(currentBackgroundColor, colorChangePercent)
+  : null;
 
 
   return (

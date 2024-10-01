@@ -46,6 +46,12 @@ const English = {
 
     "Traders active within the past 10 minutes": "Traders active within the past 10 minutes",
 
+    "All currencies": "All currencies",
+
+    "Choose whether you are buying or selling Crypto": "Choose whether you are buying or selling Crypto",
+
+    "Choose Crypto type": "Choose Crypto type"
+
 }
 
 export default English;

@@ -34,7 +34,7 @@ import useScrollController, { useScrollHandler } from './useScrollHandler';
 
 import ListCell from "./ListCell";
 import TestComponent from "../TestComponent";
-import TopTabs from "./TopTabs";
+import TabsSlider from "./TabsSlider";
 
 let numOfRenders = 0
 export default function Layout({
@@ -234,7 +234,7 @@ export default function Layout({
           headerBlur={headerBlur}
           // AdditionalComponent={() => {
           //   return (
-          //     <AdditionalComponent onSelectedTabChange={onSelectedTabChange} updateTopTabs={false}/>
+          //     <AdditionalComponent onSelectedTabChange={onSelectedTabChange} updateTabsSlider={false}/>
           //   )
           // }}
         /> 
@@ -283,11 +283,11 @@ export default function Layout({
 }
 
 
-const AdditionalComponent = ({onSelectedTabChange, updateTopTabs}) => {
+const AdditionalComponent = ({onSelectedTabChange, updateTabsSlider}) => {
 
 
   return(
-      <TopTabs onSelectedTabChange={(value) => onSelectedTabChange(value)} update={updateTopTabs}/>
+      <TabsSlider onSelectedTabChange={(value) => onSelectedTabChange(value)} update={updateTabsSlider}/>
   )
 }
 

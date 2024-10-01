@@ -27,7 +27,7 @@ import viewStyleSample from "../RNComponents/viewStyleSample";
 
 import placeHolderArray from "./placeholder.json"
 
-import TopTabs from "./TopTabs";
+import TabsSlider from "./TabsSlider";
 import List from "./List";
 
 
@@ -332,7 +332,7 @@ export default function MarketPlaceList({
           headerLayout={(layout) => setHeaderLayout(layout)}
           style={headerStyle ? headerStyle : defaultStyles}
           headerBlur={headerBlur}
-          AdditionalComponent={TopTabs}
+          AdditionalComponent={TabsSlider}
           onSelectedTabChange={onSelectedTabChange}
           topTabsResultSpeed={"fast"}
         /> 
