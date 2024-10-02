@@ -106,8 +106,6 @@ else if(animationType === "fade") {
         };
         
 }
-
-
 else if (animationType === "none") {
     if(showThisComponent === "show") {
         animateModalOpacity.value = 1;
@@ -145,29 +143,37 @@ const animatedChildStyle = useAnimatedStyle(() => {
 
 
 
-if(!useDisplayStyle && showThisComponent !== "hide") {
-    return (
-        <Animated.View
-         style={[animatedChildStyle]}
-         {...props}
-         >
-          {children}
-        </Animated.View>
-       );
-} else if (useDisplayStyle) {
+// if(!useDisplayStyle && showThisComponent !== "hide") {
+//     return (
+//         <Animated.View
+//          style={[animatedChildStyle]}
+//          {...props}
+//          >
+//           {children}
+//         </Animated.View>
+//        );
+// } else if (useDisplayStyle) {
 
-    // console.log("showThisComponent",showThisComponent)
-    return (
-        <Animated.View
-         pointerEvents={showThisComponent !== "hide" ? "auto" : "none"}
-         style={[animatedChildStyle]}
-         {...props}
-         >
-          {children}
-        </Animated.View>
-       );
-}
+//     // console.log("showThisComponent",showThisComponent)
+//     return (
+//         <Animated.View
+//          pointerEvents={showThisComponent !== "hide" ? "auto" : "none"}
+//          style={[animatedChildStyle]}
+//          {...props}
+//          >
+//           {children}
+//         </Animated.View>
+//        );
+// }
 
+
+return(
+    <Animated.View
+    // style={}
+    >
+        {children}
+    </Animated.View>
+)
 }
 
 

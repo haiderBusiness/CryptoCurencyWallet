@@ -25,14 +25,14 @@ export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }
 
     const onPress = (text) => {
         if (selected.includes(text)) {
-            console.log("removing: ", text);
+            // console.log("removing: ", text);
             const newArr = selected.filter((item) => item !== text);
             setSelected(newArr); // Set state with a new array
         } else {
-            console.log("adding: ", text);
+            // console.log("adding: ", text);
             const newArr = [...selected, text]; // Create a new array by spreading the old one and adding the new item
             setSelected(newArr); // Set state with a new array
-            console.log("updated: ", newArr);
+            // console.log("updated: ", newArr);
         }
     };
 

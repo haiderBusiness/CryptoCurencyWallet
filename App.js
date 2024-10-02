@@ -68,7 +68,10 @@ export default function App() {
     </GestureHandlerRootView>
     </SafeAreaProvider>
     </Provider>
+
+    //  <GestureHandlerRootView style={{flex: 1}}>
     // <Test/>
+    //  </GestureHandlerRootView>
     // {/* <Text>Open up App.js to start working on your app!</Text> */}
 
     // {/* <ReceiveScreen /> */}

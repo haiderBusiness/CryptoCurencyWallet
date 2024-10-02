@@ -161,7 +161,7 @@ function TabsSlider({
     const availableWidth = width - parentHorizontalPadding ;
     setTabWidth(availableWidth / data.length); // Divide the available width by the number of tabs
 
-      console.log('layout width: :', width, ' at TabsSlider file')
+      // console.log('layout width: :', width, ' at TabsSlider file')
     };
 
  return (
@@ -221,7 +221,7 @@ function TabsSlider({
             const selected = selectedTab === index;
             const textColor = selected ? themeColors.mainColorOpposite : themeColors.text
 
-            console.log("selectedTab: ", selectedTab, index)
+            // console.log("selectedTab: ", selectedTab, index)
 
            
 

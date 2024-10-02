@@ -294,7 +294,7 @@ export default function Modal(
 
 
 
-      let panSavedUpScroll = useSharedValue(0)
+
 
 
       const animatedOnScroll = useAnimatedScrollHandler({
@@ -313,11 +313,28 @@ export default function Modal(
       const scrollViewRef = useRef(null)
       const animatedScrollY = useSharedValue(0);
 
+      let panSavedUpScroll = useSharedValue(0)
+
+      const animatedTranslationY = useSharedValue(0)
+
+      const startDragingAnimation = useSharedValue(true);
+      const allowScrollViewBouce = useSharedValue(false)
+
+      
+
       const onScroll = (event) => {
         // headerScrollFunction(event)
   
-        animatedScrollY.value = event.nativeEvent.contentOffset.y;
-        animatedOnScroll;
+        const scrollY = event.nativeEvent.contentOffset.y
+        animatedScrollY.value = scrollY;
+        // if(scrollY < 0) {
+        //   enableScrolling(false)
+        // } else {
+        //   enableScrolling(true)
+        // animatedScrollY.value = event.nativeEvent.contentOffset.y;
+        // }
+      
+        // animatedOnScroll;
       }
 
 
@@ -328,11 +345,18 @@ export default function Modal(
         scrollViewRef.current.setNativeProps({ scrollEnabled: val });;
       }
 
+      console.log('Value:', ' at Modal file')
+
+      function log(title, value) {
+        console.log(title, value)
+      }
+
     // this pan is for the scrollView
     const panScroll = Gesture.Pan()
       .onBegin((event) => {
         // reset context 
         context.value = topAnimation.value;
+
       })
       .onUpdate(event => {
         if (event.translationY < 0) {
@@ -340,12 +364,16 @@ export default function Modal(
             damping: 100,
             stiffness: 400,
           });
-        } else {
-         
-          //if condition here to make sure modal does not scroll if the scrollView was scrolled up before. 
-          if(panSavedUpScroll.value >= 0) {
 
-            runOnJS(enableScrolling)(false)
+          runOnJS(enableScrolling)(true)
+          
+        } else {
+          runOnJS(enableScrolling)(false)
+          // runOnJS(log)("event.translationY: ", event.translationY)
+          //if condition here to make sure modal does not scroll if the scrollView was scrolled up before. 
+          if(animatedScrollY.value <= 0) {
+
+            // runOnJS(enableScrolling)(false)
             topAnimation.value = withSpring(context.value + event.translationY, {
               damping: 100,
               stiffness: 400,
@@ -369,7 +397,9 @@ export default function Modal(
       })
       .onEnd((event) => {
         panSavedUpScroll.value = event.translationY
-        runOnJS(enableScrolling)(true)
+        // runOnJS(enableScrolling)(true)
+        // runOnJS(log)("event.translationY: ", event.translationY)
+        // runOnJS(log)("animatedScrollY.value: ", animatedScrollY.value)
         if (topAnimation.value > openHeight) {
   
           const gestureSpeed = Math.abs(event.velocityY);
@@ -488,6 +518,7 @@ if(showModalValue !== "hide")
                     <GestureDetector gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}>
                       <Animated.ScrollView
                       // scrollEnabled={!isPanActive.value}
+                      scrollEnabled={false}
                       scrollEventThrottle={16}
                       bounces={true}
                       onScroll={onScroll}

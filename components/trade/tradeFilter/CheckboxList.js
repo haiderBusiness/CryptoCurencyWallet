@@ -42,7 +42,7 @@ export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }
     const CheckBoxFiled = ({text, style, imageSource}) => {
 
         const checked = selected.includes(text) ? true : false
-        console.log("selected.includes(text): ", selected.includes(text))
+        // console.log("selected.includes(text): ", selected.includes(text))
         return(
             <CustomPressable 
             onPress={() => onPress(text)}

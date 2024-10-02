@@ -7,110 +7,17 @@ import { SafeAreaView, SafeAreaProvider } from "react-native-safe-area-context";
 
 
 import testArray from "./testArray.json"
+import tradeArrayJson from "../assets/dummy/data/trade_array.json"
 import TestItem from './TestItem';
 import CustomPressable from '../components/RNComponents/CustomPressable';
+import { FlashList } from '@shopify/flash-list';
+import CustomList from '../components/custom_list/CustomList';
+import Order from '../components/order/Order';
 // import { SafeAreaProvider,  } from 'react-native-safe-area-context';
 
 const { height } = Dimensions.get('window');
 
-// const App = () => {
-//   const scrollY = useSharedValue(0);
-//   const flatListRef = useRef(null);
 
-//   // Scroll handler with speed adjustment
-//   const scrollHandler = useAnimatedScrollHandler({
-//     onScroll: (event) => {
-//       // Apply scaling to slow down the scroll speed
-//       scrollY.value = event.contentOffset.y * 0.9; // Adjust the scale factor to slow down the scroll speed (0.5 = 50% slower)
-//     },
-//   });
-
-//   const renderItem = ({ item }) => {
-//     return (
-//       <TestItem item={item} />
-//     );
-//   };
-
-//   return (
-//     <View style={styles.container}>
-//       <Animated.FlatList
-//         ref={flatListRef}
-//         data={testArray}
-//         renderItem={renderItem}
-//         onScroll={scrollHandler}
-//         scrollEventThrottle={16} // Adjust for smoother scrolling
-//         showsVerticalScrollIndicator={true}
-//         bounces={true} // Optional: Disable bounce effect
-//       />
-//     </View>
-//   );
-// };
-
-
-// const App = () => {
-//   const [scrollSpeed, setScrollSpeed] = useState(0);
-//   const lastScrollOffset = useRef(0); // Store the previous scroll offset
-//   const lastScrollTime = useRef(Date.now()); // Store the previous scroll timestamp
-//   const flatListRef = useRef(null); // Reference to the FlatList component
-
-//   const SCROLL_SPEED_THRESHOLD = 2000; // Speed threshold in pixels/second
-//   const SLOWDOWN_FACTOR = 0.5; // Factor by which to slow down the scroll
-
-//   const onScroll = (event) => {
-//     const currentOffset = event.nativeEvent.contentOffset.y; // Get current scroll offset
-//     const currentTime = Date.now(); // Get current timestamp
-
-//     const offsetDifference = Math.abs(currentOffset - lastScrollOffset.current); // Calculate offset difference
-//     const timeDifference = (currentTime - lastScrollTime.current) / 1000; // Calculate time difference in seconds
-
-//     const speed = offsetDifference / timeDifference; // Calculate speed (pixels per second)
-//     setScrollSpeed(speed);
-
-//     // If the speed exceeds the threshold, slow down the scroll
-//     if (speed > SCROLL_SPEED_THRESHOLD) {
-//       const adjustedOffset = lastScrollOffset.current + offsetDifference * SLOWDOWN_FACTOR;
-
-//       // Programmatically adjust the scroll position
-//       if (flatListRef.current) {
-//         // flatListRef.current.scrollToOffset({
-//         //   offset: adjustedOffset,
-//         //   animated: false, // Disable animation to make the adjustment seamless
-//         // });
-//       }
-//     }
-
-//     // Update refs
-//     lastScrollOffset.current = currentOffset;
-//     lastScrollTime.current = currentTime;
-//   };
-
-//   const renderItem = ({ item }) => {
-//     return (
-//       <TestItem item={item} />
-//     );
-//   };
-
-//   return (
-//     <SafeAreaProvider>
-//       <SafeAreaView>
-//         <View style={styles.container}>
-//           <Text style={styles.speedText}>Scroll Speed: {scrollSpeed.toFixed(2)} pixels/second</Text>
-//           {/* <FlatList
-//             ref={flatListRef}
-//             data={testArray}
-//             renderItem={renderItem}
-//             keyExtractor={(item, index) => index.toString()}
-//             onScroll={onScroll}
-//             scrollEventThrottle={16} // Frequency of onScroll events
-//             decelerationRate="fast"
-//           /> */}
-//         </View>
-//       </SafeAreaView>
-//      </SafeAreaProvider>
-    
-
-//   );
-// };
 
 
 
@@ -120,39 +27,9 @@ const App = () => {
   const lastScrollTime = useRef(Date.now()); // Store the previous scroll timestamp
   const flatListRef = useRef(null); // Reference to the FlatList component
 
-  const SCROLL_SPEED_THRESHOLD = 2000; // Speed threshold in pixels/second
-  const SLOWDOWN_FACTOR = 0.5; // Factor by which to slow down the scroll
   const [isScrollingDownDisabled, setIsScrollingDownDisabled] = useState(true); // State to track if scrolling down is disabled
 
   const debounceTimeout = useRef(null);
-  // const onScroll = (event) => {
-  //   const currentOffset = event.nativeEvent.contentOffset.y; // Get current scroll offset
-  //   const currentTime = Date.now(); // Get current timestamp
-
-  //   const offsetDifference = Math.abs(currentOffset - lastScrollOffset.current); // Calculate offset difference
-  //   const timeDifference = (currentTime - lastScrollTime.current) / 1000; // Calculate time difference in seconds
-
-  //   const speed = offsetDifference / timeDifference; // Calculate speed (pixels per second)
-  //   setScrollSpeed(speed);
-
-  //   // Check if the user is scrolling down
-  //   const isScrollingDown = currentOffset > lastScrollOffset.current;
-
-  //   // Disable scrolling down if the condition is met
-  //   if (isScrollingDown && isScrollingDownDisabled) {
-  //     // Prevent further downward scrolling
-  //     if (flatListRef.current) {
-  //       // flatListRef.current.scrollToOffset({
-  //       //   offset: lastScrollOffset.current, // Keep the scroll at the last known position
-  //       //   animated: false,
-  //       // });
-  //     }
-  //   } else {
-  //     // If not scrolling down or scrolling down is allowed, update the last scroll position
-  //     lastScrollOffset.current = currentOffset;
-  //     lastScrollTime.current = currentTime;
-  //   }
-  // };
 
 
   const enableFlatListScrolling = (flatListRef) => {
@@ -212,7 +89,7 @@ const App = () => {
         } else if (speed <= 3000) {
           setIsScrollingDownDisabled(true);
         }
-      }, 50); // Adjust debounce duration as necessary
+      }, 0); // Adjust debounce duration as necessary
   }, []);
 
   // Function to enable or disable scrolling down
@@ -251,14 +128,15 @@ const App = () => {
       </CustomPressable> */}
 
 
-      <FlatList
+      <FlashList
         ref={flatListRef}
         data={testArray}
         scrollEnabled={isScrollingDownDisabled}
         renderItem={renderItem}
         keyExtractor={(item, index) => index.toString()}
         onScroll={onScroll}
-        scrollEventThrottle={16} // Frequency of onScroll events
+        scrollEventThrottle={1} // Frequency of onScroll events
+        estimatedItemSize={230}
       />
       {/* Toggle scrolling down with a button or condition */}
 
@@ -267,12 +145,61 @@ const App = () => {
 };
 
 
+
+
+
+const AA = ({}) => {
+
+  const ListItem = ({ item, index }) => {
+
+    // console.log("index: ", index)
+    
+    return (
+      <Order
+        order={item}
+        style={{ 
+          // paddingTop: useResponsiveVerticalSpace(16),
+          // backgroundColor: themeColors.background,
+          // paddingHorizontal: useResponsiveHorizontalSpace(18)
+        }}
+      />
+    );
+  };
+
+  return(
+    <>
+    <CustomList
+    listItem={ListItem}
+    listDataArray={tradeArrayJson}
+    />
+    </>
+  )
+}
+
+const Test = () => {
+  return (
+    <SafeAreaProvider>
+      {/* <App /> */}
+      <AA/>
+    </SafeAreaProvider>
+  );
+};
+
+export default Test;
+
+
+
+
+
+
+
+
 const styles = StyleSheet.create({
   container: {
     flex: 1,
     height: "100%",
     width: "100%",
-    backgroundColor: "red",
+    backgroundColor: "pink",
     marginTop: 35,
   },
   scrollContainer: {
@@ -308,14 +235,3 @@ const styles = StyleSheet.create({
     fontSize: 15,
   }
 });
-
-
-const Test1 = () => {
-  return (
-    <GestureHandlerRootView style={{ flex: 1 }}>
-      <App />
-    </GestureHandlerRootView>
-  );
-};
-
-export default Test1;

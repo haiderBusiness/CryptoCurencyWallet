@@ -15,6 +15,7 @@ import CheckboxList from './CheckboxList';
 import { btc, currencies_white, currency_exchange_white, eth, interface_population_globe_bold_white, usdc, usdt } from '../../../assets/dummy/icons_pictures';
 import TabsSlider from '../../TabsSlider';
 import CryptoDropdown from './CryptoDropdown';
+import Animated, { LinearTransition } from 'react-native-reanimated';
 
 
 const {width, height} = Dimensions.get("window")
@@ -64,7 +65,8 @@ export default function TradeFilter({}) {
 
 
  return (
-  <View style={{...styles.container}}>
+  <View
+  style={{...styles.container}}>
 
 
       <View
@@ -112,18 +114,21 @@ export default function TradeFilter({}) {
 
 
         {/* //REVIEW crypto selection selection  */}
-      <View style={[styles.section, sectionBackgroundStyle]}>
+    <Animated.View 
+    style={{ marginTop: useResponsiveVerticalSpace(20)}}>
 
       {/* <TabsSlider data={cryptoSelectionArray} parentHorizontalPadding={HORIZONTAL_PADDING}/> */}
 
       <CryptoDropdown data={cryptoSelectionArray} themeColors={themeColors}/>
 
-      <Text style={styles.infoText}>
+
+    </Animated.View>
+
+    <Text style={styles.infoText}>
       {
       useLanguage("Choose Crypto type")
       }.
     </Text>
-    </View>
 
 
 

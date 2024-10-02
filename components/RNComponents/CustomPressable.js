@@ -20,7 +20,7 @@ const darkenHexColor = (hex, percent) => {
 
 export default function CustomPressable({
   children,
-  style,
+  style = {},
   onPress = () => {console.log("test: ", "CustomPressable")},
   colorChangePercent = 15,
   disableExtraPadding = false,
@@ -30,6 +30,7 @@ export default function CustomPressable({
 
   const receivedStyle = Array.isArray(style) ? [...style] : [style];
 
+  // console.log("received style: ", ...receivedStyle)
 // Function to extract the backgroundColor from the style array or object
 const extractBackgroundColor = (stylesArray) => {
   for (let styleObj of stylesArray) {
@@ -60,10 +61,10 @@ const backgroundColorAfterPress = currentBackgroundColor
         return (
           <View 
           style={[
-            styles,
+            ...receivedStyle,
             pressed
             ? { backgroundColor: backgroundColorAfterPress }
-            : { backgroundColor: styles.backgroundColor },
+            : { backgroundColor: currentBackgroundColor },
           ]}
           >
           {/* Check if children is a function, and pass the pressed state */}
