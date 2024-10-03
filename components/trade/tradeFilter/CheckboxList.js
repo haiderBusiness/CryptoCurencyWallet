@@ -16,7 +16,6 @@ export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }
 
     const sectionBackgroundStyle = {
       backgroundColor: themeColors.background,
-
       paddingVertical: useResponsiveVerticalSpace(10),
       paddingHorizontal: useResponsiveHorizontalSpace(18),
     }
@@ -45,6 +44,7 @@ export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }
         // console.log("selected.includes(text): ", selected.includes(text))
         return(
             <CustomPressable 
+            colorChangePercent={8}
             onPress={() => onPress(text)}
             style={{
              flexDirection: "row", 
@@ -79,7 +79,7 @@ export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }
                 </View> 
                  
                  <Text style={[styles.sectionText, textStyle]}>
-                 {useLanguage(text)}
+                    {useLanguage(text)}
                  </Text>
          
          
@@ -110,14 +110,21 @@ export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }
     <CustomPressable 
         
         // colorChangePercent={5}
+        colorChangePercent={8}
         style={{
             ...styles.section, 
-            ...sectionBackgroundStyle, 
+            ...sectionBackgroundStyle,
+            paddingVertical: useResponsiveVerticalSpace(15) 
             // marginTop: useResponsiveVerticalSpace(20)
         }}
         >
 
-          <View style={{flexDirection: "row", alignItems: "center"}}>
+          <View style={{
+            flexDirection: "row", 
+            alignItems: "center",
+            justifyContent: "center",
+
+            }}>
             {/* <View style={[styles.paymentImageView, {backgroundColor: themeColors.purple}]}>
               <Image source={interface_credit_card_white} style={{...styles.paymentImage}}/>
             </View> */}
@@ -125,7 +132,7 @@ export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }
             <Text style={{
                 color: themeColors.mainColor,
                 size: useResponsiveFontSize(13),
-                marginTop: 10
+                fontWeight: "600"
                 }}>
             {useLanguage("See all hashtags")}
             </Text>

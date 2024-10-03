@@ -112,6 +112,11 @@ export default function Modal(
  
 
 
+  const hideModalTotaly = () => {
+    setShowModalValue("hide");
+    onHide(false)
+  }
+
 
 
   const doSomeAfter = (duration) => {
@@ -133,10 +138,6 @@ export default function Modal(
   }, [show])
 
 
-  const hideModalTotaly = () => {
-    setShowModalValue("hide");
-    onHide(false)
-  }
 
   const startAnimation = (showModalValue) => {
   if(animationType === "slide") {
@@ -270,7 +271,7 @@ export default function Modal(
     //   }
     // });
 
-    console.log("re-render", )
+    // console.log("re-render", )
 
 
     const animatedParentStyle = useAnimatedStyle(() => {
@@ -327,14 +328,7 @@ export default function Modal(
   
         const scrollY = event.nativeEvent.contentOffset.y
         animatedScrollY.value = scrollY;
-        // if(scrollY < 0) {
-        //   enableScrolling(false)
-        // } else {
-        //   enableScrolling(true)
-        // animatedScrollY.value = event.nativeEvent.contentOffset.y;
-        // }
-      
-        // animatedOnScroll;
+        
       }
 
 
@@ -345,7 +339,7 @@ export default function Modal(
         scrollViewRef.current.setNativeProps({ scrollEnabled: val });;
       }
 
-      console.log('Value:', ' at Modal file')
+      // console.log('Value:', ' at Modal file')
 
       function log(title, value) {
         console.log(title, value)
@@ -356,6 +350,10 @@ export default function Modal(
       .onBegin((event) => {
         // reset context 
         context.value = topAnimation.value;
+        if(animatedScrollY.value <= 0) {
+          // runOnJS(enableScrolling)(false)
+        }
+
 
       })
       .onUpdate(event => {
@@ -365,21 +363,22 @@ export default function Modal(
             stiffness: 400,
           });
 
-          runOnJS(enableScrolling)(true)
+          // runOnJS(enableScrolling)(true)
           
         } else {
-          runOnJS(enableScrolling)(false)
-          // runOnJS(log)("event.translationY: ", event.translationY)
-          //if condition here to make sure modal does not scroll if the scrollView was scrolled up before. 
-          if(animatedScrollY.value <= 0) {
 
-            // runOnJS(enableScrolling)(false)
+
+          if(animatedScrollY.value <= 0) {
+            runOnJS(log)("event.translationY: ", event.translationY)
+            runOnJS(log)("topAnimation.value: ", topAnimation.value)
+
+            runOnJS(enableScrolling)(false)
             topAnimation.value = withSpring(context.value + event.translationY, {
               damping: 100,
               stiffness: 400,
               });
 
-            if(topAnimation.value > ((height * percentage) / 2)) {
+            if(topAnimation.value > ((height * percentage) / 1.8)) {
               //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
               runOnJS(doSomeAfter)(250)
       
@@ -397,46 +396,52 @@ export default function Modal(
       })
       .onEnd((event) => {
         panSavedUpScroll.value = event.translationY
-        // runOnJS(enableScrolling)(true)
-        // runOnJS(log)("event.translationY: ", event.translationY)
-        // runOnJS(log)("animatedScrollY.value: ", animatedScrollY.value)
-        if (topAnimation.value > openHeight) {
-  
-          const gestureSpeed = Math.abs(event.velocityY);
+        runOnJS(enableScrolling)(true)
 
-          // Example: Use gesture speed to decide some action
-          if (gestureSpeed > 2000) {  // Adjust the speed threshold as needed
+          if (event.translationY > topAnimation.value) {
 
-            //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
-            runOnJS(doSomeAfter)(250)
+            // runOnJS(log)("topAnimation.value: ", topAnimation.value)
+            if (topAnimation.value > openHeight) {
     
-            parentOpacity.value = withTiming(0,{duration: 300,},);
+              const gestureSpeed = Math.abs(event.velocityY);
 
-            topAnimation.value = withSpring(closeHeight, {
-              damping: 100,
-              stiffness: 400,
-            }, finshed => {
+              // Example: Use gesture speed to decide some action
+              if (gestureSpeed > 2000) {  // Adjust the speed threshold as needed
     
-              // runOnJS(timer)();
-              if(finshed) {
-                //REVIEW--> DO SOMETHING WHEN ANIMATION FINISHES
+                //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
+                runOnJS(doSomeAfter)(250)
+        
+                parentOpacity.value = withTiming(0,{duration: 300,},);
+    
+                topAnimation.value = withSpring(closeHeight, {
+                  damping: 100,
+                  stiffness: 400,
+                });
+              } else if(showModalValue !== "hide") {
+                topAnimation.value = withSpring(openHeight, {
+                  damping: 100,
+                  stiffness: 400,
+                });
               }
-            });
-          } else {
+    
+    
+            } 
+            // else {
+            //   topAnimation.value = withSpring(openHeight, {
+            //     damping: 100,
+            //     stiffness: 400,
+            //   });
+            // }
+          } 
+          else if(showModalValue !== "hide") {
             topAnimation.value = withSpring(openHeight, {
               damping: 100,
               stiffness: 400,
             });
           }
 
-
-        } else {
-          topAnimation.value = withSpring(openHeight, {
-            damping: 100,
-            stiffness: 400,
-          });
-        }
-        });
+   
+      });
 
 
       const scrollViewGesture = Gesture.Native()
@@ -448,16 +453,14 @@ if(showModalValue !== "hide")
     return(
         // parent 
         <Animated.View
-            tint="dark"
-            intensity={100}
             style={[animatedParentStyle, 
               {
-             backgroundColor: "transparent", 
              position: "absolute",
              width: "100%",
              height: "100%",
              zIndex: zIndex,
              ...style,
+             backgroundColor: "transparent", 
             }]}
             >
 
@@ -518,7 +521,7 @@ if(showModalValue !== "hide")
                     <GestureDetector gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}>
                       <Animated.ScrollView
                       // scrollEnabled={!isPanActive.value}
-                      scrollEnabled={false}
+                      // scrollEnabled={false}
                       scrollEventThrottle={16}
                       bounces={true}
                       onScroll={onScroll}

@@ -83,7 +83,9 @@ export default function CryptoDropdown({
 
     <View>
 
-        <CustomPressable onPress={onActiveButtonPress} 
+        <CustomPressable 
+        colorChangePercent={8}
+        onPress={onActiveButtonPress} 
         style={[styles.titleView, backgroundStyle]}
         >
           <View style={styles.textAndCoin}>
@@ -115,6 +117,7 @@ export default function CryptoDropdown({
                    exiting={FadeOut.duration(250)}
                    >
                       <CustomPressable 
+                       colorChangePercent={8}
                        onPress={() => updateActiveItem(item)}
                        style={[styles.titleView 
                         ,backgroundStyle

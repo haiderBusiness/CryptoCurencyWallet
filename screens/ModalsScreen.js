@@ -18,6 +18,15 @@ import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpac
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderWBT from '../components/HeaderWBT.js';
 import useLanguage from '../hooks/useLanguage.js';
+import {
+  NavigationContainer,
+  DarkTheme,
+  DefaultTheme,
+  ThemeProvider,
+} from "@react-navigation/native";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
+
+const Stack = createNativeStackNavigator();
 
 
 const {height} = Dimensions.get('screen');
@@ -64,6 +73,23 @@ const tradeFilterModalHeight = "92.5%"
 
  return (
   <>
+      {/* <NavigationContainer theme={MyTheme}>
+
+<ModalsScreen/>
+  <Stack.Navigator screenOptions={{ 
+    headerShown: false,
+    }}>
+          
+    <Stack.Screen name="BottomNav" component={BottomNav} />
+    <Stack.Screen 
+    name="SearchScreen" 
+    component={SearchScreen} 
+    options={{
+      animation: "none"
+    }}
+    />
+  </Stack.Navigator>
+</NavigationContainer> */}
       {/* <Modal 
       // spaceBetweenContent={0} 
       animationType="slide" 
@@ -119,7 +145,7 @@ const ApplyFiltersButton = ({snapTo}) => {
 
   const top = openHeight
 
-  console.log("height: ", height)
+  // console.log("height: ", height)
   const marginVertical = useResponsiveVerticalSpace(0)
   const componentHeight = useResponsiveHeight(0) + marginVertical
   return(

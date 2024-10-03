@@ -41,6 +41,7 @@ import HeaderWBT from "../components/HeaderWBT";
 import useThemeColors from "../hooks/useThemeColors";
 import { BlurView } from "expo-blur";
 import SearchScreen from "../screens/SearchScreen";
+import ModalsScreen from "../screens/ModalsScreen";
 
 const Stack = createNativeStackNavigator();
 const BottomStack = createBottomTabNavigator();
@@ -188,9 +189,12 @@ export default function BottomNavigation({}) {
   };
   return (
     <NavigationContainer theme={MyTheme}>
+
+    <ModalsScreen/>
       <Stack.Navigator screenOptions={{ 
         headerShown: false,
         }}>
+              
         <Stack.Screen name="BottomNav" component={BottomNav} />
         <Stack.Screen 
         name="SearchScreen" 

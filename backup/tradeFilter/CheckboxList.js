@@ -36,7 +36,7 @@ export default function CheckboxList({themeColors = {}, useLanguage =() => {}, }
         }
     };
 
-    console.log("re render")
+    // console.log("re render")
 
 
     const CheckBoxFiled = ({text, style, imageSource}) => {

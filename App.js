@@ -5,6 +5,7 @@ import ReceiveScreen from "./screens/ReceiveScreen";
 import BalanceScreen from "./screens/BalanceScreen";
 import { testGethConnection } from "./services/ethereumService";
 import BottomNavigation from "./routes/BottomNavigation";
+
 import Test from "./Test/Test";
 import { fetchAllCryptoRates } from "./backend/controllers/curencyDataController";
 
@@ -18,6 +19,7 @@ import ModalsScreen from "./screens/ModalsScreen";
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+
 
 export default function App() {
 
@@ -56,9 +58,8 @@ export default function App() {
 
     <>
     {/* Modals screen for displying views on top of everything eg. in app notifications */}
-    
     <ModalsScreen/>
-    
+
     {/* bottom navigation */}
     <BottomNavigation />
     </>

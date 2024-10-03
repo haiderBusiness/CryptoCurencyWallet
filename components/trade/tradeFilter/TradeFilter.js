@@ -16,6 +16,8 @@ import { btc, currencies_white, currency_exchange_white, eth, interface_populati
 import TabsSlider from '../../TabsSlider';
 import CryptoDropdown from './CryptoDropdown';
 import Animated, { LinearTransition } from 'react-native-reanimated';
+import { useNavigation } from '@react-navigation/native';
+
 
 
 const {width, height} = Dimensions.get("window")
@@ -31,6 +33,8 @@ const cryptoSelectionArray = [
 export default function TradeFilter({}) {
 
     const inset = useSafeAreaInsets();
+
+    const navigation = useNavigation()
 
     const themeColors = useThemeColors()
 
@@ -62,6 +66,8 @@ export default function TradeFilter({}) {
     const topNotchHeight = 14
 
     const fixedHeight = (height * snapTo) - (topNotchHeight + applyButtonHeight)
+
+    
 
 
  return (
@@ -115,7 +121,8 @@ export default function TradeFilter({}) {
 
         {/* //REVIEW crypto selection selection  */}
     <Animated.View 
-    style={{ marginTop: useResponsiveVerticalSpace(20)}}>
+    style={{ marginTop: useResponsiveVerticalSpace(20)}}
+    >
 
       {/* <TabsSlider data={cryptoSelectionArray} parentHorizontalPadding={HORIZONTAL_PADDING}/> */}
 
@@ -134,94 +141,59 @@ export default function TradeFilter({}) {
 
 
 
-    {/* //REVIEW offer location section  */}
+    {/* //REVIEW payment method/currency/region  */}
 
-    <View style={[backgroundStyle, 
+    <View style={[
+      backgroundStyle, 
       {
         borderRadius: useResponsiveRadius(10),
-        marginTop: useResponsiveVerticalSpace(20)
-       
+        marginTop: useResponsiveVerticalSpace(20),
+        overflow: "hidden"
       }]}>
 
 
 
-    <CustomPressable 
-
-        // colorChangePercent={5}
-        style={[
-          styles.section, 
-          sectionBackgroundStyle,
-          {borderRadius: 0}
-
-          // marginTop: useResponsiveVerticalSpace(20)
-        ]}
-        >
-
-          <View style={{flexDirection: "row", alignItems: "center"}}>
-            <View style={[styles.paymentImageView, {backgroundColor: themeColors.purple}]}>
-              <Image source={interface_credit_card_white} style={{...styles.paymentImage}}/>
-            </View>
-
-            <Text style={[styles.sectionText, textStyle]}>
-            {useLanguage("All payment methods")}
-            </Text>
-          </View>
-
-
-          <Image source={arrow_back_black} style={{...styles.arrowImage}}/>
-        
-        </CustomPressable>
+   
 
 
 
+      <IconTextIcon 
+        icon1Source={interface_credit_card_white} 
+        icon1BackgroundColor={themeColors.purple}
+        text={useLanguage("All payment methods")}
+        icon2Source={arrow_back_black}
+        style={sectionBackgroundStyle}
+        themeColors={themeColors}
+        textColor={textStyle.color}
+        onPress={() => {navigation.navigate("SearchScreen")}}
+      />
+
+      <IconTextIcon 
+        icon1Source={currency_exchange_white} 
+        icon1BackgroundColor={themeColors.mainColor}
+        text={useLanguage("All currencies")}
+        icon2Source={arrow_back_black}
+        style={{...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(10)}}
+        themeColors={themeColors}
+        textColor={textStyle.color}
+        onPress={() => {}}
+      />
+
+      <IconTextIcon 
+        icon1Source={interface_population_globe_bold_white} 
+        icon1BackgroundColor={themeColors.lightEasternBlue}
+        text={useLanguage("All regions")}
+        icon2Source={arrow_back_black}
+        style={{...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(10)}}
+        themeColors={themeColors}
+        textColor={textStyle.color}
+        onPress={() => {}}
+      />
 
 
-        <CustomPressable 
-        
-        style={[
-          styles.section, 
-          sectionBackgroundStyle,
-          {marginTop: useResponsiveVerticalSpace(10), borderRadius: 0},
-        ]}
-        >
 
-          <View style={{flexDirection: "row", alignItems: "center"}}>
-            <View style={[styles.paymentImageView, {backgroundColor: themeColors.mainColor}]}>
-              <Image source={currency_exchange_white} style={{...styles.paymentImage}}/>
-            </View>
+ 
 
-            <Text style={[styles.sectionText, textStyle]}>
-            {useLanguage("All currencies")}
-            </Text>
-          </View>
-
-
-          <Image source={arrow_back_black} style={{...styles.arrowImage}}/>
-        
-        </CustomPressable>
-
-        <CustomPressable 
-        style={[
-          styles.section, 
-          sectionBackgroundStyle,
-          {marginTop: useResponsiveVerticalSpace(10), borderRadius: 0},
-        ]}
-        >
-
-          <View style={{flexDirection: "row", alignItems: "center"}}>
-            <View style={[styles.paymentImageView, {backgroundColor: themeColors.lightEasternBlue}]}>
-              <Image source={interface_population_globe_bold_white} style={{...styles.paymentImage}}/>
-            </View>
-
-            <Text style={[styles.sectionText, textStyle]}>
-            {useLanguage("All regions")}
-            </Text>
-          </View>
-
-
-          <Image source={arrow_back_black} style={{...styles.arrowImage}}/>
-        
-        </CustomPressable>
         
     </View>
 
@@ -248,6 +220,10 @@ export default function TradeFilter({}) {
 
       <View 
         // style={{...sectionBackgroundStyle}}
+        style={{
+          borderRadius: useResponsiveRadius(10),
+          backgroundColor: "red"
+        }}
         >
 {/* 
           <View style={{flexDirection: "row", alignItems: "center"}}>
@@ -324,12 +300,12 @@ export default function TradeFilter({}) {
             {useLanguage("Recently active traders")}
         </Text>
 
-        <CustomPressable style={{padding: 10, backgroundColor: themeColors.background, borderRadius: 10}}
+        {/* <CustomPressable style={{padding: 10, backgroundColor: themeColors.background, borderRadius: 10}}
         >
         <Image source={interface_info_black} 
         style={{...styles.infoImage}}
         />
-        </CustomPressable>
+        </CustomPressable> */}
 
         </View>
 
@@ -346,6 +322,44 @@ export default function TradeFilter({}) {
 
   </View>
  );
+}
+
+
+
+const IconTextIcon = ({icon1Source, text, icon2Source, style, themeColors, textColor = "green", icon1BackgroundColor, onPress}) => {
+
+  return(
+    <CustomPressable 
+
+    onPress={onPress}
+    colorChangePercent={8}
+    style={[
+      styles.section, 
+      style,
+      {borderRadius: 0}
+  
+      // marginTop: useResponsiveVerticalSpace(20)
+    ]}
+    >
+  
+  
+  
+      <View style={{flexDirection: "row", alignItems: "center"}}>
+        <View style={[styles.paymentImageView, {backgroundColor:icon1BackgroundColor}]}>
+          <Image source={icon1Source} style={{...styles.paymentImage}}/>
+        </View>
+  
+        <Text style={[styles.sectionText, {color: textColor}]}>
+        {text}
+        </Text>
+      </View>
+  
+  
+      <Image source={icon2Source} style={{...styles.arrowImage}}/>
+    
+    </CustomPressable>
+  )
+
 }
 
 
