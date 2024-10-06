@@ -190,7 +190,7 @@ export default function BottomNavigation({}) {
   return (
     <NavigationContainer theme={MyTheme}>
 
-    <ModalsScreen/>
+    {/* // <ModalsScreen/> */}
       <Stack.Navigator screenOptions={{ 
         headerShown: false,
         }}>
@@ -204,6 +204,6 @@ export default function BottomNavigation({}) {
         }}
         />
       </Stack.Navigator>
-    </NavigationContainer>
+     </NavigationContainer>
   );
 }

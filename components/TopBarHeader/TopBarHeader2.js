@@ -54,7 +54,7 @@ const TopBarHeader2 = ({
   style,
   height = useResponsiveHeight(40),
   animatedScrollY,
-  showWhenReaches = useResponsiveHeight(36),
+  hightToShowHeaderWhenReached = useResponsiveHeight(36),
   topExtraSpace = 0
 
 }) => {
@@ -89,7 +89,7 @@ const TopBarHeader2 = ({
   const backgroundOpacity = useSharedValue(0)
   const colorBackgroundOpacity = useSharedValue(1)
 
-  const scrollReachHeight = showWhenReaches;
+  const scrollReachHeight = hightToShowHeaderWhenReached;
 
 
   useDerivedValue(() => {

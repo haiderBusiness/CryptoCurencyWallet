@@ -19,6 +19,7 @@ import ModalsScreen from "./screens/ModalsScreen";
 
 import { SafeAreaProvider } from 'react-native-safe-area-context';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
+import { NavigationContainer } from "@react-navigation/native";
 
 
 export default function App() {
@@ -50,6 +51,9 @@ export default function App() {
     <Provider store={Store}>
     <SafeAreaProvider>
     <GestureHandlerRootView style={{flex: 1}}>
+    {/* <NavigationContainer > */}
+
+
 
     {showSplashScreen ? 
 
@@ -65,6 +69,7 @@ export default function App() {
     </>
 
     }
+    {/* </NavigationContainer> */}
 
     </GestureHandlerRootView>
     </SafeAreaProvider>

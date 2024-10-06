@@ -17,6 +17,7 @@ import TabsSlider from '../../TabsSlider';
 import CryptoDropdown from './CryptoDropdown';
 import Animated, { LinearTransition } from 'react-native-reanimated';
 import { useNavigation } from '@react-navigation/native';
+import { ScrollView } from 'react-native-gesture-handler';
 
 
 
@@ -30,11 +31,11 @@ const cryptoSelectionArray = [
   {"name": "BTC", "image": btc},
 ]
 
-export default function TradeFilter({}) {
+export default function TradeFilter({scrollToSearchScreen}) {
 
     const inset = useSafeAreaInsets();
 
-    const navigation = useNavigation()
+    // const navigation = useNavigation()
 
     const themeColors = useThemeColors()
 
@@ -58,7 +59,7 @@ export default function TradeFilter({}) {
     }
 
 
-    //REVIEW below height is fixed and will only work if the snapTo prop of this modal in ModalsScreen is the same as here
+    //TODO attention: below height is fixed and will only work if the snapTo prop of this modal in ParentScreen is the same as here
 
     const snapTo = 0.95 // the same as the modal snapTo prop 
 
@@ -71,256 +72,200 @@ export default function TradeFilter({}) {
 
 
  return (
-  <View
-  style={{...styles.container}}>
 
-
+      
       <View
-      style={{ ...styles.header, }}
-      >
-      <Text style={styles.bigTitle}>{"Trade filters"}</Text>
-      <Text style={styles.slugText}>{"Disply trades based on your filters"}</Text>
-
-    </View>
-
-
-    {/* //REVIEW Apply last used filter section  */}
-    <View style={[styles.section, sectionBackgroundStyle]}>
-     <Text style={[styles.sectionText, textStyle]}>
-        {useLanguage("Apply last used filter")}
-     </Text>
-
-     <CustomSwitch 
-     borderRadius={useResponsiveRadius(8)}
-     activeColor={themeColors.green2} 
-     inActiveColor={themeColors.background4} />
-    </View>
-
-    <Text style={styles.infoText}>
-      {
-      useLanguage("Activate to auto-apply your last-used filter to future settings for the same currency and trade side")
-      }.
-    </Text>
-
-
-
-    {/* //REVIEW buying/selling selection  */}
-    <View style={{
-      marginTop: useResponsiveVerticalSpace(20),
-      }}>
-
-      <TabsSlider parentHorizontalPadding={HORIZONTAL_PADDING}/>
-
-      <Text style={styles.infoText}>
-      {
-      useLanguage("Choose whether you are buying or selling Crypto")
-      }.
-    </Text>
-    </View>
-
-
-        {/* //REVIEW crypto selection selection  */}
-    <Animated.View 
-    style={{ marginTop: useResponsiveVerticalSpace(20)}}
-    >
-
-      {/* <TabsSlider data={cryptoSelectionArray} parentHorizontalPadding={HORIZONTAL_PADDING}/> */}
-
-      <CryptoDropdown data={cryptoSelectionArray} themeColors={themeColors}/>
-
-
-    </Animated.View>
-
-    <Text style={styles.infoText}>
-      {
-      useLanguage("Choose Crypto type")
-      }.
-    </Text>
+      style={{...styles.container}}>
 
 
 
 
 
-    {/* //REVIEW payment method/currency/region  */}
+        {/* //REVIEW Apply last used filter section  */}
+        <View style={[styles.section, sectionBackgroundStyle]}>
+        <Text style={[styles.sectionText, textStyle]}>
+            {useLanguage("Apply last used filter")}
+        </Text>
 
-    <View style={[
-      backgroundStyle, 
-      {
-        borderRadius: useResponsiveRadius(10),
-        marginTop: useResponsiveVerticalSpace(20),
-        overflow: "hidden"
-      }]}>
+        <CustomSwitch 
+        borderRadius={useResponsiveRadius(8)}
+        activeColor={themeColors.green2} 
+        inActiveColor={themeColors.background4} />
+        </View>
 
-
-
-   
-
-
-
-      <IconTextIcon 
-        icon1Source={interface_credit_card_white} 
-        icon1BackgroundColor={themeColors.purple}
-        text={useLanguage("All payment methods")}
-        icon2Source={arrow_back_black}
-        style={sectionBackgroundStyle}
-        themeColors={themeColors}
-        textColor={textStyle.color}
-        onPress={() => {navigation.navigate("SearchScreen")}}
-      />
-
-      <IconTextIcon 
-        icon1Source={currency_exchange_white} 
-        icon1BackgroundColor={themeColors.mainColor}
-        text={useLanguage("All currencies")}
-        icon2Source={arrow_back_black}
-        style={{...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(10)}}
-        themeColors={themeColors}
-        textColor={textStyle.color}
-        onPress={() => {}}
-      />
-
-      <IconTextIcon 
-        icon1Source={interface_population_globe_bold_white} 
-        icon1BackgroundColor={themeColors.lightEasternBlue}
-        text={useLanguage("All regions")}
-        icon2Source={arrow_back_black}
-        style={{...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(10)}}
-        themeColors={themeColors}
-        textColor={textStyle.color}
-        onPress={() => {}}
-      />
+        <Text style={styles.infoText}>
+          {
+          useLanguage("Activate to auto-apply your last-used filter to future settings for the same currency and trade side")
+          }.
+        </Text>
 
 
 
- 
+        {/* //REVIEW buying/selling selection  */}
+        <View style={{
+          marginTop: useResponsiveVerticalSpace(20),
+          }}>
+
+          <TabsSlider parentHorizontalPadding={HORIZONTAL_PADDING}/>
+
+          <Text style={styles.infoText}>
+          {
+          useLanguage("Choose whether you are buying or selling Crypto")
+          }.
+        </Text>
+        </View>
+
+
+            {/* //REVIEW crypto selection selection  */}
+        <Animated.View 
+        style={{ marginTop: useResponsiveVerticalSpace(20)}}
+        >
+
+          {/* <TabsSlider data={cryptoSelectionArray} parentHorizontalPadding={HORIZONTAL_PADDING}/> */}
+
+          <CryptoDropdown data={cryptoSelectionArray} themeColors={themeColors}/>
+
+
+        </Animated.View>
+
+        <Text style={styles.infoText}>
+          {
+          useLanguage("Choose Crypto type")
+          }.
+        </Text>
+
+
+
+
+
+        {/* //REVIEW payment method/currency/region  */}
+
+        <View style={[
+          backgroundStyle, 
+          {
+            borderRadius: useResponsiveRadius(10),
+            marginTop: useResponsiveVerticalSpace(20),
+            overflow: "hidden"
+          }]}>
+          <IconTextIcon 
+            icon1Source={interface_credit_card_white} 
+            icon1BackgroundColor={themeColors.purple}
+            text={useLanguage("All payment methods")}
+            icon2Source={arrow_back_black}
+            style={sectionBackgroundStyle}
+            themeColors={themeColors}
+            textColor={textStyle.color}
+            onPress={() => {scrollToSearchScreen("test")}}
+          />
+
+          <IconTextIcon 
+            icon1Source={currency_exchange_white} 
+            icon1BackgroundColor={themeColors.mainColor}
+            text={useLanguage("All currencies")}
+            icon2Source={arrow_back_black}
+            style={{...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(10)}}
+            themeColors={themeColors}
+            textColor={textStyle.color}
+            onPress={() => {}}
+          />
+
+          <IconTextIcon 
+            icon1Source={interface_population_globe_bold_white} 
+            icon1BackgroundColor={themeColors.lightEasternBlue}
+            text={useLanguage("All regions")}
+            icon2Source={arrow_back_black}
+            style={{...sectionBackgroundStyle, marginTop: useResponsiveVerticalSpace(10)}}
+            themeColors={themeColors}
+            textColor={textStyle.color}
+            onPress={() => {}}
+          />
+        </View>
+
+        <Text style={styles.infoText}>
+          {
+          useLanguage("Change this to find trades created by vendors from your specified location")
+          }.
+        </Text>
 
         
-    </View>
-
-    <Text style={styles.infoText}>
-      {
-      useLanguage("Change this to find trades created by vendors from your specified location")
-      }.
-    </Text>
-
-    
 
 
-    {/* //REVIEW offer hashtags section  */}
-    <View style={[{zIndex: 1}]}>
-      <View style={styles.titleView}>
-          <Text style={[styles.title, textStyle]}>
-            {useLanguage("Offer hashtags")}
-          </Text>
+        {/* //REVIEW offer hashtags section  */}
+        <View style={[{zIndex: 1}]}>
+          <View style={styles.titleView}>
+              <Text style={[styles.title, textStyle]}>
+                {useLanguage("Offer hashtags")}
+              </Text>
 
-        {/* <Image source={interface_info_black} style={{...styles.infoImage}}/> */}
-      </View>
+            {/* <Image source={interface_info_black} style={{...styles.infoImage}}/> */}
+          </View>
 
 
 
-      <View 
-        // style={{...sectionBackgroundStyle}}
-        style={{
-          borderRadius: useResponsiveRadius(10),
-          backgroundColor: "red"
-        }}
-        >
-{/* 
-          <View style={{flexDirection: "row", alignItems: "center"}}>
-            <Image source={interface_hashtag_lock_black} style={{...styles.iconImage}}/>
-            <Text style={[styles.sectionText, textStyle]}>
-            {useLanguage("None selected")}
+        <View 
+            // style={{...sectionBackgroundStyle}}
+            style={{
+              borderRadius: useResponsiveRadius(10),
+              backgroundColor: "red"
+            }}
+            >
+
+              <CheckboxList useLanguage={useLanguage} themeColors={themeColors}/>
+            
+            </View>
+      
+        </View>
+
+
+
+        {/* //REVIEW Verified offers  */}
+        <View style={[{}]}>
+
+          <View style={[styles.section, sectionBackgroundStyle, {marginTop: useResponsiveVerticalSpace(20)} ]}>
+            <Text style={[styles.sectionText, textStyle, ]}>
+                {useLanguage("Verified traders")}
             </Text>
-          </View> */}
 
-
-          {/* <Image source={arrow_back_black} style={{...styles.arrowImage}}/> */}
-
-          <CheckboxList useLanguage={useLanguage} themeColors={themeColors}/>
-        
+            <CustomSwitch 
+            borderRadius={useResponsiveRadius(8)}
+            activeColor={themeColors.green2} 
+            inActiveColor={themeColors.background4} />
+          </View>
         </View>
 
 
 
-        {/* <View style={[styles.section,  {paddingHorizontal: 0, paddingVertical: 0}]}>
-          <OfferTagsHorizontal onFinish={setPaymentMethod}/>
-        </View>  */}
-  
-    </View>
-
-
-
-    {/* //REVIEW Verified offers  */}
-    <View style={[{}]}>
-      {/* <View style={styles.titleView}>
-          <Text style={[styles.title, textStyle]}>
-            {useLanguage("Trader verification")}
-          </Text>
-
-        <Image source={interface_info_black} style={{...styles.infoImage}}/>
-      </View> */}
-
-      <View style={[styles.section, sectionBackgroundStyle, {marginTop: useResponsiveVerticalSpace(20)} ]}>
-        <Text style={[styles.sectionText, textStyle, ]}>
-            {useLanguage("Verified traders")}
+        <Text style={styles.infoText}>
+          {
+          useLanguage("Only display offers from users that have met certain performance criteria including evidence of fair trading and a minimum volume requirement. Please always review offers cautiously and trade at your discretion")
+          }.
         </Text>
 
-        <CustomSwitch 
-        borderRadius={useResponsiveRadius(8)}
-        activeColor={themeColors.green2} 
-        inActiveColor={themeColors.background4} />
-      </View>
-    </View>
 
 
 
-    <Text style={styles.infoText}>
-      {
-      useLanguage("Only display offers from users that have met certain performance criteria including evidence of fair trading and a minimum volume requirement. Please always review offers cautiously and trade at your discretion")
-      }.
-    </Text>
+        {/* //REVIEW Recently active traders  */}
 
+        <View style={{marginTop: useResponsiveVerticalSpace(20) }}>
 
+          <View style={[styles.section, sectionBackgroundStyle]}>
+            <View style={{flexDirection: "row", alignItems: "center"}}>
 
+            <Text style={[styles.sectionText, textStyle, {marginRight: useResponsiveHorizontalSpace(10)}]}>
+                {useLanguage("Recently active traders")}
+            </Text>
 
-    {/* //REVIEW Recently active traders  */}
+            </View>
 
-    <View style={{marginTop: useResponsiveVerticalSpace(20) }}>
-      {/* <View style={styles.titleView}>
-          <Text style={[styles.title, textStyle]}>
-            {useLanguage("Trader verification")}
-          </Text>
-
-          <Image source={interface_info_black} style={{...styles.infoImage}}/>
-        </View> */}
-      <View style={[styles.section, sectionBackgroundStyle]}>
-        <View style={{flexDirection: "row", alignItems: "center"}}>
-
-        <Text style={[styles.sectionText, textStyle, {marginRight: useResponsiveHorizontalSpace(10)}]}>
-            {useLanguage("Recently active traders")}
-        </Text>
-
-        {/* <CustomPressable style={{padding: 10, backgroundColor: themeColors.background, borderRadius: 10}}
-        >
-        <Image source={interface_info_black} 
-        style={{...styles.infoImage}}
-        />
-        </CustomPressable> */}
-
+            <CustomSwitch 
+            borderRadius={useResponsiveRadius(8)}
+            activeColor={themeColors.green2} 
+            inActiveColor={themeColors.background4} />
+          </View>
         </View>
 
-        <CustomSwitch 
-        borderRadius={useResponsiveRadius(8)}
-        activeColor={themeColors.green2} 
-        inActiveColor={themeColors.background4} />
+
       </View>
-    </View>
-
-
-
-
-
-  </View>
  );
 }
 
@@ -366,9 +311,11 @@ const IconTextIcon = ({icon1Source, text, icon2Source, style, themeColors, textC
 
 const styles = StyleSheet.create({
  container: {
-  width: '100%',
+  width: width,
   height: '100%',
-  paddingHorizontal: useResponsiveHorizontalSpace(18)
+  overflow: "hidden",
+  paddingHorizontal: useResponsiveHorizontalSpace(18),
+  // backgroundColor: "red"
   },
 
   header: {

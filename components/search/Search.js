@@ -12,8 +12,8 @@ import Animated from 'react-native-reanimated';
 const cancelButtonWidth = useResponsiveWidth(75)
 const horizontalPadding = useResponsiveHorizontalSpace(30)
 
-
-export default function Search({onCancel}) {
+const {width, height} = Dimensions.get("window")
+export default function Search({onCancel, focusSearchInput = true}) {
 
   const [searchText, setSearchText] = useState("")
 
@@ -55,7 +55,7 @@ export default function Search({onCancel}) {
 
 
   useEffect(() => {
-    if (inputRef.current) {
+    if (inputRef.current && focusSearchInput) {
       inputRef.current.focus();
     }
   },[])
@@ -157,7 +157,7 @@ const CancelButton = ({onPress}) => {
 
 const styles = StyleSheet.create({
  container: {
-  width: '100%',
+  width: width,
   height: "100%",
 //   height: useResponsiveBothHeightWidth(40),
   alignItems: 'center',

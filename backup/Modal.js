@@ -4,8 +4,7 @@ import { BlurView } from "expo-blur";
 import Animated, 
 { Easing, runOnJS, useAnimatedStyle, useSharedValue, withTiming ,
 withSpring,
-useAnimatedScrollHandler,
-useDerivedValue
+useAnimatedScrollHandler
 } from "react-native-reanimated";
 
 import useThemeColors from "../../hooks/useThemeColors"
@@ -60,15 +59,12 @@ export default function Modal(
     backgroundColor, 
     backDropColor = "black", 
     showTopNotch = true, 
-    animatedScrollY,
 
     //scrollView props 
-    scrollComponentRef,
+    
     footerComponent,
     headerComponent,
     additionalComponentHeight,
-    verticalScrollEnabled = true,
-    composedGesture = null,
     ...rest
     }
     ) {
@@ -89,11 +85,9 @@ export default function Modal(
     const parentOpacity = useSharedValue(show ? 1 : 0)
     const blurAnimation = useSharedValue(show ? 1 : 0)
 
-    const defaultVerticalScrollEnabled = verticalScrollEnabled
-
 
     // const inset = useSafeAreaInsets();
-    const insets = useSafeAreaInsets();
+    const inset = useSafeAreaInsets();
     const {height} = Dimensions.get('screen');
     const percentage = parseFloat(snapTo.replace('%', '')) / 100;
     const closeHeight = height;
@@ -125,7 +119,7 @@ export default function Modal(
 
 
 
-  const hideModalAfter = (duration) => {
+  const doSomeAfter = (duration) => {
     setTimeout(() => {
       hideModalTotaly()
     }, duration)
@@ -250,7 +244,7 @@ export default function Modal(
     //     if (gestureSpeed > 2000) {  // Adjust the speed threshold as needed
 
     //       //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
-    //       runOnJS(hideModalAfter)(250)
+    //       runOnJS(doSomeAfter)(250)
   
     //       parentOpacity.value = withTiming(0,{duration: 300,},);
     //       topAnimation.value = withSpring(closeHeight, {
@@ -318,7 +312,7 @@ export default function Modal(
 
 
       const scrollViewRef = useRef(null)
-      const customAnimatedScrollY = useSharedValue(0);
+      const animatedScrollY = useSharedValue(0);
 
       let panSavedUpScroll = useSharedValue(0)
 
@@ -329,43 +323,23 @@ export default function Modal(
 
       
 
-      // const onScroll = (event) => {
-      //   // headerScrollFunction(event)
+      const onScroll = (event) => {
+        // headerScrollFunction(event)
   
-      //   const scrollY = event.nativeEvent.contentOffset.y
-      //   animatedScrollY.value = scrollY;
+        const scrollY = event.nativeEvent.contentOffset.y
+        animatedScrollY.value = scrollY;
         
-      // }
+      }
 
 
 
       const enableScrolling = (val = false) => {
 
         // enable or disable scrolling functionality of the ScrollView
-        if(scrollComponentRef && scrollComponentRef.current) {
-          scrollComponentRef.current.setNativeProps({ 
-            scrollEnabled: val, 
-            // bounces: val 
-          });;
-
-            // setTimeout(() => {
-            //   setBounces(false)
-            // }, 700)
-            // } else {
-            // setBounces(true)
-            // }
-        }
-
+        scrollViewRef.current.setNativeProps({ scrollEnabled: val });;
       }
 
-      const enableBounces = (val = false) => {
-        if(scrollComponentRef && scrollComponentRef.current) {
-          scrollComponentRef.current.setNativeProps({ 
-            bounces: val 
-          });;
-
-        }
-      }
+      // console.log('Value:', ' at Modal file')
 
       function log(title, value) {
         console.log(title, value)
@@ -376,10 +350,10 @@ export default function Modal(
       .onBegin((event) => {
         // reset context 
         context.value = topAnimation.value;
-        if(animatedScrollY.value === 0) {
-          runOnJS(enableBounces)(false)
+        if(animatedScrollY.value <= 0) {
+          // runOnJS(enableScrolling)(false)
         }
-        // runOnJS(log)("trigered", Math.random())
+
 
       })
       .onUpdate(event => {
@@ -389,49 +363,34 @@ export default function Modal(
             stiffness: 400,
           });
 
-
-          // runOnJS(log)("animatedScrollY: ", animatedScrollY.value)
-          // runOnJS(log)("animatedScrollY: ", animatedScrollY.value)
-          // if( animatedScrollY.value >= 250) {
-          //   runOnJS(enableBounces)(true)
-          // }
           // runOnJS(enableScrolling)(true)
           
         } else {
 
-            // if( animatedScrollY.value >= 250) {
-            //   runOnJS(enableBounces)(true)
-            // }
 
-          
+          if(animatedScrollY.value <= 0) {
+            runOnJS(log)("event.translationY: ", event.translationY)
+            runOnJS(log)("topAnimation.value: ", topAnimation.value)
 
+            runOnJS(enableScrolling)(false)
+            topAnimation.value = withSpring(context.value + event.translationY, {
+              damping: 100,
+              stiffness: 400,
+              });
 
-
-
-
-            if(animatedScrollY.value === 0) { 
-                // runOnJS(log)("topAnimation.value: ", topAnimation.value)
-     
-                runOnJS(enableScrolling)(false)
-
-                // runOnJS(log)("event.translationY: ", event.translationY)
-                topAnimation.value = withSpring(context.value + event.translationY, {
-                  damping: 100,
-                  stiffness: 400,
-                });
-
-                if(topAnimation.value > ((height * percentage) / 1.8)) {
-                  //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
-                  runOnJS(hideModalAfter)(250)
-          
-                  parentOpacity.value = withTiming(0,{duration: 300,},);
-                  topAnimation.value = withSpring(closeHeight, {
-                    damping: 100,
-                    stiffness: 400,
-                  });
-                }
-                
+            if(topAnimation.value > ((height * percentage) / 1.8)) {
+              //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
+              runOnJS(doSomeAfter)(250)
+      
+              parentOpacity.value = withTiming(0,{duration: 300,},);
+              topAnimation.value = withSpring(closeHeight, {
+                damping: 100,
+                stiffness: 400,
+              });
             }
+          } 
+
+
 
         }
       })
@@ -450,7 +409,7 @@ export default function Modal(
               if (gestureSpeed > 2000) {  // Adjust the speed threshold as needed
     
                 //REVIEW --> DO SOMETHING AFTER A SPECEFIC TIME
-                runOnJS(hideModalAfter)(250)
+                runOnJS(doSomeAfter)(250)
         
                 parentOpacity.value = withTiming(0,{duration: 300,},);
     
@@ -486,15 +445,6 @@ export default function Modal(
 
 
       const scrollViewGesture = Gesture.Native()
-
-
-
-      if(composedGesture) {
-        composedGesture.current = Gesture.Simultaneous(panScroll, scrollViewGesture);
-      }
-
-
-      
 
       const topBarHeaderHeight = useResponsiveHeight(55)
 
@@ -546,7 +496,7 @@ if(showModalValue !== "hide")
 
         
                       
-                    {/* <TopBarHeader2 
+                    <TopBarHeader2 
                       leftImageSource1={interface_x_black}
                       leftImage1Style={{
                         backgroundColor: style.backgroundColor,
@@ -565,42 +515,34 @@ if(showModalValue !== "hide")
                       height={topBarHeaderHeight}
                       animatedScrollY={animatedScrollY}
                       showWhenReaches={useResponsiveBothHeightWidth(45)}
-                    />  */}
+                    /> 
          
 
-                    {/* <GestureDetector 
-                    // gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}
-                    // gesture={panScroll}
-                    > */}
-                      <Animated.View
+                    <GestureDetector gesture={Gesture.Simultaneous(panScroll, scrollViewGesture)}>
+                      <Animated.ScrollView
                       // scrollEnabled={!isPanActive.value}
                       // scrollEnabled={false}
-                      // scrollEnabled={defaultVerticalScrollEnabled}
-                      // scrollEventThrottle={16}
-                      // bounces={true}
-                      // onScroll={onScroll}
-                      // ref={scrollViewRef}
-                      // {...rest}
-                      style={{
-                        width: width,
-                        height: "100%"
-                      }}
+                      scrollEventThrottle={16}
+                      bounces={true}
+                      onScroll={onScroll}
+                      ref={scrollViewRef}
+                      {...rest}
                       >
 
                       {/* TopBarHeader sapce */}
-                      {/* {<View style={{width: "100%", height:topBarHeaderHeight }}/>} */}
+                      {<View style={{width: "100%", height:topBarHeaderHeight }}/>}
 
                       {children}
 
                       {/* TopBarHeader sapce */}
-                      {/* <View style={{width: "100%", height: inset.bottom}}/> */}
+                      <View style={{width: "100%", height: inset.bottom}}/>
 
-{/* 
-                      {footerComponent && additionalComponentHeight && <View style={{width: "100%", height:additionalComponentHeight}}/>} */}
-                      </Animated.View>
 
-{/*                       
-                    </GestureDetector> */}
+                      {footerComponent && additionalComponentHeight && <View style={{width: "100%", height:additionalComponentHeight}}/>}
+                      </Animated.ScrollView>
+
+                      
+                    </GestureDetector>
                              
                     {footerComponent}
         

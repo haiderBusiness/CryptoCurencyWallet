@@ -4,7 +4,7 @@ import Modal from '../components/modal/Modal.js';
 import TradeFilter from '../components/trade/tradeFilter/TradeFilter.js';
 import BottomSheet from '../components/modal/BottomSheet';
 
-import Animated from 'react-native-reanimated';
+import Animated, { useDerivedValue, useSharedValue } from 'react-native-reanimated';
 import { BlurView } from 'expo-blur';
 
 
@@ -18,6 +18,7 @@ import { useResponsiveFontSize, useResponsiveHeight, useResponsiveHorizontalSpac
 import { useSafeAreaInsets } from "react-native-safe-area-context";
 import HeaderWBT from '../components/HeaderWBT.js';
 import useLanguage from '../hooks/useLanguage.js';
+import SearchScreen from "../screens/SearchScreen";
 import {
   NavigationContainer,
   DarkTheme,
@@ -25,19 +26,25 @@ import {
   ThemeProvider,
 } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import MarketPlaceFilters from '../components/trade/tradeFilter/MarketPlaceFilters.js';
 
 const Stack = createNativeStackNavigator();
 
 
-const {height} = Dimensions.get('screen');
+const {height, width} = Dimensions.get('window');
 
 const applyFiltersButtonVerticalPadding = useResponsiveVerticalSpace(15)
 const applyFiltersButtonHeight = useResponsiveHeight(45) + applyFiltersButtonVerticalPadding
 
 
+
+
 export default function ModalsScreen({}) {
 
 const bottomSheetRef = useRef(null)
+
+
+const insets = useSafeAreaInsets();
 
 const expandHandler = useCallback(() => {
   bottomSheetRef.current?.expand()
@@ -48,13 +55,17 @@ const themeColors = useThemeColors()
 
 
 //REVIEW MARKET PLACE FILTERS <-
+
+const MarketPlaceFiltersAnimatedScrollY = useSharedValue(0)
+
+const MarketPlaceFiltersScrollViewRef = useRef(null)
+
+const MarketPlaceFiltersComposedGesture = useRef(null)
+
+
 const marketPlaceFilters = useSelector((state) => state.marketPlaceFilters)
 
 const [showMarketPlaceFilters, setShowMarketPlaceFilters] = useState(false)
-
-
-
-
 
 useEffect(() => {
  
@@ -70,61 +81,121 @@ useEffect(() => {
 const tradeFilterModalHeight = "92.5%"
 
 
+const scrollViewRef = useRef(null)
+
+const [activeScreen, setActiveScreen] = useState("FiltersScreen")
+
+const changeActiveScreen = (value) => {
+  setActiveScreen(value)
+}
+
+
+//REVIEW SearchScreen <-
+const SearchScreenAnimatedScrollY = useSharedValue(0)
+
+const SearchScreenScrollViewRef = useRef(null)
+
+const SearchScreenComposedGesture = useRef(null)
+
+
+
+////REVIEW Modal props
+const [animatedScrollY, setAnimatedScrollY]= useState(MarketPlaceFiltersAnimatedScrollY);
+const [scrollComponentRef, setScrollComponentRef] = useState(MarketPlaceFiltersScrollViewRef);
+const [composedGesture, setComposedGesture]= useState(MarketPlaceFiltersComposedGesture);
+
+
+
+
+
+const horizontalScrollTo = (index) => {
+
+  if(scrollViewRef && scrollViewRef.current) {
+
+    scrollViewRef.current.scrollTo({
+      x:width * index,
+      y:0,
+      animated: true
+    })
+  }
+
+  if(index > 0) {
+    changeActiveScreen("SearchScreen");
+    setAnimatedScrollY(SearchScreenAnimatedScrollY);
+    setScrollComponentRef(SearchScreenScrollViewRef);
+    setComposedGesture(SearchScreenComposedGesture);
+  } else {
+    changeActiveScreen("FiltersScreen");
+    setAnimatedScrollY(MarketPlaceFiltersAnimatedScrollY);
+    setScrollComponentRef(MarketPlaceFiltersScrollViewRef);
+    setComposedGesture(MarketPlaceFiltersComposedGesture);
+  }
+  
+}
+
+
+
 
  return (
   <>
-      {/* <NavigationContainer theme={MyTheme}>
 
-<ModalsScreen/>
-  <Stack.Navigator screenOptions={{ 
-    headerShown: false,
-    }}>
-          
-    <Stack.Screen name="BottomNav" component={BottomNav} />
-    <Stack.Screen 
-    name="SearchScreen" 
-    component={SearchScreen} 
-    options={{
-      animation: "none"
-    }}
-    />
-  </Stack.Navigator>
-</NavigationContainer> */}
-      {/* <Modal 
-      // spaceBetweenContent={0} 
-      animationType="slide" 
-      zIndex={1} 
-      Content={TradeFilter} 
-      showModal={true}
-      showSmallWidget={true}
-      /> */}
-      {/* <BottomSheet show={false} ref={bottomSheetRef} snapTo={'70%'} backgroundColor={"white"}>
-        <View>
-          <Text>
-            Hello there 
-          </Text>
-        </View>
-      </BottomSheet> */}
 
-       <Modal 
+
+    <Modal 
       // spaceBetweenContent={0} 
       animationType="slide" 
       zIndex={1} 
       Content={TradeFilter} 
       show={showMarketPlaceFilters}
       showTopNotch={false}
-
+      scrollComponentRef={scrollComponentRef}
       // animationTime={1000}
       onHide={setShowMarketPlaceFilters}
       snapTo={tradeFilterModalHeight}
-      backgroundColor={themeColors.background4}
-      footerComponent={<ApplyFiltersButton snapTo={tradeFilterModalHeight}/>}
-      additionalComponentHeight={applyFiltersButtonHeight}
-      headerTitle={useLanguage("Trade filters")}
-      style={{backgroundColor: themeColors.background4}}
+      backgroundColor={themeColors.background3}
+      animatedScrollY={animatedScrollY}
+      composedGesture={composedGesture}
+      // footerComponent={<ApplyFiltersButton snapTo={tradeFilterModalHeight}/>}
+      // additionalComponentHeight={applyFiltersButtonHeight + insets.bottom}
+      // headerTitle={useLanguage("Trade filters")}
+      verticalScrollEnabled={activeScreen === "FiltersScreen" ? true : false}
+      style={{backgroundColor: themeColors.background3}}
       >
-        <TradeFilter/>
-      </Modal>
+
+      <ScrollView 
+      ref={scrollViewRef}
+      horizontal={true} 
+      scrollEnabled={false}
+      style={{
+        flex: 1,
+        // width: width,
+      }}
+      >
+      <MarketPlaceFilters 
+      scrollToSearchScreen={(data) => {horizontalScrollTo(1)}}
+      footerAbsoluteSpace={applyFiltersButtonHeight + insets.bottom}
+      scrollViewRef={MarketPlaceFiltersScrollViewRef}
+      animatedScrollYToForward={MarketPlaceFiltersAnimatedScrollY}
+      scrollComponentRef={MarketPlaceFiltersScrollViewRef}
+      composedGesture={MarketPlaceFiltersComposedGesture}
+      />
+
+      <SearchScreen 
+      focusSearchInput={false} 
+      goBack={(data) => {horizontalScrollTo(0)}}
+      footerAbsoluteSpace={applyFiltersButtonHeight + insets.bottom}
+      scrollViewRef={MarketPlaceFiltersScrollViewRef}
+      animatedScrollYToForward={SearchScreenAnimatedScrollY}
+      scrollComponentRef={SearchScreenScrollViewRef}
+      composedGesture={SearchScreenComposedGesture}
+      />
+
+      </ScrollView>
+
+      <ApplyFiltersButton snapTo={tradeFilterModalHeight}/>
+        
+    </Modal>
+
   </>
 
  );

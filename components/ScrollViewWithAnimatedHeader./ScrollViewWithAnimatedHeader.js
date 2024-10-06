@@ -47,6 +47,7 @@ export default function ScrollViewWithAnimatedHeader({
   onRightImage1Press,
   onRightImage2Press,
   onRightImage3Press,
+  includeSafeAreaSpace = true,
   style = viewStyleSample,
 }) {
   const receivedStyles = style.flex !== 1000 ? style : {};
@@ -168,7 +169,7 @@ export default function ScrollViewWithAnimatedHeader({
           scroll={scroll}
           scrollViewRef={scrollViewRef}
           animatedScrollY={scroll}
-          topExtraSpace={inset.top}
+          topExtraSpace={includeSafeAreaSpace ? inset.top : 0}
           // AdditionalComponent={TabsSlider}
           // onSelectedTabChange={() => {}}
           // topTabsResultSpeed={"fast"}

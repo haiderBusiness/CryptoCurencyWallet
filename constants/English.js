@@ -50,7 +50,11 @@ const English = {
 
     "Choose whether you are buying or selling Crypto": "Choose whether you are buying or selling Crypto",
 
-    "Choose Crypto type": "Choose Crypto type"
+    "Choose Crypto type": "Choose Crypto type",
+
+    "MarketPlace Filters": "MarketPlace Filters",
+    
+    "Disply offers based on your filters": "Disply offers based on your filters",
 
 }
 
